@@ -1,3 +1,39 @@
+function cleanJsonString(str) {
+  let cleaned = str.trim();
+  
+  // Extract JSON block if wrapped in markdown or other text
+  const startIdx = cleaned.indexOf('{');
+  const endIdx = cleaned.lastIndexOf('}');
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    cleaned = cleaned.substring(startIdx, endIdx + 1);
+  }
+
+  // Replace raw control characters (like literal newlines, tabs, carriage returns) 
+  // inside double quotes with their escaped counterparts
+  let insideString = false;
+  let result = "";
+  for (let i = 0; i < cleaned.length; i++) {
+    const char = cleaned[i];
+    if (char === '"' && (i === 0 || cleaned[i - 1] !== '\\')) {
+      insideString = !insideString;
+      result += char;
+    } else if (insideString) {
+      if (char === '\n') {
+        result += '\\n';
+      } else if (char === '\r') {
+        result += '\\r';
+      } else if (char === '\t') {
+        result += '\\t';
+      } else {
+        result += char;
+      }
+    } else {
+      result += char;
+    }
+  }
+  return result;
+}
+
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -188,6 +224,7 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       const message = errorData.error?.message || `Gemini API error (Status ${response.status})`;
+      console.error("Gemini API returned error response:", response.status, errorData);
       return res.status(response.status).json({ error: message });
     }
 
@@ -195,27 +232,27 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
     const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
     
     if (!rawText) {
-      return res.status(500).json({ error: 'Empty response received from Gemini API.' });
+      console.error("Empty response from Gemini API. Full response object:", JSON.stringify(data));
+      return res.status(500).json({ 
+        error: 'Empty response received from Gemini API.',
+        debugData: data
+      });
     }
 
     let parsedData;
+    let cleanedString = "";
     try {
-      let jsonString = rawText.trim();
-      
-      // Look for the first '{' and the last '}' to extract the JSON block cleanly
-      const startIdx = jsonString.indexOf('{');
-      const endIdx = jsonString.lastIndexOf('}');
-      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
-        jsonString = jsonString.substring(startIdx, endIdx + 1);
-      } else if (jsonString.startsWith('```')) {
-        jsonString = jsonString.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-      }
-      
-      parsedData = JSON.parse(jsonString);
-    } catch {
+      cleanedString = cleanJsonString(rawText);
+      parsedData = JSON.parse(cleanedString);
+    } catch (parseError) {
+      console.error("Failed to parse JSON response from Gemini.");
+      console.error("Raw response:", rawText);
+      console.error("Cleaned response:", cleanedString);
+      console.error("Parse Error Details:", parseError);
       return res.status(500).json({ 
         error: 'Failed to parse JSON response from Gemini.', 
-        rawResponse: rawText 
+        rawResponse: rawText,
+        parseErrorMessage: parseError.message
       });
     }
 
