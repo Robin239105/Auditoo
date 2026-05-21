@@ -78,13 +78,32 @@ export default function App() {
   });
 
   // --- Recent Audits Live Activity State ---
-  const [auditsList, setAuditsList] = useState([
-    { domain: 'growthloop.io', score: 88, type: 'B' },
-    { domain: 'stripe.com', score: 96, type: 'A' },
-    { domain: 'fintechflow.co', score: 62, type: 'D' },
-    { domain: 'shopverse.com', score: 79, type: 'C' },
-    { domain: 'saasify.app', score: 91, type: 'A' },
-  ]);
+  const [auditsList, setAuditsList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('auditoo_recent_audits');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error("Failed to load recent audits from localStorage:", e);
+    }
+    return [
+      { domain: 'growthloop.io', score: 88, type: 'B' },
+      { domain: 'stripe.com', score: 96, type: 'A' },
+      { domain: 'fintechflow.co', score: 62, type: 'D' },
+      { domain: 'shopverse.com', score: 79, type: 'C' },
+      { domain: 'saasify.app', score: 91, type: 'A' },
+    ];
+  });
+
+  // Persist auditsList to localStorage on update
+  useEffect(() => {
+    try {
+      localStorage.setItem('auditoo_recent_audits', JSON.stringify(auditsList));
+    } catch (e) {
+      console.error("Failed to save recent audits to localStorage:", e);
+    }
+  }, [auditsList]);
 
 
 
@@ -309,16 +328,21 @@ export default function App() {
         .ticker-content {
           flex-grow: 1;
           overflow: hidden;
-          position: relative;
-          height: 20px;
-        }
-        .ticker-slide {
-          position: absolute;
-          width: 300%;
-          white-space: nowrap;
-          animation: tickerLoop 25s linear infinite;
           display: flex;
+          width: 100%;
+          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+        }
+        .ticker-track {
+          display: flex;
+          flex-shrink: 0;
           gap: 40px;
+          padding-right: 40px;
+          white-space: nowrap;
+          animation: tickerScroll 25s linear infinite;
+        }
+        .ticker-content:hover .ticker-track {
+          animation-play-state: paused;
         }
         .ticker-item {
           font-size: 12px;
@@ -333,9 +357,9 @@ export default function App() {
           padding: 2px 6px;
           border-radius: 4px;
         }
-        @keyframes tickerLoop {
+        @keyframes tickerScroll {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-33.3333%); }
+          100% { transform: translateX(-100%); }
         }
 
         /* Capabilities Grid */
@@ -1160,9 +1184,24 @@ export default function App() {
                 Live Activity
               </div>
               <div className="ticker-content">
-                <div className="ticker-slide">
-                  {[...auditsList, ...auditsList, ...auditsList].map((audit, idx) => (
-                    <span key={idx} className="ticker-item">
+                <div className="ticker-track">
+                  {auditsList.map((audit, idx) => (
+                    <span key={`t1-${idx}`} className="ticker-item">
+                      <span style={{ color: '#F1F5F9', fontWeight: 600 }}>{audit.domain}</span>
+                      <span>audited</span>
+                      <span className="ticker-score-badge" style={{
+                        background: audit.score >= 90 ? 'rgba(16, 185, 129, 0.15)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                        color: audit.score >= 90 ? '#10B981' : audit.score >= 70 ? '#F59E0B' : '#EF4444',
+                        border: `1px solid ${audit.score >= 90 ? 'rgba(16, 185, 129, 0.25)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
+                      }}>
+                        {audit.score}/100 ({audit.type})
+                      </span>
+                    </span>
+                  ))}
+                </div>
+                <div className="ticker-track" aria-hidden="true">
+                  {auditsList.map((audit, idx) => (
+                    <span key={`t2-${idx}`} className="ticker-item">
                       <span style={{ color: '#F1F5F9', fontWeight: 600 }}>{audit.domain}</span>
                       <span>audited</span>
                       <span className="ticker-score-badge" style={{
