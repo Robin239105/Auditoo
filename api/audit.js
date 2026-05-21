@@ -47,7 +47,15 @@ export default async function handler(req, res) {
   
   const prompt = `You are an expert web analyst and senior UI/UX designer.
 Analyze the website URL: "${cleanUrl}".
-Based on your knowledge of this website or websites of this type, return ONLY a valid JSON object with NO markdown formatting, NO code blocks, and NO explanation text.
+
+First, determine the likely category, industry, or purpose of the website from the domain name and path "${cleanUrl}" (e.g., e-commerce, personal portfolio, corporate, SaaS tool, blog, restaurant/local business, landing page, dashboard).
+Tailor all scores, problems, and redesign suggestions specifically to this website category. 
+
+Ensure the following:
+1. Vary the scores (design, seo, speed, conversion, mobile, overall) realistically so they do not look identical to previous runs or other websites. Introduce custom variations based on the complexity of the domain name's category.
+2. The problems list (designProblems, seoProblems, speedProblems, conversionProblems, mobileIssues, missingCTAs) must contain specific, contextual issues matching the category. For example, if it is e-commerce, include issues like "checkout cart visibility" or "product filtering"; if it is a personal portfolio, include "case study details" or "missing resume download"; if it is a SaaS, include "pricing table layout" or "trial signup CTA".
+3. Write a unique, custom 2-3 sentence overallSummary that specifically references the domain name, its industry, and the key issues identified.
+4. Do not use generic filler text or identical lists of issues across different websites.
 
 Use the following JSON schema:
 {
@@ -74,7 +82,7 @@ Use the following JSON schema:
     }
   ],
   "quickWins": string[],
-  "overallSummary": string // 2-3 sentences honest assessment
+  "overallSummary": string
 }
 
 If you don't have specific data for this URL, use reasonable estimates based on typical websites in this industry. Always return plausible, specific, actionable issues - never generic filler.
@@ -167,7 +175,7 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
         generationConfig: {
           responseMimeType: 'application/json',
           responseSchema: responseSchema,
-          temperature: 0.2,
+          temperature: 0.7,
           maxOutputTokens: 2048
         }
       })
