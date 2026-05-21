@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient for rounded rectangle -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0F" />
+      <stop offset="100%" stop-color="#141420" />
+    </linearGradient>
+    
+    <!-- Primary branding gradients -->
+    <linearGradient id="logo-indigo-violet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <linearGradient id="logo-cyan-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <linearGradient id="logo-handle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+
+    <!-- Glowing effect filter -->
+    <filter id="premium-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background base to ensure icon pops in any browser tab theme (light/dark) -->
+  <rect width="512" height="512" rx="112" fill="url(#bg-grad)" stroke="#1E1E2E" stroke-width="8" />
+
+  <!-- Logo Mark Group with Filter Glow -->
+  <g filter="url(#premium-glow)" transform="translate(16, 16)">
+    <!-- Left Loop (Indigo/Violet) -->
+    <circle cx="190" cy="235" r="85" fill="#111118" stroke="url(#logo-indigo-violet)" stroke-width="20" />
+
+    <!-- Right Loop (Cyan/Emerald) -->
+    <circle cx="310" cy="235" r="85" fill="#111118" stroke="url(#logo-cyan-emerald)" stroke-width="20" opacity="0.95" />
+
+    <!-- Magnifying Glass Handle -->
+    <path d="M365 290 L445 370" stroke="url(#logo-handle)" stroke-width="26" stroke-linecap="round" />
+
+    <!-- Left loop content: Glowing Lightning Bolt (AI Auditor) -->
+    <path d="M195 180 L160 235 L190 235 L183 285 L220 230 L190 230 Z" fill="#6366F1" />
+
+    <!-- Right loop content: Glowing Checkmark (Successful Audit) -->
+    <path d="M280 235 L300 255 L340 215" fill="none" stroke="#10B981" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

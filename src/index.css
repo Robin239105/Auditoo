@@ -1,0 +1,6 @@
+/* Reset global default browser styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #0A0A0F;
+}
