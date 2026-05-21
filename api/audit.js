@@ -79,7 +79,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const targetModel = model || 'gemini-2.5-flash';
+  const targetModel = model || 'gemini-1.5-flash';
   
   const prompt = `You are an expert web analyst and senior UI/UX designer.
 Analyze the website URL: "${cleanUrl}".
@@ -89,13 +89,16 @@ Tailor all scores, problems, and redesign suggestions specifically to this websi
 
 Ensure the following:
 1. Vary the scores (design, seo, speed, conversion, mobile, overall) realistically so they do not look identical to previous runs or other websites. Introduce custom variations based on the complexity of the domain name and subdomain category.
-2. The problems list (designProblems, seoProblems, speedProblems, conversionProblems, mobileIssues, missingCTAs) must contain specific, contextual issues matching the category. For example:
+2. For each problem array (designProblems, seoProblems, speedProblems, conversionProblems, mobileIssues, missingCTAs) and the quickWins array, you MUST generate EXACTLY 3 items.
+3. For redesignSections, you MUST generate EXACTLY 2 section items.
+4. Keep every single item description very short, concise, and direct (under 12 words per item). This is crucial to avoid API latency and output truncation.
+5. The problems list must contain specific, contextual issues matching the category. For example:
    - For subdomains like "app.*" or "dashboard.*" or login pages: focus on user flow friction, loading efficiency, form validation, and onboarding clarity.
    - For subdomains like "shop.*" or e-commerce: focus on checkout cart placement, product details layout, filtering, and conversion metrics.
    - For blogs/news: focus on readability, typography, social sharing, and searchability.
    - For portfolios: focus on project showcase quality, contact ease, and resume download visibility.
-3. Write a unique, custom 2-3 sentence overallSummary that specifically references the domain and subdomain name, its industry, and the key issues identified.
-4. Do not use generic filler text or identical lists of issues across different websites.
+6. Write a unique, custom 1-2 sentence overallSummary (maximum 35 words) that specifically references the domain and subdomain name, its industry, and the key issues identified.
+7. Do not use generic filler text or identical lists of issues across different websites.
 
 Use the following JSON schema:
 {
