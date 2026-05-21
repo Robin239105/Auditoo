@@ -79,7 +79,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const targetModel = model || 'gemini-2.5-flash';
+  const targetModel = model || 'gemini-3.5-flash';
   
   const prompt = `You are an expert web analyst and senior UI/UX designer.
 Analyze the website URL: "${cleanUrl}".
