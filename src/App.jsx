@@ -1721,7 +1721,7 @@ export default function App() {
                 {/* Booking Button Area */}
                 <div style={{ width: '100%', maxWidth: '380px' }}>
                   <a
-                    href="https://calendly.com/your-strategy-session-placeholder"
+                    href="https://www.alaminrobin.com/contact"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-booking btn-shimmer"
