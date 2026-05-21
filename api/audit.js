@@ -79,7 +79,16 @@ export default async function handler(req, res) {
     });
   }
 
-  const targetModel = model || 'gemini-3.5-flash';
+  // List of models to try in order of priority (handles fallbacks)
+  const candidateModels = [];
+  if (model) {
+    candidateModels.push(model);
+  } else {
+    candidateModels.push('gemini-3.5-flash');
+    candidateModels.push('gemini-2.5-flash');
+    candidateModels.push('gemma-4-26b-a4b-it');
+    candidateModels.push('gemma-4-31b-it');
+  }
   
   const prompt = `You are an expert web analyst and senior UI/UX designer.
 Analyze the website URL: "${cleanUrl}".
@@ -203,64 +212,72 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
     ]
   };
 
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          responseSchema: responseSchema,
-          temperature: 0.7,
-          maxOutputTokens: 2048
-        }
-      })
-    });
+  let lastError = null;
+  let parsedData = null;
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const message = errorData.error?.message || `Gemini API error (Status ${response.status})`;
-      console.error("Gemini API returned error response:", response.status, errorData);
-      return res.status(response.status).json({ error: message });
-    }
-
-    const data = await response.json();
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    
-    if (!rawText) {
-      console.error("Empty response from Gemini API. Full response object:", JSON.stringify(data));
-      return res.status(500).json({ 
-        error: 'Empty response received from Gemini API.',
-        debugData: data
-      });
-    }
-
-    let parsedData;
-    let cleanedString = "";
+  for (const currentModel of candidateModels) {
     try {
-      cleanedString = cleanJsonString(rawText);
-      parsedData = JSON.parse(cleanedString);
-    } catch (parseError) {
-      console.error("Failed to parse JSON response from Gemini.");
-      console.error("Raw response:", rawText);
-      console.error("Cleaned response:", cleanedString);
-      console.error("Parse Error Details:", parseError);
-      return res.status(500).json({ 
-        error: 'Failed to parse JSON response from Gemini.', 
-        rawResponse: rawText,
-        parseErrorMessage: parseError.message
+      console.log(`Attempting audit with model: ${currentModel}`);
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            responseSchema: responseSchema,
+            temperature: 0.7,
+            maxOutputTokens: 2048
+          }
+        })
       });
-    }
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const message = errorData.error?.message || `API error (Status ${response.status})`;
+        console.warn(`Model ${currentModel} failed (Status ${response.status}): ${message}`);
+        lastError = new Error(message);
+        continue;
+      }
+
+      const data = await response.json();
+      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (!rawText) {
+        console.warn(`Model ${currentModel} returned an empty response.`);
+        lastError = new Error('Empty response from model.');
+        continue;
+      }
+
+      let cleanedString = "";
+      try {
+        cleanedString = cleanJsonString(rawText);
+        parsedData = JSON.parse(cleanedString);
+        console.log(`Successfully completed audit using model: ${currentModel}`);
+        break; // Successfully got and parsed data, exit loop!
+      } catch (parseError) {
+        console.error(`Failed to parse JSON response from model: ${currentModel}`);
+        console.error("Raw response:", rawText);
+        lastError = parseError;
+        continue;
+      }
+    } catch (err) {
+      console.error(`Unexpected error with model ${currentModel}:`, err.message);
+      lastError = err;
+      continue;
+    }
+  }
+
+  if (parsedData) {
     return res.status(200).json(parsedData);
-  } catch (error) {
-    return res.status(500).json({ error: `Server error: ${error.message}` });
+  } else {
+    const errorMsg = lastError ? lastError.message : 'All models in the fallback chain failed.';
+    return res.status(500).json({ error: `Server error: ${errorMsg}` });
   }
 }
