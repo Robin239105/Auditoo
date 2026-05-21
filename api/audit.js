@@ -80,6 +80,78 @@ Use the following JSON schema:
 If you don't have specific data for this URL, use reasonable estimates based on typical websites in this industry. Always return plausible, specific, actionable issues - never generic filler.
 Return ONLY the JSON. Nothing before it. Nothing after it.`;
 
+  const responseSchema = {
+    type: 'object',
+    properties: {
+      scores: {
+        type: 'object',
+        properties: {
+          design: { type: 'integer' },
+          seo: { type: 'integer' },
+          speed: { type: 'integer' },
+          conversion: { type: 'integer' },
+          mobile: { type: 'integer' },
+          overall: { type: 'integer' }
+        },
+        required: ['design', 'seo', 'speed', 'conversion', 'mobile', 'overall']
+      },
+      designProblems: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      seoProblems: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      speedProblems: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      conversionProblems: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      missingCTAs: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      mobileIssues: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      redesignSections: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            section: { type: 'string' },
+            priority: { type: 'string', enum: ['High', 'Medium', 'Low'] },
+            reason: { type: 'string' },
+            suggestion: { type: 'string' }
+          },
+          required: ['section', 'priority', 'reason', 'suggestion']
+        }
+      },
+      quickWins: {
+        type: 'array',
+        items: { type: 'string' }
+      },
+      overallSummary: { type: 'string' }
+    },
+    required: [
+      'scores',
+      'designProblems',
+      'seoProblems',
+      'speedProblems',
+      'conversionProblems',
+      'missingCTAs',
+      'mobileIssues',
+      'redesignSections',
+      'quickWins',
+      'overallSummary'
+    ]
+  };
+
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${apiKey}`, {
       method: 'POST',
@@ -94,6 +166,7 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
         }],
         generationConfig: {
           responseMimeType: 'application/json',
+          responseSchema: responseSchema,
           temperature: 0.2,
           maxOutputTokens: 2048
         }
