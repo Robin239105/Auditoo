@@ -182,6 +182,7 @@ export default function App() {
           display: flex;
           flex-direction: column;
           overflow-x: hidden;
+          word-break: break-word;
         }
 
         /* Ambient Animated Blobs */
@@ -734,6 +735,11 @@ export default function App() {
           .hero-title {
             font-size: 32px !important;
             line-height: 1.25 !important;
+          }
+          .hero-subtitle {
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+            padding: 0 16px;
           }
           .hero-wrapper {
             padding: 32px 16px !important;
