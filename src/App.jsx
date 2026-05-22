@@ -1,158 +1,28 @@
 import { useState, useEffect } from 'react';
 
-// ============================================================================
-// 1. GORGEOUS CUSTOM SVG ICONS (Crisp, High-End Vectors)
-// ============================================================================
-
-const LogoIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 14.5C4 11.4624 6.46243 9 9.5 9C12.5376 9 15 11.4624 15 14.5C15 17.5376 12.5376 20 9.5 20C6.46243 20 4 17.5376 4 14.5Z" stroke="url(#logoGrad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M9.5 9.5C9.5 6.46243 11.9624 4 15 4C18.0376 4 20.5 6.46243 20.5 9.5C20.5 12.5376 18.0376 15 15 15C11.9624 15 9.5 12.5376 9.5 9.5Z" stroke="url(#logoGrad2)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <defs>
-      <linearGradient id="logoGrad" x1="4" y1="9" x2="15" y2="20" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#3b82f6" />
-        <stop offset="1" stopColor="#6366f1" />
-      </linearGradient>
-      <linearGradient id="logoGrad2" x1="9.5" y1="4" x2="20.5" y2="15" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#6366f1" />
-        <stop offset="1" stopColor="#10b981" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
-const GithubIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-  </svg>
-);
-
-const GlobeIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="2" y1="12" x2="22" y2="12" />
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-  </svg>
-);
-
-const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
-
-const AlertIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-    <line x1="12" y1="9" x2="12" y2="13" />
-    <line x1="12" y1="17" x2="12.01" y2="17" />
-  </svg>
-);
-
-const ErrorIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="15" y1="9" x2="9" y2="15" />
-    <line x1="9" y1="9" x2="15" y2="15" />
-  </svg>
-);
-
-
-
-const StarIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-  </svg>
-);
-
-const DoubleQuoteIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.15 }}>
-    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.988zm-12 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-  </svg>
-);
-
-const SparklesIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
-  </svg>
-);
-
-// Component-specific custom icons
-const DesignIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
-    <path d="M12 6V12L16 14" />
-  </svg>
-);
-
-const SeoIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <path d="M21 21L16.65 16.65" />
-    <path d="M11 8V11H14" />
-  </svg>
-);
-
-const SpeedIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
-  </svg>
-);
-
-const ConversionIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 8V12" />
-    <path d="M8 12H16" />
-    <path d="M12 16V16.01" />
-  </svg>
-);
-
-const MobileIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-    <line x1="12" y1="18" x2="12.01" y2="18" />
-  </svg>
-);
-
-
-// ============================================================================
-// 2. PREMIUM SLENDER SCORE GAUGES
-// ============================================================================
-
-const ScoreRing = ({ score, size = 60, strokeWidth = 5, showNumber = false }) => {
+// Reusable Circular Progress Ring Component
+const ScoreRing = ({ score, size = 60, strokeWidth = 6, showNumber = false }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
-  let color = 'var(--accent-rose)'; // Coral Rose
-  let glowColor = 'rgba(244, 63, 94, 0.22)';
-  
+  let color = '#EF4444'; // Red < 50
   if (score >= 80) {
-    color = 'var(--accent-emerald)'; // Emerald Green
-    glowColor = 'rgba(16, 185, 129, 0.22)';
+    color = '#10B981'; // Green (80+)
   } else if (score >= 50) {
-    color = 'var(--accent-amber)'; // Warning Orange
-    glowColor = 'rgba(245, 158, 11, 0.22)';
+    color = '#F59E0B'; // Amber (50-79)
   }
 
   return (
     <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', filter: `drop-shadow(0 0 6px ${glowColor})` }}>
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
         {/* Background Circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="transparent"
-          stroke="rgba(255, 255, 255, 0.03)"
+          stroke="#1E1E2E"
           strokeWidth={strokeWidth}
         />
         {/* Foreground Circle */}
@@ -167,452 +37,21 @@ const ScoreRing = ({ score, size = 60, strokeWidth = 5, showNumber = false }) =>
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
           style={{
-            transition: 'stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            transition: 'stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         />
       </svg>
       {showNumber && (
         <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: size * 0.28, fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-display)', letterSpacing: '-0.5px' }}>{score}</span>
+          <span style={{ fontSize: size * 0.28, fontWeight: 800, color: '#F1F5F9' }}>{score}</span>
         </div>
       )}
     </div>
   );
 };
-
-
-// ============================================================================
-// 3. INTERACTIVE SHOWCASE BROWSER MOCKUP
-// ============================================================================
-
-const BrowserMockup = () => {
-  const [activeTab, setActiveTab] = useState('summary');
-  const [hoveredMetric, setHoveredMetric] = useState(null);
-
-  const mockMetrics = [
-    { id: 'perf', title: 'Speed Latency', score: 62, desc: 'Heavy media and blocking script tags.', win: 'Compress high banner assets' },
-    { id: 'conversion', title: 'Funnels Flow', score: 48, desc: 'Missing explicit hero CTAs and form gaps.', win: 'Place a clear above-fold CTA' },
-    { id: 'accessibility', title: 'Layout Grid', score: 85, desc: 'High typography clarity, slight shift ratios.', win: 'Align layout grid margins' },
-  ];
-
-  return (
-    <div className="browser-mockup animate-fade-up delay-2">
-      <div className="browser-header">
-        <div style={{ display: 'flex', gap: '6px' }}>
-          <div className="browser-dot" style={{ backgroundColor: '#ff5f56' }} />
-          <div className="browser-dot" style={{ backgroundColor: '#ffbd2e' }} />
-          <div className="browser-dot" style={{ backgroundColor: '#27c93f' }} />
-        </div>
-        <div className="browser-address">
-          <span>auditoo.com/showcase/fintechflow.co</span>
-        </div>
-      </div>
-      
-      <div className="browser-body" style={{ textAlign: 'left' }}>
-        {/* Mockup Navigation Tabs */}
-        <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '12px' }}>
-          <button 
-            onClick={() => setActiveTab('summary')}
-            style={{ 
-              background: activeTab === 'summary' ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
-              border: 'none',
-              padding: '6px 12px',
-              borderRadius: '6px',
-              color: activeTab === 'summary' ? '#ffffff' : 'var(--text-secondary)',
-              fontSize: '11px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            Diagnostic Summary
-          </button>
-          <button 
-            onClick={() => setActiveTab('blueprints')}
-            style={{ 
-              background: activeTab === 'blueprints' ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
-              border: 'none',
-              padding: '6px 12px',
-              borderRadius: '6px',
-              color: activeTab === 'blueprints' ? '#ffffff' : 'var(--text-secondary)',
-              fontSize: '11px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            Wireframe Blueprints
-          </button>
-        </div>
-
-        {activeTab === 'summary' ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', animation: 'fadeUp 0.4s ease' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-              <div>
-                <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Domain Scorecard</span>
-                <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff', marginTop: '2px' }}>fintechflow.co is underperforming</h4>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(251, 113, 133, 0.05)', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(251, 113, 133, 0.1)' }}>
-                <ScoreRing score={58} size={28} strokeWidth={3} />
-                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-rose)' }}>Critical Gaps (58/100)</span>
-              </div>
-            </div>
-
-            {/* Simulated charts and hover interaction */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }} className="responsive-score-grid">
-              {mockMetrics.map((metric) => (
-                <div 
-                  key={metric.id}
-                  onMouseEnter={() => setHoveredMetric(metric.id)}
-                  onMouseLeave={() => setHoveredMetric(null)}
-                  style={{
-                    background: 'rgba(255,255,255,0.01)',
-                    border: hoveredMetric === metric.id ? '1px solid var(--border-hover)' : '1px solid var(--border-color)',
-                    padding: '12px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    position: 'relative'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#ffffff' }}>{metric.title}</span>
-                    <ScoreRing score={metric.score} size={24} strokeWidth={2.5} showNumber={false} />
-                  </div>
-                  <span style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff', display: 'block', marginTop: '6px' }}>{metric.score}%</span>
-                  
-                  {/* Micro metric bar visual */}
-                  <div className="metric-bar-track" style={{ marginTop: '8px' }}>
-                    <div 
-                      className="metric-bar-fill" 
-                      style={{ 
-                        width: `${metric.score}%`, 
-                        backgroundColor: metric.score >= 80 ? 'var(--accent-emerald)' : metric.score >= 50 ? 'var(--accent-amber)' : 'var(--accent-rose)' 
-                      }} 
-                    />
-                  </div>
-
-                  {/* Elegant Hotspot tooltip */}
-                  {hoveredMetric === metric.id && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '105%',
-                      left: '5%',
-                      right: '5%',
-                      background: 'rgba(14, 19, 38, 0.98)',
-                      border: '1px solid var(--border-hover)',
-                      borderRadius: '8px',
-                      padding: '8px 10px',
-                      zIndex: 10,
-                      boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
-                      fontSize: '10px',
-                      lineHeight: '1.4'
-                    }} className="animate-fade-up">
-                      <strong style={{ color: 'var(--accent-primary)', display: 'block', marginBottom: '2px' }}>Insight Winner:</strong>
-                      <span style={{ color: '#ffffff' }}>{metric.desc}</span>
-                      <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '4px', paddingTop: '4px', color: 'var(--accent-emerald)', fontWeight: 600 }}>
-                        🚀 Action Win: {metric.win}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Visual Simulated SVG Chart */}
-            <div style={{ background: 'rgba(0,0,0,0.15)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-secondary)' }}>Simulated Conversion Uplift Forecast</span>
-                <span style={{ fontSize: '9px', color: 'var(--accent-emerald)', fontWeight: 700 }}>+42.8% Conversion Optimize potential</span>
-              </div>
-              <svg width="100%" height="60" viewBox="0 0 400 60" style={{ overflow: 'visible' }}>
-                <path d="M0,50 Q60,45 120,38 T240,25 T360,10" fill="none" stroke="rgba(59, 130, 246, 0.15)" strokeWidth="3" strokeDasharray="3" />
-                <path d="M0,50 Q60,40 120,25 T240,15 T360,4" fill="none" stroke="var(--accent-primary)" strokeWidth="3" />
-                <circle cx="360" cy="4" r="4" fill="var(--accent-emerald)" />
-              </svg>
-            </div>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', animation: 'fadeUp 0.4s ease' }}>
-            <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff' }}>Redesigned Conversion Grid Concept</h4>
-            <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-              UX consultants propose an asymmetric 3-grid design flow to replace clustered vertical form fields.
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '12px', marginTop: '4px' }}>
-              <div style={{ border: '1px dashed rgba(255,255,255,0.08)', borderRadius: '6px', padding: '16px', background: 'rgba(255,255,255,0.01)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <div style={{ width: '40%', height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px' }} />
-                <div style={{ width: '85%', height: '6px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px' }} />
-                <div style={{ width: '70%', height: '6px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px' }} />
-              </div>
-              <div style={{ border: '1px dashed rgba(255,255,255,0.08)', borderRadius: '6px', padding: '16px', background: 'rgba(59, 130, 246, 0.02)', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '45px', height: '14px', background: 'var(--accent-primary)', borderRadius: '100px' }} />
-                <div style={{ width: '25px', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }} />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-
-// ============================================================================
-// 4. CALENDLY-STYLE TESTIMONIAL & SCHEDULER WIDGET
-// ============================================================================
-
-const testimonials = [
-  { quote: "Al Amin Robin transformed our landing page. Conversions jumped by 40% in just two weeks!", author: "Sarah M.", role: "SaaS Founder" },
-  { quote: "The conversion audit was incredibly eye-opening. Structured, exact, and highly actionable suggestions.", author: "David K.", role: "FinTech Product Lead" },
-  { quote: "Our site feels twice as fast and visually aligned. Exceptional UX blueprint insight.", author: "Alex L.", role: "E-comm Merchant" }
-];
-
-const CalendlyScheduler = ({ urlDomain }) => {
-  const [selectedDate, setSelectedDate] = useState('Mon 25');
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [bookingEmail, setBookingEmail] = useState('');
-  const [bookingConfirmed, setBookingConfirmed] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
-
-  const dates = [
-    { day: 'Mon', num: '25', full: 'Monday, May 25' },
-    { day: 'Tue', num: '26', full: 'Tuesday, May 26' },
-    { day: 'Wed', num: '27', full: 'Wednesday, May 27' },
-    { day: 'Thu', num: '28', full: 'Thursday, May 28' },
-    { day: 'Fri', num: '29', full: 'Friday, May 29' }
-  ];
-
-  const timeSlots = ['10:30 AM', '2:00 PM', '3:30 PM', '5:00 PM'];
-
-  const handleBookingSubmit = (e) => {
-    e.preventDefault();
-    if (!bookingEmail.trim()) return;
-    setBookingConfirmed(true);
-    setShowConfirmModal(false);
-  };
-
-  return (
-    <div className="calendly-card" style={{ textAlign: 'left', position: 'relative', overflow: 'hidden' }}>
-      {/* Absolute Glow */}
-      <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '160px', height: '160px', background: 'rgba(99, 102, 241, 0.05)', borderRadius: '50%', filter: 'blur(30px)' }} />
-
-      {!bookingConfirmed ? (
-        <>
-          {/* Left Column: Expert Bio & Testimonials */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'space-between', borderRight: '1px solid rgba(255, 255, 255, 0.04)', paddingRight: '20px' }}>
-            
-            {/* Advisor Profile */}
-            <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
-              <div style={{ position: 'relative', width: '50px', height: '50px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', padding: '1.5px' }}>
-                <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#0e1326', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </div>
-                <div style={{ position: 'absolute', bottom: '1px', right: '1px', width: '12px', height: '12px', borderRadius: '50%', background: 'var(--accent-emerald)', border: '2px solid #0e1326' }} />
-              </div>
-              <div>
-                <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--accent-secondary)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Principal Advisor</span>
-                <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>Al Amin Robin</h4>
-                <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Audited 200+ global domains</p>
-              </div>
-            </div>
-
-            {/* Dynamic Value Prop */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--accent-rose)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                ⚠️ FREE 30-MIN STRATEGY SESSION FOR {urlDomain.toUpperCase()}
-              </span>
-              <h3 style={{ fontSize: '19px', fontWeight: 800, color: '#ffffff', lineHeight: '1.25' }}>
-                Your landing page is leaking metrics.
-              </h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                Grab one of today's free consulting slots. We will step through your Auditoo wireframe live and map high-converting elements.
-              </p>
-            </div>
-
-            {/* Testimonial slider */}
-            <div style={{ 
-              background: 'rgba(255,255,255,0.01)', 
-              border: '1px solid var(--border-color)', 
-              borderRadius: '10px', 
-              padding: '12px 16px', 
-              position: 'relative',
-              minHeight: '95px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}>
-              <div style={{ position: 'absolute', top: '6px', left: '8px' }}>
-                <DoubleQuoteIcon />
-              </div>
-              <p style={{ fontSize: '11px', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: '1.5', paddingLeft: '14px' }}>
-                {testimonials[currentTestimonial].quote}
-              </p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', paddingLeft: '14px' }}>
-                <span style={{ fontSize: '10px', fontWeight: 700, color: '#ffffff' }}>
-                  {testimonials[currentTestimonial].author} <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>· {testimonials[currentTestimonial].role}</span>
-                </span>
-                <span style={{ display: 'flex', gap: '2px', color: '#fbbf24' }}>
-                  <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Calendly Date & Time Slots */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block', marginBottom: '8px' }}>
-                1. Select strategy slot date
-              </span>
-              <div className="calendly-dates-grid">
-                {dates.map((d) => (
-                  <button
-                    key={d.num}
-                    onClick={() => { setSelectedDate(`${d.day} ${d.num}`); setSelectedTime(null); }}
-                    className={`calendly-date-btn ${selectedDate === `${d.day} ${d.num}` ? 'active' : ''}`}
-                  >
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <span style={{ fontSize: '9px', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.2px' }}>{d.day}</span>
-                      <span style={{ fontSize: '14px', fontWeight: 800, marginTop: '2px' }}>{d.num}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block', marginBottom: '8px' }}>
-                2. Choose available time slot
-              </span>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-                {timeSlots.map((time) => (
-                  <button
-                    key={time}
-                    onClick={() => { setSelectedTime(time); setShowConfirmModal(true); }}
-                    style={{
-                      background: selectedTime === time ? 'var(--accent-primary)' : 'rgba(255,255,255,0.01)',
-                      border: `1px solid ${selectedTime === time ? 'var(--accent-primary)' : 'var(--border-color)'}`,
-                      color: '#ffffff',
-                      padding: '10px 14px',
-                      borderRadius: '8px',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      textAlign: 'center',
-                      boxShadow: selectedTime === time ? '0 4px 12px rgba(59, 130, 246, 0.3)' : 'none'
-                    }}
-                  >
-                    {time}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center', background: 'rgba(255,255,255,0.01)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.02)' }}>
-              <SparklesIcon />
-              <span style={{ fontSize: '10.5px', fontWeight: 500, color: 'var(--text-secondary)' }}>Instant verification link sent.</span>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div style={{ padding: '24px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', gridColumn: 'span 2', width: '100%' }} className="animate-fade-up">
-          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-emerald)' }}>
-            <CheckIcon />
-          </div>
-          <h4 style={{ fontSize: '20px', fontWeight: 800, color: '#ffffff' }}>Strategy Reserved Successfully!</h4>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '440px', lineHeight: '1.6', textAlign: 'center', margin: '0 auto' }}>
-            We scheduled your wireframe audit strategy for <strong>{selectedDate}</strong> at <strong>{selectedTime}</strong>. A calendar invite was locked for <strong>{bookingEmail}</strong>.
-          </p>
-          <div style={{ background: 'rgba(59, 130, 246, 0.06)', padding: '12px 20px', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.15)', fontSize: '11px', color: '#a5b4fc', fontWeight: 600 }}>
-            ⚡ Tip: Keep your Auditoo report scores open for our discussion.
-          </div>
-        </div>
-      )}
-
-      {/* Booking Form Overlay Modal */}
-      {showConfirmModal && (
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(7, 9, 19, 0.97)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', zIndex: 100 }}>
-          <div style={{ width: '100%', maxWidth: '360px', display: 'flex', flexDirection: 'column', gap: '14px' }} className="animate-fade-up">
-            <div>
-              <h5 style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>Verify Strategy Booking Slot</h5>
-              <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.4' }}>
-                You are scheduling a Free 30-Min Strategy Session with Al Amin Robin on <strong>{selectedDate}</strong> at <strong>{selectedTime}</strong>.
-              </p>
-            </div>
-            
-            <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <input
-                type="email"
-                required
-                placeholder="Enter your work email address"
-                value={bookingEmail}
-                onChange={(e) => setBookingEmail(e.target.value)}
-                style={{
-                  width: '100%',
-                  background: '#070913',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '8px',
-                  padding: '10px 12px',
-                  color: '#ffffff',
-                  fontSize: '12.5px',
-                  outline: 'none',
-                  transition: 'border-color 0.2s'
-                }}
-                onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
-                onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
-              />
-              <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
-                <button
-                  type="submit"
-                  className="btn-saas-primary"
-                  style={{ flex: 1, padding: '10px 14px', fontSize: '12px' }}
-                >
-                  Confirm Invite
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setShowConfirmModal(false); setSelectedTime(null); }}
-                  style={{
-                    background: 'transparent',
-                    border: '1px solid var(--border-color)',
-                    color: 'var(--text-secondary)',
-                    padding: '10px 14px',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-
-// ============================================================================
-// 5. MAIN APPLICATION
-// ============================================================================
 
 export default function App() {
-  // --- States ---
+  // --- React State ---
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState(null);
@@ -638,24 +77,26 @@ export default function App() {
     overall: 0
   });
 
-  // Recent Audits live feed list from localStorage or defaults
+  // --- Recent Audits Live Activity State ---
   const [auditsList, setAuditsList] = useState(() => {
     try {
       const saved = localStorage.getItem('auditoo_recent_audits');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        return JSON.parse(saved);
+      }
     } catch (e) {
       console.error("Failed to load recent audits from localStorage:", e);
     }
     return [
-      { domain: 'growthloop.io', score: 88, type: 'Excellent' },
-      { domain: 'stripe.com', score: 96, type: 'Excellent' },
-      { domain: 'fintechflow.co', score: 62, type: 'Warning' },
-      { domain: 'shopverse.com', score: 79, type: 'Warning' },
-      { domain: 'saasify.app', score: 91, type: 'Excellent' },
+      { domain: 'growthloop.io', score: 88, type: 'B' },
+      { domain: 'stripe.com', score: 96, type: 'A' },
+      { domain: 'fintechflow.co', score: 62, type: 'D' },
+      { domain: 'shopverse.com', score: 79, type: 'C' },
+      { domain: 'saasify.app', score: 91, type: 'A' },
     ];
   });
 
-  // Persist auditsList
+  // Persist auditsList to localStorage on update
   useEffect(() => {
     try {
       localStorage.setItem('auditoo_recent_audits', JSON.stringify(auditsList));
@@ -664,14 +105,17 @@ export default function App() {
     }
   }, [auditsList]);
 
-  // Loader step sequential timing effect
+
+
+
+  // --- Loader Step Effect (Sequential HUD checklist) ---
   useEffect(() => {
     if (!loading) return;
-    const timer1 = setTimeout(() => setLoaderStep(1), 1100);
-    const timer2 = setTimeout(() => setLoaderStep(2), 2400);
-    const timer3 = setTimeout(() => setLoaderStep(3), 3900);
-    const timer4 = setTimeout(() => setLoaderStep(4), 5400);
-    const timer5 = setTimeout(() => setLoaderStep(5), 7000);
+    const timer1 = setTimeout(() => setLoaderStep(1), 1200);
+    const timer2 = setTimeout(() => setLoaderStep(2), 2600);
+    const timer3 = setTimeout(() => setLoaderStep(3), 4400);
+    const timer4 = setTimeout(() => setLoaderStep(4), 6200);
+    const timer5 = setTimeout(() => setLoaderStep(5), 8200);
 
     return () => {
       clearTimeout(timer1);
@@ -682,11 +126,779 @@ export default function App() {
     };
   }, [loading]);
 
-  // Score counter animation effect
+  // --- Interactive Sub-score Accordion Expander & Smooth Scroller ---
+  const handleScoreClick = (sectionKey) => {
+    // 1. Auto-expand the clicked section
+    setExpandedSections((prev) => ({
+      ...prev,
+      [sectionKey]: true
+    }));
+
+    // 2. Smooth scroll to the target deep-dive section
+    setTimeout(() => {
+      const element = document.getElementById(`accordion-${sectionKey}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 80);
+  };
+
+  // --- Dynamic Style Block Injection ---
+  useEffect(() => {
+    const styleId = 'auditoo-global-styles';
+    let styleTag = document.getElementById(styleId);
+    if (!styleTag) {
+      styleTag = document.createElement('style');
+      styleTag.id = styleId;
+      styleTag.innerHTML = `
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        .auditoo-wrapper {
+          position: relative;
+          background-color: #0A0A0F;
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+          color: #F1F5F9;
+          min-height: 100vh;
+          padding: 40px 24px;
+          display: flex;
+          flex-direction: column;
+          overflow-x: hidden;
+        }
+
+        /* Ambient Animated Blobs */
+        .ambient-blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(120px);
+          opacity: 0.15;
+          z-index: 0;
+          pointer-events: none;
+          animation: floatBlob 20s infinite alternate ease-in-out;
+        }
+        .blob-1 {
+          width: 400px;
+          height: 400px;
+          background: #6366F1;
+          top: 5%;
+          left: -10%;
+          animation-duration: 25s;
+        }
+        .blob-2 {
+          width: 500px;
+          height: 500px;
+          background: #8B5CF6;
+          bottom: 10%;
+          right: -10%;
+          animation-duration: 30s;
+          animation-delay: -5s;
+        }
+        .blob-3 {
+          width: 300px;
+          height: 300px;
+          background: #06B6D4;
+          top: 45%;
+          left: 60%;
+          animation-duration: 20s;
+          animation-delay: -10s;
+        }
+        @keyframes floatBlob {
+          0% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(60px, -80px) scale(1.1); }
+          100% { transform: translate(-30px, 30px) scale(0.95); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes popIn {
+          from {
+            transform: scale(0.85);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            left: -100%;
+          }
+          100% {
+            left: 100%;
+          }
+        }
+
+        @keyframes scan {
+          0% { top: 0; }
+          50% { top: 100%; }
+          100% { top: 0; }
+        }
+
+        .fade-in {
+          animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .pop-in {
+          animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .input-glow:focus {
+          outline: none;
+          border-color: #6366F1 !important;
+          box-shadow: 0 0 15px rgba(99, 102, 241, 0.4) !important;
+        }
+
+        .btn-shimmer {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .btn-shimmer::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+          transform: skewX(-20deg);
+        }
+
+        /* Ticker activity bar */
+        .ticker-wrap {
+          width: 100%;
+          overflow: hidden;
+          background: rgba(17, 17, 24, 0.5);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+          padding: 10px 16px;
+          margin-bottom: 24px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          z-index: 1;
+        }
+        .ticker-title {
+          font-size: 11px;
+          font-weight: 800;
+          text-transform: uppercase;
+          color: #6366F1;
+          letter-spacing: 1.2px;
+          white-space: nowrap;
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
+          padding-right: 16px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .ticker-title::before {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #10B981;
+          box-shadow: 0 0 8px #10B981;
+          animation: pulseGlow 1.5s infinite;
+        }
+        @keyframes pulseGlow {
+          0% { transform: scale(0.9); opacity: 0.6; }
+          50% { transform: scale(1.25); opacity: 1; }
+          100% { transform: scale(0.9); opacity: 0.6; }
+        }
+        .ticker-content {
+          flex-grow: 1;
+          overflow: hidden;
+          display: flex;
+          width: 100%;
+          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+        }
+        .ticker-track {
+          display: flex;
+          flex-shrink: 0;
+          gap: 40px;
+          padding-right: 40px;
+          white-space: nowrap;
+          animation: tickerScroll 25s linear infinite;
+        }
+        .ticker-content:hover .ticker-track {
+          animation-play-state: paused;
+        }
+        .ticker-item {
+          font-size: 12px;
+          color: #64748B;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .ticker-score-badge {
+          font-weight: 700;
+          font-size: 10px;
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+        @keyframes tickerScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-100%); }
+        }
+
+        /* Capabilities Grid */
+        .capabilities-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          margin-top: 16px;
+        }
+        .capability-card {
+          background: rgba(17, 17, 24, 0.4);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.03);
+          border-radius: 20px;
+          padding: 24px;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .capability-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          margin-bottom: 16px;
+        }
+
+        /* Card surfaces and layout elements with glassmorphism */
+        .card-surface {
+          background: rgba(17, 17, 24, 0.7);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
+          padding: 32px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hover-card {
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+        }
+
+        @media (hover: hover) {
+          .hover-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.5) !important;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15), 0 0 25px rgba(99, 102, 241, 0.08);
+          }
+          .btn-shimmer:hover::after {
+            animation: shimmer 1.5s infinite;
+          }
+          .accordion-header:hover {
+            background-color: rgba(30, 30, 46, 0.6) !important;
+          }
+        }
+
+        /* Pill Badge */
+        .pill-badge {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(99, 102, 241, 0.08);
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          border-radius: 100px;
+          padding: 6px 16px;
+          font-size: 12px;
+          font-weight: 600;
+          color: #6366F1;
+          margin-bottom: 24px;
+          letter-spacing: 0.5px;
+        }
+
+        /* Hero Subtitle */
+        .hero-subtitle {
+          font-size: 16px;
+          color: #64748B;
+          max-width: 600px;
+          margin: 0 auto 40px auto;
+          line-height: 1.6;
+          font-weight: 400;
+        }
+
+        /* Report Header & Domain word break */
+        .report-title {
+          font-size: 26px;
+          font-weight: 800;
+          color: #F1F5F9;
+          margin-top: 4px;
+          overflow-wrap: break-word;
+          word-break: break-word;
+        }
+
+        /* Executive Summary Container */
+        .overall-score-container {
+          background: rgba(17, 17, 24, 0.7);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
+          padding: 32px;
+          display: flex;
+          gap: 32px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .overall-score-left {
+          flex: 0 0 250px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          border-right: 1px solid #1E1E2E;
+          padding-right: 32px;
+        }
+
+        .overall-score-right {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 20px;
+        }
+
+        /* Lead Generation CTA Wrapper & Rotating Glowing Border */
+        .lead-card-wrapper {
+          position: relative;
+          overflow: hidden;
+          border-radius: 24px;
+          padding: 1px;
+          margin-top: 16px;
+          box-shadow: 0 20px 40px rgba(99, 102, 241, 0.25);
+          background: rgba(99, 102, 241, 0.2);
+        }
+        .lead-card-wrapper::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: conic-gradient(transparent, #6366F1, #8B5CF6, transparent 40%);
+          animation: rotateBorder 6s linear infinite;
+          z-index: 0;
+        }
+        @keyframes rotateBorder {
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Booking Lead Card */
+        .lead-card-inner {
+          position: relative;
+          z-index: 1;
+          background: rgba(17, 17, 24, 0.9) !important;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 23px;
+          padding: 40px 32px;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 24px;
+        }
+
+        .lead-title {
+          font-size: 30px;
+          font-weight: 800;
+          color: #F1F5F9;
+          margin-top: 16px;
+          line-height: 1.25;
+          letter-spacing: -0.5px;
+        }
+
+        /* Responsive Buttons */
+        .btn-primary {
+          background: linear-gradient(135deg, #6366F1, #8B5CF6);
+          border: none;
+          border-radius: 50px;
+          padding: 16px 32px;
+          font-size: 15px;
+          font-weight: 700;
+          color: #FFFFFF;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+          transition: all 0.25s;
+          margin-top: 8px;
+        }
+
+        .btn-booking {
+          text-decoration: none;
+          background: linear-gradient(135deg, #6366F1, #8B5CF6);
+          border: none;
+          border-radius: 50px;
+          padding: 16px 28px;
+          font-size: 15px;
+          font-weight: 700;
+          color: #FFFFFF;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+          transition: all 0.25s;
+          width: 100%;
+        }
+
+        /* Accordion Header */
+        .accordion-header {
+          transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        /* Scanning Loading State */
+        .scanner-container {
+          position: relative;
+          width: 100%;
+          max-width: 600px;
+          height: 280px;
+          background: #111118;
+          border: 1px solid #1E1E2E;
+          border-radius: 16px;
+          overflow: hidden;
+          margin: 0 auto 24px auto;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .scanner-line {
+          position: absolute;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          background: linear-gradient(90deg, transparent, #6366F1, #8B5CF6, #6366F1, transparent);
+          box-shadow: 0 0 15px #6366F1, 0 0 30px #8B5CF6;
+          animation: scan 2.5s linear infinite;
+          z-index: 10;
+        }
+
+        .mock-web-header {
+          height: 44px;
+          border-bottom: 1px solid #1E1E2E;
+          display: flex;
+          align-items: center;
+          padding: 0 16px;
+          gap: 8px;
+        }
+
+        .mock-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+        .mock-dot.red { background: #EF4444; }
+        .mock-dot.yellow { background: #F59E0B; }
+        .mock-dot.green { background: #10B981; }
+
+        .mock-web-hero {
+          padding: 32px 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          text-align: center;
+        }
+
+        .mock-text-title {
+          width: 75%;
+          height: 24px;
+          background: #1E1E2E;
+          border-radius: 6px;
+        }
+
+        .mock-text-sub {
+          width: 45%;
+          height: 14px;
+          background: #161622;
+          border-radius: 4px;
+        }
+
+        .mock-btn {
+          width: 110px;
+          height: 36px;
+          background: #1E1E2E;
+          border-radius: 8px;
+          margin-top: 8px;
+        }
+
+        .mock-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+          padding: 0 24px;
+        }
+
+        .mock-card {
+          height: 64px;
+          background: #161622;
+          border-radius: 8px;
+          border: 1px solid #1E1E2E;
+        }
+
+        /* Responsive Layouts Base (Centered Flex) */
+        .grid-scores {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 16px;
+        }
+        .grid-scores > div {
+          flex: 1 1 180px;
+          max-width: 220px;
+        }
+
+        .grid-redesign {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+        .grid-redesign > div {
+          flex: 1 1 400px;
+        }
+
+        /* iOS Input Zoom Prevention */
+        @media (max-width: 768px) {
+          .input-glow, select.input-glow, input[type="text"].input-glow {
+            font-size: 16px !important;
+          }
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 800px) {
+          .overall-score-container {
+            flex-direction: column;
+            padding: 24px 16px;
+            gap: 24px;
+          }
+          .overall-score-left {
+            flex: 1;
+            border-right: none;
+            border-bottom: 1px solid #1E1E2E;
+            padding-right: 0;
+            padding-bottom: 24px;
+          }
+          .overall-score-right {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .capabilities-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .hero-title {
+            font-size: 32px !important;
+            line-height: 1.25 !important;
+          }
+          .hero-wrapper {
+            padding: 32px 16px !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .card-surface {
+            padding: 20px 16px;
+            border-radius: 16px;
+          }
+          .grid-scores {
+            gap: 12px;
+          }
+          .grid-scores > div {
+            flex: 1 1 calc(50% - 6px);
+            max-width: none;
+          }
+          .grid-scores > div:last-child {
+            flex: 1 1 100%;
+          }
+          .lead-card-wrapper {
+            border-radius: 16px !important;
+          }
+          .lead-card-inner {
+            border-radius: 15px !important;
+            padding: 24px 16px;
+            gap: 18px;
+          }
+          .redesign-card {
+            padding: 16px !important;
+          }
+          .lead-fixes-box {
+            padding: 16px !important;
+            border-radius: 12px !important;
+          }
+          .lead-title {
+            font-size: 20px;
+          }
+          .btn-primary {
+            padding: 14px 24px;
+            font-size: 14px;
+          }
+          .btn-booking {
+            padding: 14px 22px;
+            font-size: 14px;
+          }
+          .report-title {
+            font-size: 20px;
+          }
+          .hero-subtitle {
+            font-size: 14px;
+            margin-bottom: 24px;
+          }
+          .footer-container {
+            flex-direction: column !important;
+            text-align: center !important;
+            align-items: center !important;
+            gap: 16px !important;
+          }
+        }
+
+        /* Radar and HUD styles */
+        .radar-box {
+          position: relative;
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          border: 1px solid rgba(99, 102, 241, 0.3);
+          background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto;
+        }
+        .radar-sweep {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 2px solid #6366F1;
+          animation: radarPulse 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+          opacity: 0;
+        }
+        @keyframes radarPulse {
+          0% { transform: scale(0.6); opacity: 0.8; }
+          100% { transform: scale(1.4); opacity: 0; }
+        }
+        .hud-console {
+          text-align: left;
+          background: rgba(10, 10, 15, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 16px;
+          padding: 24px;
+          font-family: 'Courier New', Courier, monospace;
+          margin-top: 12px;
+          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+        .hud-line {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+          font-size: 13px;
+          transition: all 0.3s;
+        }
+        .hud-line.pending {
+          color: #4A4A5A;
+        }
+        .hud-line.active {
+          color: #6366F1;
+          font-weight: bold;
+          text-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+        }
+        .hud-line.completed {
+          color: #10B981;
+        }
+        .live-alert-banner {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: 100px;
+          padding: 6px 16px;
+          font-size: 12px;
+          font-weight: 700;
+          color: #EF4444;
+          margin-top: 12px;
+          animation: pulseSlots 2s infinite;
+        }
+        @keyframes pulseSlots {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+          70% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .loader-grid {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 32px;
+          padding: 32px;
+          align-items: center;
+        }
+        @media (max-width: 768px) {
+          .loader-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+            padding: 20px 16px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .auditoo-wrapper {
+            padding: 20px 12px;
+          }
+          .pill-badge {
+            font-size: 11px;
+            padding: 4px 12px;
+            margin-bottom: 16px;
+          }
+        }
+      `;
+      document.head.appendChild(styleTag);
+    }
+    return () => {
+      if (styleTag && styleTag.parentNode) {
+        styleTag.parentNode.removeChild(styleTag);
+      }
+    };
+  }, []);
+
+
+
+  // --- Number Counter Animation (Easing-out 60fps) ---
   useEffect(() => {
     if (!auditData) return;
 
-    const duration = 1400;
+    const duration = 1500;
     const frameRate = 1000 / 60;
     const totalFrames = Math.round(duration / frameRate);
 
@@ -696,7 +908,8 @@ export default function App() {
     const timer = setInterval(() => {
       frame++;
       const progress = frame / totalFrames;
-      const easeProgress = progress * (2 - progress); // ease out
+      // Quadratic ease-out
+      const easeProgress = progress * (2 - progress);
 
       setAnimatedScores({
         design: Math.round((targets.design || 0) * easeProgress),
@@ -716,24 +929,9 @@ export default function App() {
     return () => clearInterval(timer);
   }, [auditData]);
 
-  // Click sub-score to open relevant accordion & scroll down
-  const handleScoreClick = (sectionKey) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [sectionKey]: true
-    }));
-
-    setTimeout(() => {
-      const element = document.getElementById(`accordion-${sectionKey}`);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 100);
-  };
-
-  // URL Utilities
+  // --- URL Validation and Sanitization ---
   const validateUrl = (urlStr) => {
-    if (!urlStr || urlStr.trim() === '') return 'Please enter a website URL';
+    if (!urlStr || urlStr.trim() === '') return 'Please enter a URL';
     let checkStr = urlStr.trim();
     if (!/^https?:\/\//i.test(checkStr)) {
       checkStr = 'http://' + checkStr;
@@ -760,13 +958,14 @@ export default function App() {
   };
 
   const getGrade = (score) => {
-    if (score >= 90) return { letter: 'A', color: 'var(--accent-emerald)', label: 'Excellent Design', themeClass: 'ticker-badge-excellent' };
-    if (score >= 80) return { letter: 'B', color: 'var(--accent-emerald)', label: 'Good Layout', themeClass: 'ticker-badge-excellent' };
-    if (score >= 70) return { letter: 'C', color: 'var(--accent-amber)', label: 'Average Layout', themeClass: 'ticker-badge-warning' };
-    if (score >= 50) return { letter: 'D', color: 'var(--accent-amber)', label: 'Needs Rebuilding', themeClass: 'ticker-badge-warning' };
-    return { letter: 'F', color: 'var(--accent-rose)', label: 'Critical Friction', themeClass: 'ticker-badge-critical' };
+    if (score >= 90) return { letter: 'A', color: '#10B981', label: 'Excellent' };
+    if (score >= 80) return { letter: 'B', color: '#10B981', label: 'Good' };
+    if (score >= 70) return { letter: 'C', color: '#F59E0B', label: 'Average' };
+    if (score >= 50) return { letter: 'D', color: '#F59E0B', label: 'Needs Improvement' };
+    return { letter: 'F', color: '#EF4444', label: 'Critical' };
   };
 
+  // --- Accordion Logic ---
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -774,7 +973,7 @@ export default function App() {
     }));
   };
 
-  // Submission handler
+  // --- API Invocation ---
   const handleAuditSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
@@ -798,12 +997,15 @@ export default function App() {
     setLoading(true);
 
     try {
+      // Fetch results from Vercel Serverless Function Proxy
       const response = await fetch('/api/audit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url: trimmedUrl })
+        body: JSON.stringify({
+          url: trimmedUrl
+        })
       });
 
       const resJson = await response.json().catch(() => ({}));
@@ -812,20 +1014,20 @@ export default function App() {
         throw new Error(resJson.error || `Server returned error status: ${response.status}`);
       }
 
-      // Safe defaults
+      // Merge with safe fallbacks to protect UI from incomplete AI payloads
       const fallback = {
         scores: { design: 60, seo: 60, speed: 60, conversion: 60, mobile: 60, overall: 60 },
-        designProblems: ["Inconsistent visual grid margins", "Sub-optimal text contrast scales"],
-        seoProblems: ["Improper meta headers configuration", "Missing structural descriptive schema attributes"],
-        speedProblems: ["Uncompressed main page media assets", "Blocking render-preventing script libraries"],
-        conversionProblems: ["Weak core value message header", "Disorganized paths to primary call to action hooks"],
-        missingCTAs: ["No clear main action hook in hero section", "Secondary utility links lacking hierarchy"],
-        mobileIssues: ["Target buttons configured too closely", "Mobile font scales too tiny for viewports"],
+        designProblems: ["Inconsistent visual hierarchy", "Sub-optimal color choices"],
+        seoProblems: ["Improper meta tag configuration", "Missing descriptive alt attributes"],
+        speedProblems: ["Unoptimized media formats", "Large asset transfer size"],
+        conversionProblems: ["Unclear path to key conversion actions", "Weak primary value message"],
+        missingCTAs: ["No primary button above the fold", "Secondary links missing structure"],
+        mobileIssues: ["Interactive elements grouped too closely", "Font configurations too small"],
         redesignSections: [
-          { section: "Hero CTA Section", priority: "High", reason: "Unfocused header messaging & missing button", suggestion: "Restructure with bold, clear values, secondary subheads, and a singular, high-contrast action widget." }
+          { section: "Hero Area", priority: "High", reason: "Unfocused messaging", suggestion: "Rebuild with a bold, clear headline, a secondary value subhead, and a single, obvious primary conversion button." }
         ],
-        quickWins: ["Compress initial graphic banner assets", "Place a distinct primary CTA widget above-the-fold", "Expand spacing and touch sizes of navigation elements"],
-        overallSummary: "The evaluated domain possesses structural viability but exhibits clear visual and layout opportunities to improve loading curves and click conversions."
+        quickWins: ["Compress hero assets and defer offscreen scripts", "Position a primary CTA button above the fold", "Adjust font weight and touch sizes for mobile elements"],
+        overallSummary: "The scanned domain demonstrates sound structural fundamentals but shows distinct opportunities for improving layouts, loading times, and mobile tap layouts to raise user conversion."
       };
 
       const sanitizedData = {
@@ -843,10 +1045,10 @@ export default function App() {
 
       setAuditData(sanitizedData);
       
+      // Update dynamic live activity feed with the newly audited site
       const newDomain = getCleanDomain(trimmedUrl);
       const newScore = sanitizedData.scores.overall;
-      const newGrade = getGrade(newScore).label.split(' ')[0]; // Excellent, Warning, etc.
-      
+      const newGrade = getGrade(newScore).letter;
       setAuditsList((prev) => {
         const filtered = prev.filter((item) => item.domain.toLowerCase() !== newDomain.toLowerCase());
         return [{ domain: newDomain, score: newScore, type: newGrade }, ...filtered];
@@ -854,7 +1056,7 @@ export default function App() {
 
       setLoading(false);
     } catch (err) {
-      setError(err.message || 'An unexpected connection error occurred.');
+      setError(err.message || 'An unexpected connection or serverless API failure occurred.');
       setLoading(false);
     }
   };
@@ -875,140 +1077,139 @@ export default function App() {
     });
   };
 
-  return (
-    <div className="saas-workspace">
-      
-      {/* Background Ambience Subtle Glows */}
-      <div className="saas-glow glow-left" />
-      <div className="saas-glow glow-right" />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: '40px', position: 'relative', zIndex: 1 }}>
+
+  return (
+    <div className="auditoo-wrapper">
+      {/* Ambient background blur blobs */}
+      <div className="ambient-blob blob-1"></div>
+      <div className="ambient-blob blob-2"></div>
+      <div className="ambient-blob blob-3"></div>
+
+      <div style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: '40px', position: 'relative', zIndex: 1 }}>
         
-        {/* ====================================================================
-            HEADER NAV BAR (Floating & Glassmorphic)
-            ==================================================================== */}
-        <header style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          padding: '16px 24px', 
-          background: 'rgba(14, 19, 38, 0.4)', 
-          backdropFilter: 'blur(20px)', 
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid var(--border-color)', 
-          borderRadius: '100px',
-          marginTop: '12px'
-        }}>
-          <div onClick={handleReset} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
-            <LogoIcon />
-            <span style={{ 
-              fontSize: '19px', 
-              fontWeight: 800, 
-              fontFamily: 'var(--font-display)', 
-              background: 'linear-gradient(135deg, #ffffff 60%, var(--text-secondary))', 
-              WebkitBackgroundClip: 'text', 
-              WebkitTextFillColor: 'transparent', 
-              letterSpacing: '-0.8px' 
-            }}>
-              Auditoo<span style={{ color: 'var(--accent-primary)' }}>.</span>
+        {/* --- Header Brand logo --- */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div 
+            onClick={handleReset}
+            style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+          >
+            {/* Custom Auditoo Vector Logo */}
+            <svg width="40" height="40" viewBox="0 0 200 200" fill="none" style={{ filter: 'drop-shadow(0 0 10px rgba(99, 102, 241, 0.45))' }}>
+              <defs>
+                <linearGradient id="logo-indigo-violet" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366F1" />
+                  <stop offset="100%" stopColor="#8B5CF6" />
+                </linearGradient>
+                <linearGradient id="logo-cyan-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#06B6D4" />
+                  <stop offset="100%" stopColor="#10B981" />
+                </linearGradient>
+                <linearGradient id="logo-handle" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8B5CF6" />
+                  <stop offset="100%" stopColor="#06B6D4" />
+                </linearGradient>
+              </defs>
+              {/* Left Loop (Indigo/Violet) */}
+              <circle cx="76" cy="96" r="32" fill="#111118" stroke="url(#logo-indigo-violet)" strokeWidth="8" />
+
+              {/* Right Loop (Cyan/Emerald) */}
+              <circle cx="124" cy="96" r="32" fill="#111118" stroke="url(#logo-cyan-emerald)" strokeWidth="8" opacity="0.95" />
+
+              {/* Magnifying Glass Handle */}
+              <path d="M146 118 L176 148" stroke="url(#logo-handle)" strokeWidth="10" strokeLinecap="round" />
+
+              {/* Left loop content: Glowing Lightning Bolt */}
+              <path d="M79 76 L65 96 L77 96 L74 114 L89 94 L77 94 Z" fill="#6366F1" />
+
+              {/* Right loop content: Glowing Checkmark */}
+              <path d="M114 96 L122 104 L138 88" fill="none" stroke="#10B981" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            
+            <span style={{ fontSize: '22px', fontWeight: 800, background: 'linear-gradient(135deg, #F1F5F9, #64748B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>
+              Auditoo<span style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>.</span>
             </span>
           </div>
-
+          
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              background: 'rgba(255, 255, 255, 0.02)', 
-              padding: '6px 14px', 
-              borderRadius: '100px', 
-              border: '1px solid var(--border-color)', 
-              fontSize: '11px', 
-              color: 'var(--text-secondary)',
-              fontWeight: 600
-            }}>
-              <span style={{ 
-                width: '6px', 
-                height: '6px', 
-                borderRadius: '50%', 
-                background: 'var(--accent-emerald)', 
-                display: 'inline-block', 
-                boxShadow: '0 0 10px var(--accent-emerald)' 
-              }} />
-              <span>Conversion Audit Active</span>
-            </div>
-            
-            <a 
-              href="https://github.com/Robin239105/Auditoo.git" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="btn-saas-outline"
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            <a
+              href="https://github.com/Robin239105/Auditoo.git"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#F1F5F9',
+                padding: '8px 16px',
+                borderRadius: '50px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                textDecoration: 'none',
+                transition: 'all 0.25s',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.25)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+              }}
             >
-              <GithubIcon />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+              </svg>
               <span>GitHub</span>
             </a>
+            <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 500 }}>
+              v1.0.0
+            </span>
           </div>
-        </header>
+        </div>
 
-        {/* ====================================================================
-            LANDING SCREEN (Inputs & Interactive Mockups)
-            ==================================================================== */}
-        {!auditData && !loading && !error && (
-          <div className="animate-fade-up" style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
-            
-            {/* Elegant Live Ticker Feed */}
-            <div style={{ 
-              width: '100%', 
-              overflow: 'hidden', 
-              background: 'rgba(14, 19, 38, 0.3)', 
-              backdropFilter: 'blur(8px)', 
-              border: '1px solid var(--border-color)', 
-              borderRadius: '100px', 
-              padding: '10px 24px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '16px' 
-            }}>
-              <div style={{ 
-                fontSize: '9.5px', 
-                fontWeight: 800, 
-                color: 'var(--accent-primary)', 
-                textTransform: 'uppercase', 
-                letterSpacing: '1px', 
-                borderRight: '1px solid rgba(255,255,255,0.06)', 
-                paddingRight: '16px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '6px' 
-              }}>
-                <span style={{ 
-                  width: '5px', 
-                  height: '5px', 
-                  borderRadius: '50%', 
-                  background: 'var(--accent-emerald)', 
-                  boxShadow: '0 0 8px var(--accent-emerald)', 
-                  display: 'inline-block' 
-                }} />
-                <span>Live Feed</span>
+        <>
+            {/* --- SECTION 1: HERO & AUDIT INPUTS --- */}
+            {!auditData && !loading && !error && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', zIndex: 2 }} className="fade-in">
+            {/* Live Ticker Bar */}
+            <div className="ticker-wrap">
+              <div className="ticker-title">
+                Live Activity
               </div>
-              
-              <div style={{ flexGrow: 1, overflow: 'hidden', display: 'flex', position: 'relative' }}>
-                <div style={{ display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'tickerScroll 26s linear infinite' }}>
-                  {auditsList.concat(auditsList).map((audit, idx) => (
-                    <span key={`ticker-1-${idx}`} style={{ fontSize: '11.5px', color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                      <strong style={{ color: '#ffffff' }}>{audit.domain}</strong>
-                      <span style={{ opacity: 0.6 }}>analyzed</span>
-                      <span style={{
-                        fontSize: '9.5px',
-                        fontWeight: 700,
-                        background: audit.score >= 80 ? 'rgba(16, 185, 129, 0.08)' : 'rgba(245, 158, 11, 0.08)',
-                        color: audit.score >= 80 ? 'var(--accent-emerald)' : 'var(--accent-amber)',
-                        border: `1px solid ${audit.score >= 80 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)'}`,
-                        padding: '2px 8px',
-                        borderRadius: '100px'
+              <div className="ticker-content">
+                <div className="ticker-track">
+                  {auditsList.map((audit, idx) => (
+                    <span key={`t1-${idx}`} className="ticker-item">
+                      <span style={{ color: '#F1F5F9', fontWeight: 600 }}>{audit.domain}</span>
+                      <span>audited</span>
+                      <span className="ticker-score-badge" style={{
+                        background: audit.score >= 90 ? 'rgba(16, 185, 129, 0.15)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                        color: audit.score >= 90 ? '#10B981' : audit.score >= 70 ? '#F59E0B' : '#EF4444',
+                        border: `1px solid ${audit.score >= 90 ? 'rgba(16, 185, 129, 0.25)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
                       }}>
-                        {audit.score}/100
+                        {audit.score}/100 ({audit.type})
+                      </span>
+                    </span>
+                  ))}
+                </div>
+                <div className="ticker-track" aria-hidden="true">
+                  {auditsList.map((audit, idx) => (
+                    <span key={`t2-${idx}`} className="ticker-item">
+                      <span style={{ color: '#F1F5F9', fontWeight: 600 }}>{audit.domain}</span>
+                      <span>audited</span>
+                      <span className="ticker-score-badge" style={{
+                        background: audit.score >= 90 ? 'rgba(16, 185, 129, 0.15)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                        color: audit.score >= 90 ? '#10B981' : audit.score >= 70 ? '#F59E0B' : '#EF4444',
+                        border: `1px solid ${audit.score >= 90 ? 'rgba(16, 185, 129, 0.25)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
+                      }}>
+                        {audit.score}/100 ({audit.type})
                       </span>
                     </span>
                   ))}
@@ -1016,320 +1217,305 @@ export default function App() {
               </div>
             </div>
 
-            {/* Premium Center-Aligned Hero Section */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+            <div className="hero-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '48px 24px', borderRadius: '24px', background: 'radial-gradient(ellipse at top, rgba(99, 102, 241, 0.1), transparent 60%)' }}>
               
-              <div style={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                gap: '8px', 
-                background: 'rgba(99, 102, 241, 0.06)', 
-                border: '1px solid rgba(99, 102, 241, 0.2)', 
-                padding: '6px 14px', 
-                borderRadius: '100px', 
-                fontSize: '11px', 
-                fontWeight: 700, 
-                color: 'var(--accent-secondary)', 
-                textTransform: 'uppercase', 
-                letterSpacing: '0.8px' 
-              }}>
-                ✦ High-Precision Layout Conversion Auditor
+              {/* Pill Badge */}
+              <div className="pill-badge">
+                ✦ 100% Free · Instant Diagnostics · High-Precision Audit
               </div>
 
-              <h1 style={{ 
-                fontSize: '52px', 
-                fontWeight: 800, 
-                lineHeight: '1.08', 
-                letterSpacing: '-0.03em', 
-                background: 'linear-gradient(135deg, #ffffff 40%, #c7d2fe, #8b5cf6)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent' 
-              }}>
-                Uncover what is killing your site's conversion.
+              {/* Main Headline */}
+              <h1 className="hero-title" style={{ fontSize: '48px', fontWeight: 800, lineHeight: 1.15, marginBottom: '16px', background: 'linear-gradient(135deg, #F1F5F9 50%, #6366F1, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-1px' }}>
+                Uncover exactly what's killing your website's performance
               </h1>
-              
-              <p style={{ fontSize: '16px', color: 'var(--text-secondary)', lineHeight: '1.6', maxWidth: '640px' }}>
-                Analyze layout shifts, core latency, asset weights, and CTA visibility scales instantly. Tailored heuristic wireframes, no signup required.
+
+              {/* Subheading */}
+              <p className="hero-subtitle">
+                Comprehensive Analysis · 24-Point Metric Evaluation · No Signup Required
               </p>
 
-              {/* Glowing Search Bar */}
-              <div style={{ width: '100%', maxWidth: '580px', marginTop: '10px' }}>
-                <form onSubmit={handleAuditSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ 
-                    position: 'relative', 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    background: 'rgba(14, 19, 38, 0.85)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: '100px',
-                    padding: '6px',
-                    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)'
-                  }}>
-                    <span style={{ position: 'absolute', left: '20px', color: 'var(--text-muted)', display: 'flex' }}>
-                      <GlobeIcon />
-                    </span>
+              {/* Input Card Container */}
+              <div className="card-surface" style={{ width: '100%', maxWidth: '760px', zIndex: 10 }}>
+                <form onSubmit={handleAuditSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  
+                  {/* Large Website URL Input */}
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <div style={{ position: 'absolute', left: '20px', color: '#64748B', display: 'flex', alignItems: 'center' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                      </svg>
+                    </div>
                     <input
                       type="text"
-                      placeholder="Enter domain name (e.g. Stripe.com)"
+                      placeholder="Enter website URL (e.g., example.com)"
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
+                      className="input-glow"
                       style={{
                         width: '100%',
-                        background: 'transparent',
-                        border: 'none',
-                        padding: '12px 20px 12px 42px',
-                        fontSize: '14.5px',
-                        color: '#ffffff',
-                        outline: 'none',
-                        fontFamily: 'var(--font-interface)'
+                        background: '#0A0A0F',
+                        border: '1px solid #1E1E2E',
+                        borderRadius: '50px',
+                        padding: '16px 20px 16px 52px',
+                        fontSize: '15px',
+                        color: '#F1F5F9',
+                        transition: 'all 0.25s',
                       }}
                     />
-                    <button type="submit" className="btn-saas-primary" style={{ padding: '12px 24px', fontSize: '13px' }}>
-                      <SearchIcon />
-                      <span>Analyze Domain</span>
-                    </button>
                   </div>
 
+
+
                   {formError && (
-                    <div style={{ 
-                      color: 'var(--accent-rose)', 
-                      fontSize: '12px', 
-                      fontWeight: 600, 
-                      display: 'inline-flex', 
-                      alignItems: 'center', 
-                      gap: '6px',
-                      justifyContent: 'center',
-                      background: 'rgba(244, 63, 94, 0.05)',
-                      padding: '6px 14px',
-                      borderRadius: '100px',
-                      border: '1px solid rgba(244, 63, 94, 0.1)',
-                      width: 'fit-content',
-                      margin: '0 auto'
-                    }}>
-                      <ErrorIcon />
+                    <div style={{ color: '#EF4444', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', textAlign: 'left' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                       {formError}
                     </div>
                   )}
+
+                  {/* Audit Submission Button */}
+                  <button
+                    type="submit"
+                    className="btn-primary btn-shimmer"
+                    style={{ width: '100%' }}
+                    onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
+                    onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                  >
+                    Audit My Website →
+                  </button>
                 </form>
               </div>
-            </div>
 
-            {/* Interactive Showcase Mockup Canvas */}
-            <div style={{ maxWidth: '840px', width: '100%', margin: '0 auto' }}>
-              <span style={{ 
-                fontSize: '10px', 
-                fontWeight: 800, 
-                color: 'var(--text-muted)', 
-                textTransform: 'uppercase', 
-                letterSpacing: '1px', 
-                textAlign: 'center', 
-                display: 'block',
-                marginBottom: '16px' 
-              }}>
-                ✦ Hover over metrics to inspect real-time audit suggestions
-              </span>
-              <BrowserMockup />
-            </div>
-
-            {/* Design Value Pillars Grid */}
-            <div className="saas-grid-3" style={{ marginTop: '20px' }}>
-              {[
-                { title: 'Visual Grid Integrity', desc: 'Checks alignment shifts, text-scaling ratios, and margins consistency.', icon: <DesignIcon />, col: 'rgba(99, 102, 241, 0.04)' },
-                { title: 'Core Render Latencies', desc: 'Examines image weight blocks, layout thread times, and paints latency.', icon: <SpeedIcon />, col: 'rgba(6, 182, 212, 0.04)' },
-                { title: 'Conversion Funnel Hooks', desc: 'Evaluates CTA proximity, visual focal anchors, and checkout path friction.', icon: <ConversionIcon />, col: 'rgba(139, 92, 246, 0.04)' }
-              ].map((scope, idx) => (
-                <div key={idx} className="card-premium card-premium-interactive" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', textAlign: 'left' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: scope.col, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
-                    {scope.icon}
-                  </div>
-                  <h4 style={{ fontSize: '14.5px', fontWeight: 800, color: '#ffffff' }}>{scope.title}</h4>
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{scope.desc}</p>
+              {/* Interactive Capability Preview Cards */}
+              <div style={{ marginTop: '48px', width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#F1F5F9', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Comprehensive Diagnostic Scope
+                </h3>
+                <div className="capabilities-grid">
+                  {[
+                    { title: 'UX & Design Analysis', desc: 'Checks typography scale, responsive layout shifts, formatting anomalies, and styling hierarchy.', icon: '🎨', color: 'rgba(99, 102, 241, 0.08)' },
+                    { title: 'Performance & Speed', desc: 'Identifies loading latency, oversized media assets, slow layout paints, and scripting blockages.', icon: '⚡', color: 'rgba(6, 182, 212, 0.08)' },
+                    { title: 'Conversion Mechanics', desc: 'Audits below-the-fold call-to-actions, conversion path friction, and messaging clarity above the fold.', icon: '🎯', color: 'rgba(139, 92, 246, 0.08)' }
+                  ].map((cap, idx) => (
+                    <div key={idx} className="capability-card hover-card">
+                      <div className="capability-icon" style={{ background: cap.color }}>{cap.icon}</div>
+                      <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#F1F5F9', marginBottom: '8px' }}>{cap.title}</h4>
+                      <p style={{ fontSize: '12px', color: '#64748B', lineHeight: '1.6' }}>{cap.desc}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
 
+            </div>
           </div>
         )}
 
-        {/* ====================================================================
-            LOADING SYSTEM AUDITING (Minimalist Telemetry Spinner)
-            ==================================================================== */}
+        {/* --- SECTION 2: LOADING STATE --- */}
         {loading && (
-          <div className="animate-fade-up" style={{ width: '100%', maxWidth: '780px', margin: '40px auto', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            
-            <div className="card-premium" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '32px', padding: '32px', alignItems: 'center' }} className="responsive-hero-grid">
-              
-              {/* Loader checklist stream */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'left' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '12px' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-rose)', display: 'inline-block', animation: 'pulseGlow 1.4s infinite' }} />
-                  <span style={{ fontSize: '9.5px', fontWeight: 800, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    SYSTEM ANALYSIS IN PROGRESS
-                  </span>
+          <div className="fade-in" style={{ width: '100%', maxWidth: '800px', margin: '40px auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="card-surface loader-grid">
+              {/* Left Column: Sequential Diagnostic HUD checklist */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '12px' }}>
+                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#EF4444', animation: 'pulseGlow 1.5s infinite' }}></div>
+                  <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#6366F1', letterSpacing: '1px' }}>SYSTEM DIAGNOSTICS ACTIVE</span>
                 </div>
-
-                {/* Highly Polished Step checklist */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div className="hud-console">
                   {[
-                    { text: 'Mapping URL node sandbox...', minStep: 1 },
-                    { text: 'Evaluating structure layers & elements...', minStep: 2 },
-                    { text: 'Testing viewport metrics & asset transfers...', minStep: 3 },
-                    { text: 'Executing CTA heuristics conversion audits...', minStep: 4 },
-                    { text: 'Assembling detailed report manifest...', minStep: 5 }
-                  ].map((step, idx) => {
-                    let colorClass = 'var(--text-muted)';
-                    let iconNode = (
-                      <span style={{ 
-                        width: '14px', 
-                        height: '14px', 
-                        borderRadius: '50%', 
-                        border: '1.5px solid var(--text-muted)', 
-                        display: 'inline-flex' 
-                      }} />
-                    );
-                    
-                    if (loaderStep >= step.minStep) {
-                      colorClass = '#ffffff';
-                      iconNode = (
-                        <span style={{ 
-                          width: '14px', 
-                          height: '14px', 
-                          borderRadius: '50%', 
-                          background: 'var(--accent-emerald)', 
-                          color: '#ffffff',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '8px',
-                          fontWeight: 900
-                        }}>
-                          ✓
-                        </span>
-                      );
-                    } else if (loaderStep === step.minStep - 1) {
-                      colorClass = 'var(--accent-primary)';
-                      iconNode = (
-                        <span className="minimal-spinning-ring" style={{ 
-                          width: '14px', 
-                          height: '14px', 
-                          borderWidth: '1.5px',
-                          margin: 0
-                        }} />
-                      );
+                    { text: "Initializing virtual sandbox...", step: 1 },
+                    { text: "Crawling DOM structures & checking meta tags...", step: 2 },
+                    { text: "Analyzing layout shifts and asset sizes...", step: 3 },
+                    { text: "Running conversion funnel heuristics...", step: 4 },
+                    { text: "Compiling data-driven recommendations...", step: 5 }
+                  ].map((stepItem) => {
+                    let status = "pending";
+                    let icon = "○";
+                    if (loaderStep >= stepItem.step) {
+                      status = "completed";
+                      icon = "✓";
+                    } else if (loaderStep === stepItem.step - 1) {
+                      status = "active";
+                      icon = "⎔";
                     }
 
                     return (
-                      <div key={idx} style={{ color: colorClass, fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '12px', fontWeight: loaderStep === step.minStep - 1 ? 600 : 400, transition: 'all 0.3s' }}>
-                        {iconNode}
-                        <span>{step.text}</span>
+                      <div key={stepItem.step} className={`hud-line ${status}`}>
+                        <span style={{ 
+                          fontFamily: 'monospace', 
+                          fontWeight: 'bold', 
+                          fontSize: '15px',
+                          display: 'inline-block',
+                          width: '18px'
+                        }}>
+                          {icon}
+                        </span>
+                        <span>{stepItem.text}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Loader telemetry concentric visual */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '220px', position: 'relative' }}>
-                <div className="minimal-spinning-ring" style={{ width: '120px', height: '120px', borderStyle: 'dashed' }} />
-                
-                <div style={{ position: 'absolute', zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <span style={{ fontSize: '26px', fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-display)', letterSpacing: '-1px' }}>
-                    {loaderStep * 20}%
-                  </span>
-                  <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px', marginTop: '2px' }}>
-                    COMPILING
-                  </span>
+              {/* Right Column: Visual scanner HUD */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                <div className="scanner-container" style={{ width: '100%', height: '220px', marginBottom: '0' }}>
+                  <div className="scanner-line"></div>
+                  
+                  {/* Radar Pulse Overlay */}
+                  <div className="radar-box" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 11 }}>
+                    <div className="radar-sweep"></div>
+                    <div className="radar-sweep" style={{ animationDelay: '0.6s' }}></div>
+                    <div className="radar-sweep" style={{ animationDelay: '1.2s' }}></div>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366F1" strokeWidth="2.5" style={{ filter: 'drop-shadow(0 0 5px rgba(99, 102, 241, 0.6))' }}>
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="2" x2="12" y2="22"></line>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                    </svg>
+                  </div>
+
+                  {/* Fake Website Mockup */}
+                  <div className="mock-web-header">
+                    <div className="mock-dot red"></div>
+                    <div className="mock-dot yellow"></div>
+                    <div className="mock-dot green"></div>
+                    <div style={{ flexGrow: 1 }}></div>
+                    <div style={{ width: '80px', height: '8px', background: '#1E1E2E', borderRadius: '4px' }}></div>
+                  </div>
+                  
+                  <div className="mock-web-hero" style={{ opacity: 0.3 }}>
+                    <div className="mock-text-title"></div>
+                    <div className="mock-text-sub"></div>
+                    <div className="mock-btn"></div>
+                  </div>
+                  
+                  <div className="mock-grid" style={{ opacity: 0.2 }}>
+                    <div className="mock-card"></div>
+                    <div className="mock-card"></div>
+                    <div className="mock-card"></div>
+                  </div>
                 </div>
               </div>
-
             </div>
-
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-              Compiling heuristic scorecard for <strong style={{ color: '#ffffff' }}>{getCleanDomain(url)}</strong>...
+            
+            <p style={{ fontSize: '13px', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              Performing live analysis of {getCleanDomain(url)} ...
             </p>
           </div>
         )}
 
-        {/* ====================================================================
-            ERROR DISPLAY
-            ==================================================================== */}
+        {/* --- ERROR DISPLAY CARD --- */}
         {error && (
-          <div className="card-premium animate-fade-up" style={{ width: '100%', maxWidth: '540px', margin: '40px auto', textAlign: 'center', border: '1px solid var(--accent-rose)' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(244, 63, 94, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-rose)', margin: '0 auto 16px auto' }}>
-              <ErrorIcon />
+          <div className="fade-in" style={{ background: '#111118', border: '1px solid #EF4444', borderRadius: '16px', padding: '32px', textAlign: 'center', maxWidth: '600px', margin: '40px auto', boxShadow: '0 8px 30px rgba(239, 68, 68, 0.15)' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto', color: '#EF4444' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
             </div>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff', marginBottom: '8px' }}>Analysis Aborted</h3>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: '1.6' }}>{error}</p>
-            
-            <button onClick={handleReset} className="btn-saas-primary" style={{ margin: '0 auto' }}>
-              Reset Audit Compiler
+            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#F1F5F9', marginBottom: '8px' }}>Audit Failed</h3>
+            <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '24px', lineHeight: '1.6' }}>
+              {error}
+            </p>
+            <button
+              onClick={handleReset}
+              className="btn-shimmer"
+              style={{
+                background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                border: 'none',
+                borderRadius: '50px',
+                padding: '12px 24px',
+                fontSize: '14px',
+                fontWeight: 600,
+                color: '#FFFFFF',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(99, 102, 241, 0.3)'
+              }}
+            >
+              Try Again
             </button>
           </div>
         )}
 
-        {/* ====================================================================
-            AUDIT REPORT RESULTS (Premium SaaS Analytics Platform Layout)
-            ==================================================================== */}
+        {/* --- AUDIT REPORT RESULTS CONTENT --- */}
         {auditData && !loading && (
-          <div className="animate-fade-up" style={{ display: 'flex', flexDirection: 'column', gap: '36px', textAlign: 'left' }}>
+          <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginBottom: '40px' }}>
             
-            {/* Report Header summary bar */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+            {/* Header info */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1E1E2E', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={{ fontSize: '9.5px', fontWeight: 800, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  DIAGNOSTIC REPORT SECURED
-                </span>
-                <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em', marginTop: '4px' }}>
-                  Auditoo Report: <span style={{ background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', wordBreak: 'break-all' }}>{getCleanDomain(url)}</span>
+                <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#6366F1', fontWeight: 700, letterSpacing: '1px' }}>AUDIT COMPLETED</span>
+                <h2 className="report-title">
+                  Report for <span style={{ color: '#8B5CF6', wordBreak: 'break-all' }}>{getCleanDomain(url)}</span>
                 </h2>
               </div>
-
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={() => window.print()} className="btn-saas-outline">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" style={{ marginRight: '4px' }}>
-                    <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
-                  </svg>
-                  <span>Save PDF</span>
-                </button>
-                <button onClick={handleReset} className="btn-saas-primary">
-                  Analyze Another Site
-                </button>
-              </div>
+              <button
+                onClick={handleReset}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid #1E1E2E',
+                  color: '#64748B',
+                  padding: '10px 18px',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  transition: 'all 0.25s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#F1F5F9';
+                  e.currentTarget.style.borderColor = '#6366F1';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#64748B';
+                  e.currentTarget.style.borderColor = '#1E1E2E';
+                }}
+              >
+                Audit Another Site
+              </button>
             </div>
 
-            {/* Split workspace Grid */}
-            <div className="saas-dashboard-grid">
+            {/* --- SECTION 3: OVERALL SCORE CARD --- */}
+            <div className="overall-score-container">
               
-              {/* Left Column: Sticky Score & Wins Card */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', position: 'sticky', top: '24px' }}>
+              {/* Circle Graphic Side */}
+              <div className="overall-score-left">
+                <ScoreRing score={animatedScores.overall} size={120} strokeWidth={9} showNumber={true} />
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#64748B', marginTop: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Score</span>
                 
-                {/* Total Score gauge */}
-                <div className="card-premium" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', background: 'rgba(14, 19, 38, 0.9)', padding: '24px' }}>
-                  <ScoreRing score={animatedScores.overall} size={110} strokeWidth={7} showNumber={true} />
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'center' }}>
-                    <span style={{ fontSize: '10px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                      Overall Design Score
-                    </span>
-                    
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: getGrade(animatedScores.overall).color }}>
-                      Grade {getGrade(animatedScores.overall).letter} ({getGrade(animatedScores.overall).label})
-                    </span>
-                  </div>
-                </div>
-
-                {/* Wins panel */}
-                <div className="card-premium" style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(14, 19, 38, 0.6)', padding: '24px' }}>
-                  <span style={{ fontSize: '10px', fontWeight: 800, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <SparklesIcon />
-                    <span>PRIORITY WIREFRAME WINS</span>
+                {/* Grade Label */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(30, 30, 46, 0.6)', border: '1px solid #1E1E2E', padding: '6px 14px', borderRadius: '50px', marginTop: '12px' }}>
+                  <span style={{ fontSize: '20px', fontWeight: 800, color: getGrade(animatedScores.overall).color }}>
+                    {getGrade(animatedScores.overall).letter}
                   </span>
-                  
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#F1F5F9' }}>
+                    {getGrade(animatedScores.overall).label}
+                  </span>
+                </div>
+              </div>
+
+              {/* Text / Summary Side */}
+              <div className="overall-score-right">
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F1F5F9', marginBottom: '8px' }}>Executive Summary</h3>
+                  <p style={{ fontSize: '15px', color: '#64748B', lineHeight: '1.7' }}>
+                    {auditData.overallSummary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 style={{ fontSize: '12px', fontWeight: 800, color: '#F1F5F9', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    🚀 QUICK WINS
+                  </h4>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {auditData.quickWins?.slice(0, 3).map((win, idx) => (
-                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '12px', color: '#ffffff', lineHeight: '1.4' }}>
-                        <span style={{ display: 'inline-flex', color: 'var(--accent-emerald)', marginTop: '2px' }}>
-                          <CheckIcon />
+                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#F1F5F9', lineHeight: '1.5' }}>
+                        <span style={{ marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(16, 185, 129, 0.1)', padding: '4px', borderRadius: '50%' }}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
                         </span>
                         <span>{win}</span>
                       </li>
@@ -1337,292 +1523,343 @@ export default function App() {
                   </ul>
                 </div>
               </div>
+            </div>
 
-              {/* Right Column: Detailed findings flow */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                
-                {/* Executive Summary */}
-                <div className="card-premium">
-                  <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#ffffff', marginBottom: '8px' }}>Executive Heuristic Summary</h3>
-                  <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', lineHeight: '1.65' }}>
-                    {auditData.overallSummary}
-                  </p>
+            {/* --- SECTION 4: SCORE GRID --- */}
+            <div className="grid-scores">
+              {[
+                { key: 'design', label: 'Design Problems', short: 'Design', desc: 'Hierarchy & layouts' },
+                { key: 'seo', label: 'SEO Issues', short: 'SEO', desc: 'Metadata & visibility' },
+                { key: 'speed', label: 'Speed Issues', short: 'Speed', desc: 'Page latency & weights' },
+                { key: 'conversion', label: 'Conversion Problems', short: 'Conversions', desc: 'Flows & action hooks' },
+                { key: 'mobile', label: 'Mobile UX', short: 'Mobile', desc: 'Viewport & touches' }
+              ].map((item) => (
+                <div key={item.key} onClick={() => handleScoreClick(item.key)} className="hover-card" style={{ background: '#111118', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'pointer' }}>
+                  <ScoreRing score={animatedScores[item.key]} size={72} strokeWidth={6} showNumber={true} />
+                  <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#F1F5F9', marginTop: '16px', marginBottom: '4px' }}>
+                    {item.short}
+                  </h4>
+                  <span style={{ fontSize: '11px', color: '#64748B', lineHeight: '1.4' }}>
+                    {item.desc}
+                  </span>
                 </div>
+              ))}
+            </div>
 
-                {/* Dynamic Scores Dials Grid */}
-                <div className="saas-scores-grid">
-                  {[
-                    { key: 'design', name: 'Design problems', label: 'Layout Grid', icon: <DesignIcon /> },
-                    { key: 'seo', name: 'SEO issues', label: 'SEO Search', icon: <SeoIcon /> },
-                    { key: 'speed', name: 'Speed issues', label: 'Render Latency', icon: <SpeedIcon /> },
-                    { key: 'conversion', name: 'Conversion problems', label: 'Funnels Friction', icon: <ConversionIcon /> },
-                    { key: 'mobile', name: 'Mobile issues', label: 'Mobile UX', icon: <MobileIcon /> }
-                  ].map((subScore) => (
-                    <div 
-                      key={subScore.key} 
-                      onClick={() => handleScoreClick(subScore.key)}
-                      className="card-premium card-premium-interactive"
-                      style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', background: 'rgba(14, 19, 38, 0.6)', cursor: 'pointer' }}
-                    >
-                      <ScoreRing score={animatedScores[subScore.key]} size={52} strokeWidth={4} showNumber={true} />
-                      <h4 style={{ fontSize: '12px', color: '#ffffff', marginTop: '12px', fontWeight: 700 }}>{subScore.label}</h4>
-                      <span style={{ fontSize: '9px', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        {subScore.icon}
-                        <span>Audit</span>
-                      </span>
-                    </div>
-                  ))}
-                </div>
+            {/* --- SECTION 5: ACCORDION ISSUES BREAKDOWN --- */}
+            <div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F1F5F9', marginBottom: '16px' }}>
+                Deep-Dive Problems & Issues
+              </h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {[
+                  { key: 'design', label: 'Design Problems', icon: '🎨', data: auditData.designProblems },
+                  { key: 'seo', label: 'SEO Issues', icon: '🔍', data: auditData.seoProblems },
+                  { key: 'speed', label: 'Speed Issues', icon: '⚡', data: auditData.speedProblems },
+                  { key: 'conversion', label: 'Conversion Problems', icon: '💰', data: auditData.conversionProblems },
+                  { key: 'mobile', label: 'Mobile Issues', icon: '📱', data: auditData.mobileIssues },
+                  { key: 'cta', label: 'Missing CTAs', icon: '🎯', data: auditData.missingCTAs }
+                ].map((sec) => {
+                  const isOpen = expandedSections[sec.key];
+                  const count = sec.data ? sec.data.length : 0;
+                  const isSevere = sec.key === 'speed' || sec.key === 'cta';
 
-                {/* Staggered Accordion lists */}
-                <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff', marginBottom: '16px' }}>Detailed Evaluation</h3>
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {[
-                      { key: 'design', name: 'Visual Layout & Grid Structures Gaps', icon: <DesignIcon />, data: auditData.designProblems },
-                      { key: 'seo', name: 'Meta Header & Search Visibility Issues', icon: <SeoIcon />, data: auditData.seoProblems },
-                      { key: 'speed', name: 'Core Speed Latency & Asset Weights Gaps', icon: <SpeedIcon />, data: auditData.speedProblems },
-                      { key: 'conversion', name: 'CTA Conversion Funnels & Flow Friction', icon: <ConversionIcon />, data: auditData.conversionProblems },
-                      { key: 'mobile', name: 'Mobile Viewport Accessibility Gaps', icon: <MobileIcon />, data: auditData.mobileIssues },
-                      { key: 'cta', name: 'Missing Primary Conversions Action Hooks', icon: <ConversionIcon />, data: auditData.missingCTAs }
-                    ].map((sec) => {
-                      const isOpen = expandedSections[sec.key];
-                      const count = sec.data ? sec.data.length : 0;
-                      const isHighPriority = sec.key === 'speed' || sec.key === 'cta';
+                  return (
+                    <div key={sec.key} id={`accordion-${sec.key}`} style={{ background: '#111118', border: '1px solid #1E1E2E', borderRadius: '12px', overflow: 'hidden' }}>
+                      {/* Accordion Toggle Header */}
+                      <button
+                        onClick={() => toggleSection(sec.key)}
+                        className="accordion-header"
+                        style={{
+                          width: '100%',
+                          background: isOpen ? 'rgba(30, 30, 46, 0.4)' : 'transparent',
+                          border: 'none',
+                          padding: '16px 20px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          cursor: 'pointer',
+                          color: '#F1F5F9',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '18px' }}>{sec.icon}</span>
+                          <span style={{ fontSize: '14px', fontWeight: 600 }}>{sec.label}</span>
+                          
+                          {/* Count Badge */}
+                          <span style={{
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            background: count > 0 ? (isSevere ? 'rgba(239, 68, 68, 0.12)' : 'rgba(245, 158, 11, 0.12)') : 'rgba(16, 185, 129, 0.12)',
+                            color: count > 0 ? (isSevere ? '#EF4444' : '#F59E0B') : '#10B981',
+                            border: `1px solid ${count > 0 ? (isSevere ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.2)') : 'rgba(16, 185, 129, 0.2)'}`,
+                            padding: '2px 8px',
+                            borderRadius: '20px'
+                          }}>
+                            {count === 0 ? 'Optimal' : `${count} ${count === 1 ? 'issue' : 'issues'} found`}
+                          </span>
+                        </div>
+                        
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.25s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </button>
 
-                      return (
-                        <div key={sec.key} id={`accordion-${sec.key}`} style={{ 
-                          background: 'rgba(14, 19, 38, 0.5)', 
-                          border: '1px solid var(--border-color)', 
-                          borderRadius: '12px', 
-                          overflow: 'hidden',
-                          transition: 'all 0.3s'
-                        }}>
-                          <button
-                            onClick={() => toggleSection(sec.key)}
-                            style={{
-                              width: '100%',
-                              background: isOpen ? 'rgba(255, 255, 255, 0.01)' : 'transparent',
-                              border: 'none',
-                              padding: '16px 20px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              cursor: 'pointer',
-                              color: '#ffffff',
-                              textAlign: 'left'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                              <span style={{ color: 'var(--accent-primary)', display: 'flex' }}>{sec.icon}</span>
-                              <span style={{ fontSize: '13.5px', fontWeight: 700 }}>{sec.name}</span>
-                              
-                              <span style={{
-                                fontSize: '9.5px',
-                                fontWeight: 800,
-                                background: count > 0 ? (isHighPriority ? 'rgba(244, 63, 94, 0.08)' : 'rgba(245, 158, 11, 0.08)') : 'rgba(16, 185, 129, 0.08)',
-                                color: count > 0 ? (isHighPriority ? 'var(--accent-rose)' : 'var(--accent-amber)') : 'var(--accent-emerald)',
-                                border: `1px solid ${count > 0 ? (isHighPriority ? 'rgba(244, 63, 94, 0.15)' : 'rgba(245, 158, 11, 0.15)') : 'rgba(16, 185, 129, 0.15)'}`,
-                                padding: '2px 8px',
-                                borderRadius: '100px'
-                              }}>
-                                {count === 0 ? 'Fully Clean' : `${count} Gaps Found`}
-                              </span>
+                      {/* Accordion Expand Area */}
+                      {isOpen && (
+                        <div style={{ padding: '20px', borderTop: '1px solid #1E1E2E', background: 'rgba(10, 10, 15, 0.4)' }}>
+                          {count === 0 ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10B981', fontSize: '13px' }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                              Fully optimized. No issues found.
                             </div>
-
-                            <svg 
-                              width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2.5"
-                              style={{ transition: 'transform 0.3s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                            >
-                              <polyline points="6 9 12 15 18 9" />
-                            </svg>
-                          </button>
-
-                          {isOpen && (
-                            <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.03)', background: 'rgba(7, 9, 19, 0.3)' }}>
-                              {count === 0 ? (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-emerald)', fontSize: '12.5px' }}>
-                                  <CheckIcon />
-                                  <span>Fully optimized structure. No issues detected in this domain check.</span>
+                          ) : (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                              {sec.data.map((issue, idx) => (
+                                <div
+                                  key={idx}
+                                  className="pop-in"
+                                  style={{
+                                    background: '#111118',
+                                    border: `1px solid ${isSevere ? 'rgba(239, 68, 68, 0.25)' : 'rgba(245, 158, 11, 0.25)'}`,
+                                    borderRadius: '30px',
+                                    padding: '6px 14px',
+                                    fontSize: '13px',
+                                    color: '#F1F5F9',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                    animationDelay: `${idx * 40}ms`
+                                  }}
+                                >
+                                  <span style={{
+                                    width: '6px',
+                                    height: '6px',
+                                    borderRadius: '50%',
+                                    background: isSevere ? '#EF4444' : '#F59E0B'
+                                  }}></span>
+                                  {issue}
                                 </div>
-                              ) : (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                  {sec.data.map((item, idx) => (
-                                    <div 
-                                      key={idx}
-                                      className="animate-fade-up"
-                                      style={{
-                                        background: '#0e1326',
-                                        border: `1px solid var(--border-color)`,
-                                        borderRadius: '8px',
-                                        padding: '10px 14px',
-                                        fontSize: '12.5px',
-                                        color: '#ffffff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        animationDelay: `${idx * 40}ms`
-                                      }}
-                                    >
-                                      <span style={{ display: 'flex', color: isHighPriority ? 'var(--accent-rose)' : 'var(--accent-amber)' }}>
-                                        {isHighPriority ? <ErrorIcon /> : <AlertIcon />}
-                                      </span>
-                                      <span>{item}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                              ))}
                             </div>
                           )}
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-                {/* Rebuilding Blueprints section */}
-                <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
-                    Proposed Rebuild Layout Blueprints
-                  </h3>
-                  <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginBottom: '16px' }}>
-                    Structural layout wireframe solutions proposed by senior advisors to recover identified conversion leakage.
-                  </p>
+            {/* --- SECTION 6: REDESIGN RECOMMENDATIONS --- */}
+            <div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F1F5F9', marginBottom: '4px' }}>
+                Sections That Need Rebuilding
+              </h3>
+              <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '20px' }}>
+                Data-driven layout blueprints to recover lost conversions.
+              </p>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {auditData.redesignSections?.map((section, idx) => {
-                      const isHigh = section.priority?.toLowerCase() === 'high';
-                      
-                      return (
-                        <div key={idx} className="card-premium" style={{ 
-                          padding: '24px', 
-                          display: 'grid', 
-                          gridTemplateColumns: '1.2fr 0.8fr', 
-                          gap: '24px', 
-                          alignItems: 'center',
-                          background: 'rgba(14, 19, 38, 0.7)'
-                        }} className="responsive-hero-grid">
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                              <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>{section.section}</h4>
-                              <span style={{
-                                fontSize: '8.5px',
-                                fontWeight: 800,
-                                background: isHigh ? 'rgba(244, 63, 94, 0.08)' : 'rgba(245, 158, 11, 0.08)',
-                                color: isHigh ? 'var(--accent-rose)' : 'var(--accent-amber)',
-                                border: `1px solid ${isHigh ? 'rgba(244, 63, 94, 0.15)' : 'rgba(245, 158, 11, 0.15)'}`,
-                                padding: '2px 8px',
-                                borderRadius: '100px',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.5px'
-                              }}>
-                                {section.priority} Priority
-                              </span>
-                            </div>
+              <div className="grid-redesign">
+                {auditData.redesignSections?.map((section, idx) => {
+                  let badgeColor = '#10B981';
+                  let badgeBg = 'rgba(16, 185, 129, 0.1)';
+                  let badgeBorder = 'rgba(16, 185, 129, 0.2)';
+                  
+                  if (section.priority?.toLowerCase() === 'high') {
+                    badgeColor = '#EF4444';
+                    badgeBg = 'rgba(239, 68, 68, 0.1)';
+                    badgeBorder = 'rgba(239, 68, 68, 0.2)';
+                  } else if (section.priority?.toLowerCase() === 'medium') {
+                    badgeColor = '#F59E0B';
+                    badgeBg = 'rgba(245, 158, 11, 0.1)';
+                    badgeBorder = 'rgba(245, 158, 11, 0.2)';
+                  }
 
-                            <div>
-                              <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Friction Anchor:</span>
-                              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: '1.4' }}>{section.reason}</p>
-                            </div>
-
-                            <div>
-                              <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Proposed Blueprint Wireframe:</span>
-                              <p style={{ fontSize: '13px', color: '#ffffff', marginTop: '2px', lineHeight: '1.5' }}>{section.suggestion}</p>
-                            </div>
-                          </div>
-
-                          {/* CSS Drawn visual grid layout mockup */}
-                          <div style={{ 
-                            background: '#070913', 
-                            border: '1px solid var(--border-color)', 
-                            borderRadius: '12px', 
-                            padding: '16px', 
-                            minHeight: '130px', 
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            gap: '8px', 
-                            justifyContent: 'center' 
+                  return (
+                    <div key={idx} className="hover-card redesign-card" style={{ background: '#111118', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                          <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#F1F5F9' }}>{section.section}</h4>
+                          <span style={{
+                            fontSize: '10px',
+                            fontWeight: 800,
+                            color: badgeColor,
+                            background: badgeBg,
+                            border: `1px solid ${badgeBorder}`,
+                            padding: '2px 8px',
+                            borderRadius: '20px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px'
                           }}>
-                            <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', textAlign: 'center', letterSpacing: '0.5px' }}>
-                              Visual wireframe mockup
-                            </span>
-                            
-                            {section.section.toLowerCase().includes('hero') ? (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center', opacity: 0.7 }}>
-                                <div style={{ width: '60%', height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px' }} />
-                                <div style={{ width: '40%', height: '5px', background: 'rgba(255,255,255,0.03)', borderRadius: '4px' }} />
-                                <div style={{ width: '50px', height: '14px', background: 'var(--accent-primary)', borderRadius: '100px', marginTop: '4px' }} />
-                              </div>
-                            ) : (
-                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px', opacity: 0.7 }}>
-                                <div style={{ height: '36px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px dashed rgba(255,255,255,0.06)' }} />
-                                <div style={{ height: '36px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px dashed rgba(255,255,255,0.06)' }} />
-                                <div style={{ height: '36px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px dashed rgba(255,255,255,0.06)' }} />
-                              </div>
-                            )}
+                            {section.priority} Priority
+                          </span>
+                        </div>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          <div>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Pain Point:</span>
+                            <p style={{ fontSize: '13px', color: '#64748B', marginTop: '2px', lineHeight: '1.5' }}>{section.reason}</p>
+                          </div>
+                          <div>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#6366F1', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Wireframe Solution:</span>
+                            <p style={{ fontSize: '14px', color: '#F1F5F9', marginTop: '2px', lineHeight: '1.5' }}>{section.suggestion}</p>
                           </div>
                         </div>
-                      );
-                    })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* --- SECTION 7: LEAD GENERATION CTA --- */}
+            <div className="lead-card-wrapper">
+              <div className="lead-card-inner">
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5CF6', background: 'rgba(139, 92, 246, 0.1)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '4px 12px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    EXCLUSIVE OFFER FOR {getCleanDomain(url).toUpperCase()}
+                  </span>
+                  
+                  <div className="live-alert-banner">
+                    <span>⚠️ Only 3 free redesign strategy sessions remaining for today.</span>
                   </div>
+                  
+                  <h3 className="lead-title" style={{ marginTop: '8px' }}>
+                    Your site is losing customers every day. Let's fix that.
+                  </h3>
+                  
+                  <p style={{ fontSize: '15px', color: '#64748B', maxWidth: '600px', margin: '8px auto 0 auto', lineHeight: '1.6' }}>
+                    I've personally audited 200+ sites. These issues are costing you valuable leads.
+                  </p>
                 </div>
 
-                {/* Personal advisor profile scheduler block */}
-                <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
-                  <CalendlyScheduler urlDomain={getCleanDomain(url)} />
+                {/* Summarized Target Fixes Box */}
+                <div className="lead-fixes-box" style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '24px', maxWidth: '520px', width: '100%', textAlign: 'left' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#F1F5F9', display: 'block', marginBottom: '16px' }}>
+                    Your site scored <span style={{ color: getGrade(auditData.scores.overall).color, fontWeight: 800 }}>{auditData.scores.overall}/100</span>. Here is what I would fix first:
+                  </span>
+                  
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {auditData.quickWins?.slice(0, 3).map((win, idx) => (
+                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#F1F5F9', lineHeight: '1.4' }}>
+                        <span style={{ marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(99, 102, 241, 0.1)', padding: '4px', borderRadius: '50%' }}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6366F1" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </span>
+                        <span>{win}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
+                {/* Booking Button Area */}
+                <div style={{ width: '100%', maxWidth: '380px' }}>
+                  <a
+                    href="https://www.alaminrobin.com/contact"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-booking btn-shimmer"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 12px 30px rgba(99, 102, 241, 0.6)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(99, 102, 241, 0.4)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    Book a Free Redesign Strategy Call →
+                  </a>
+                  
+                  <span style={{ display: 'block', fontSize: '12px', color: '#64748B', marginTop: '12px' }}>
+                    No pressure · 30 min · I'll show you exactly what to fix.
+                  </span>
+                </div>
+
+                {/* Rating / Social Proof */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                  <span style={{ color: '#F59E0B', fontSize: '14px' }}>★★★★★</span>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: '#64748B', letterSpacing: '0.3px' }}>Trusted by 50+ businesses</span>
+                </div>
               </div>
             </div>
 
           </div>
         )}
+        </>
 
-        {/* ====================================================================
-            FOOTER
-            ==================================================================== */}
-        <footer style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '16px', 
-          borderTop: '1px solid rgba(255,255,255,0.03)', 
-          marginTop: '60px', 
-          paddingTop: '24px', 
-          textAlign: 'left' 
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', maxWidth: '640px', lineHeight: '1.6' }}>
-              Auditoo Heuristics Engine · Report evaluations are based on structural wireframe logic and semantic elements checklist guidelines. All recommendations represent strategic target opportunities.
-            </p>
+        {/* --- GLOBAL FOOTER --- */}
+        {!loading && (
+          <div className="footer-container" style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderTop: '1px solid #1E1E2E', marginTop: '32px', paddingTop: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+              <p style={{ fontSize: '11px', color: '#64748B', maxWidth: '600px', lineHeight: '1.6' }}>
+                Auditoo Diagnostics · Audit reports are based on public web analysis heuristics and typical UX standards. Scores and recommendations are predictive guides.
+              </p>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <a
+                  href="https://github.com/Robin239105/Auditoo.git"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#6366F1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    textDecoration: 'underline',
+                  }}
+                >
+                  GitHub Repo
+                </a>
+                {auditData && (
+                  <button
+                    onClick={handleReset}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: '#6366F1',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    Audit Another Site
+                  </button>
+                )}
+              </div>
+            </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <a href="https://github.com/Robin239105/Auditoo.git" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', fontSize: '12px', fontWeight: 600, textDecoration: 'underline' }}>
-                GitHub Repository
-              </a>
-              {auditData && (
-                <button onClick={handleReset} style={{ background: 'transparent', border: 'none', color: 'var(--accent-primary)', fontSize: '12px', fontWeight: 600, textDecoration: 'underline', cursor: 'pointer' }}>
-                  Analyze Another site
-                </button>
-              )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.03)', paddingTop: '16px' }}>
+              <p style={{ fontSize: '12px', color: '#4B5563' }}>
+                &copy; {new Date().getFullYear()} Auditoo. All rights reserved.
+              </p>
+              <p style={{ fontSize: '12px', color: '#64748B' }}>
+                Developed by{' '}
+                <a
+                  href="https://alaminrobin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#6366F1',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#8B5CF6'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#6366F1'}
+                >
+                  Al Amin Robin
+                </a>
+              </p>
             </div>
           </div>
+        )}
 
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.02)', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
-            <p>&copy; {new Date().getFullYear()} Auditoo. All rights reserved.</p>
-            <p>
-              Developed by{' '}
-              <a 
-                href="https://alaminrobin.com" target="_blank" rel="noopener noreferrer" 
-                style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
-                onMouseEnter={(e) => e.target.style.color = 'var(--accent-secondary)'}
-                onMouseLeave={(e) => e.target.style.color = 'var(--accent-primary)'}
-              >
-                Al Amin Robin
-              </a>
-            </p>
-          </div>
-        </footer>
 
       </div>
     </div>
