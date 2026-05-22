@@ -12,6 +12,7 @@ Auditoo is a premium, high-fidelity website audit tool powered by Google Gemini.
 - **Targeted Action Checklists**: Structured recommendations categorized by priority (High, Medium, Low) to optimize conversion rates.
 - **Sleek Premium Design**: Modern dark mode interface with neon accent lines, responsive grids, custom vector logo, and fluid animations.
 - **Live Activity Feed**: Real-time ticker showing recent audit domains and their scores.
+- **Deep Technical Diagnostics (Zero-Cost)**: A dedicated 8-tab panel powered by custom serverless functions that instantly analyzes Tech Stack, Broken Links, Cookies/Privacy, Security/SSL, Carbon Footprint, DNS/Hosting, Social Tags, and Page Weight—without using any AI tokens.
 
 ---
 

@@ -114,13 +114,14 @@ export default async function handler(req, res) {
     { patterns: ['ghost.org'], name: 'Ghost', category: 'CMS', confidence: 'High' },
     { patterns: ['drupal'], name: 'Drupal', category: 'CMS', confidence: 'Medium' },
     { patterns: ['joomla'], name: 'Joomla', category: 'CMS', confidence: 'Medium' },
-    // Frameworks
+    // Frameworks & Build Tools
     { patterns: ['/_next/', '__next_data__'], name: 'Next.js', category: 'Framework', confidence: 'High' },
     { patterns: ['__nuxt__', '/_nuxt/'], name: 'Nuxt', category: 'Framework', confidence: 'High' },
     { patterns: ['ng-version', 'angular'], name: 'Angular', category: 'Framework', confidence: 'Medium' },
     { patterns: ['svelte'], name: 'Svelte', category: 'Framework', confidence: 'Medium' },
-    { patterns: ['vue.js', 'vue.min.js', '__vue__'], name: 'Vue.js', category: 'Framework', confidence: 'Medium' },
-    { patterns: ['reactdom', 'react-dom', '__react'], name: 'React', category: 'Framework', confidence: 'Medium' },
+    { patterns: ['vue.js', 'vue.min.js', '__vue__', 'id="app"'], name: 'Vue.js', category: 'Framework', confidence: 'Medium' },
+    { patterns: ['reactdom', 'react-dom', '__react', 'id="root"', 'data-reactroot'], name: 'React', category: 'Framework', confidence: 'Medium' },
+    { patterns: ['vite/client', '@vite/client', 'vite-legacy-polyfill', '<script type="module" crossorigin'], name: 'Vite', category: 'Build Tool', confidence: 'Medium' },
     { patterns: ['laravel'], name: 'Laravel', category: 'Framework', confidence: 'Medium' },
     { patterns: ['csrfmiddlewaretoken'], name: 'Django', category: 'Framework', confidence: 'Low' },
     { patterns: ['turbolinks', 'data-turbo'], name: 'Ruby on Rails', category: 'Framework', confidence: 'Low' },
