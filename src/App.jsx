@@ -61,6 +61,13 @@ export default function App() {
   const [selectedLighthouseTab, setSelectedLighthouseTab] = useState('performance');
   const [completedLighthouseTasks, setCompletedLighthouseTasks] = useState({});
 
+  // --- New Diagnostic Tools State ---
+  const [scanData, setScanData] = useState(null);
+  const [dnsData, setDnsData] = useState(null);
+  const [scanLoading, setScanLoading] = useState(false);
+  const [scanError, setScanError] = useState(null);
+  const [activeToolTab, setActiveToolTab] = useState('techStack');
+
   const [expandedSections, setExpandedSections] = useState({
     design: true,
     seo: false,
@@ -1011,24 +1018,53 @@ export default function App() {
 
     setLoaderStep(0);
     setLoading(true);
+    setScanLoading(true);
 
     try {
-      // Fetch results from Vercel Serverless Function Proxy
-      const response = await fetch('/api/audit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          url: trimmedUrl
+      // Execute all three fetches in parallel for maximum speed
+      const [auditRes, scanRes, dnsRes] = await Promise.allSettled([
+        fetch('/api/audit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: trimmedUrl })
+        }),
+        fetch('/api/scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: trimmedUrl })
+        }),
+        fetch('/api/dns', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: trimmedUrl })
         })
-      });
+      ]);
 
-      const resJson = await response.json().catch(() => ({}));
-      
-      if (!response.ok) {
-        throw new Error(resJson.error || `Server returned error status: ${response.status}`);
+      // Handle AI Audit Response
+      let resJson = {};
+      if (auditRes.status === 'fulfilled' && auditRes.value.ok) {
+        resJson = await auditRes.value.json().catch(() => ({}));
+      } else if (auditRes.status === 'fulfilled') {
+        const errJson = await auditRes.value.json().catch(() => ({}));
+        throw new Error(errJson.error || `Server returned error status: ${auditRes.value.status}`);
+      } else {
+        throw new Error('Audit API request failed');
       }
+
+      // Handle Scan Response
+      if (scanRes.status === 'fulfilled' && scanRes.value.ok) {
+        const sData = await scanRes.value.json().catch(() => null);
+        setScanData(sData);
+      } else {
+        setScanError('Failed to load deep scan diagnostics.');
+      }
+
+      // Handle DNS Response
+      if (dnsRes.status === 'fulfilled' && dnsRes.value.ok) {
+        const dData = await dnsRes.value.json().catch(() => null);
+        setDnsData(dData);
+      }
+      setScanLoading(false);
 
       // Merge with safe fallbacks to protect UI from incomplete AI payloads
       const fallback = {
@@ -1115,8 +1151,12 @@ export default function App() {
 
   const handleReset = () => {
     setAuditData(null);
+    setScanData(null);
+    setDnsData(null);
     setLoading(false);
+    setScanLoading(false);
     setError(null);
+    setScanError(null);
     setFormError(null);
     setLoaderStep(0);
     setSelectedLighthouseTab('performance');
@@ -1885,6 +1925,234 @@ export default function App() {
 
               </div>
             </div>
+
+            {/* --- SECTION 4.5: ZERO-COST TOOLS PANEL --- */}
+            {(scanData || dnsData) && (
+              <div style={{ marginTop: '24px' }} className="fade-in">
+                <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F1F5F9', marginBottom: '16px' }}>
+                  Technical Diagnostics
+                </h3>
+                <div className="card-surface" style={{ padding: '0', overflow: 'hidden' }}>
+                  {/* Tab Navigation */}
+                  <div style={{ display: 'flex', overflowX: 'auto', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', scrollbarWidth: 'none' }}>
+                    {[
+                      { id: 'techStack', icon: '🔧', label: 'Tech Stack' },
+                      { id: 'brokenLinks', icon: '🔗', label: 'Links' },
+                      { id: 'privacy', icon: '🍪', label: 'Privacy' },
+                      { id: 'security', icon: '🔒', label: 'Security' },
+                      { id: 'carbon', icon: '🌱', label: 'Carbon' },
+                      { id: 'dns', icon: '🌐', label: 'DNS' },
+                      { id: 'social', icon: '📱', label: 'Social' },
+                      { id: 'pageWeight', icon: '⚖️', label: 'Page Weight' },
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setActiveToolTab(tab.id)}
+                        style={{
+                          background: activeToolTab === tab.id ? 'rgba(99, 102, 241, 0.1)' : 'transparent',
+                          border: 'none',
+                          borderBottom: activeToolTab === tab.id ? '2px solid #6366F1' : '2px solid transparent',
+                          color: activeToolTab === tab.id ? '#F1F5F9' : '#64748B',
+                          padding: '16px 20px',
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          whiteSpace: 'nowrap',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        <span style={{ fontSize: '16px' }}>{tab.icon}</span>
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Tab Content */}
+                  <div style={{ padding: '24px' }}>
+                    {scanLoading ? (
+                      <div style={{ textAlign: 'center', padding: '40px 0', color: '#64748B', fontSize: '14px' }}>
+                        <div style={{ width: '24px', height: '24px', border: '2px solid #6366F1', borderTopColor: 'transparent', borderRadius: '50%', animation: 'rotateBorder 1s linear infinite', margin: '0 auto 16px' }}></div>
+                        Running deep technical diagnostics...
+                      </div>
+                    ) : scanError && !scanData && !dnsData ? (
+                      <div style={{ color: '#EF4444', fontSize: '13px' }}>{scanError}</div>
+                    ) : (
+                      <div className="fade-in">
+                        {activeToolTab === 'techStack' && scanData?.techStack && (
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
+                            {scanData.techStack.length === 0 ? <p style={{ color: '#64748B', fontSize: '13px' }}>No specific technologies detected.</p> : scanData.techStack.map((tech, idx) => (
+                              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                                <div style={{ fontSize: '11px', color: '#6366F1', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{tech.category}</div>
+                                <div style={{ fontSize: '15px', color: '#F1F5F9', fontWeight: 600 }}>{tech.name}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {activeToolTab === 'brokenLinks' && scanData?.links && (
+                          <div>
+                            <div style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
+                              <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '12px 20px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10B981', fontWeight: 600, fontSize: '13px' }}>{scanData.links.workingCount} Working Links</div>
+                              <div style={{ background: scanData.links.broken.length > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255, 255, 255, 0.05)', padding: '12px 20px', borderRadius: '8px', border: scanData.links.broken.length > 0 ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid transparent', color: scanData.links.broken.length > 0 ? '#EF4444' : '#64748B', fontWeight: 600, fontSize: '13px' }}>{scanData.links.broken.length} Broken Links</div>
+                            </div>
+                            {scanData.links.broken.length > 0 && (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {scanData.links.broken.map((link, idx) => (
+                                  <div key={idx} style={{ background: 'rgba(239, 68, 68, 0.05)', padding: '12px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
+                                    <span style={{ color: '#F1F5F9', wordBreak: 'break-all', paddingRight: '16px' }}>{link.url}</span>
+                                    <span style={{ background: '#EF4444', color: '#FFF', padding: '2px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '11px', whiteSpace: 'nowrap' }}>{link.status === 0 ? 'TIMEOUT' : link.status}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {activeToolTab === 'privacy' && scanData?.cookies && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                              <div style={{ background: scanData.cookies.bannerDetected ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', padding: '16px', borderRadius: '12px', border: scanData.cookies.bannerDetected ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(239, 68, 68, 0.2)' }}>
+                                <div style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 600 }}>Cookie Banner</div>
+                                <div style={{ fontSize: '12px', color: scanData.cookies.bannerDetected ? '#10B981' : '#EF4444', marginTop: '4px' }}>{scanData.cookies.bannerDetected ? 'Detected' : 'Not Found'}</div>
+                              </div>
+                              <div style={{ background: scanData.cookies.privacyPageFound ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)', padding: '16px', borderRadius: '12px', border: scanData.cookies.privacyPageFound ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(245, 158, 11, 0.2)' }}>
+                                <div style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 600 }}>Privacy Policy</div>
+                                <div style={{ fontSize: '12px', color: scanData.cookies.privacyPageFound ? '#10B981' : '#F59E0B', marginTop: '4px' }}>{scanData.cookies.privacyPageFound ? 'Link Found' : 'Not Found'}</div>
+                              </div>
+                            </div>
+                            {scanData.cookies.preConsentCookies.length > 0 && (
+                              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                                <div style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 600, marginBottom: '8px' }}>Cookies Set Before Consent ({scanData.cookies.preConsentCookies.length})</div>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                  {scanData.cookies.preConsentCookies.map((c, i) => (
+                                    <span key={i} style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', color: '#CBD5E1' }}>{c}</span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {activeToolTab === 'security' && scanData?.security && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            <div>
+                              <h4 style={{ fontSize: '14px', color: '#F1F5F9', marginBottom: '12px' }}>SSL Certificate</h4>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' }}>
+                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: '#64748B' }}>Status</div><div style={{ fontSize: '14px', color: scanData.security.ssl.valid ? '#10B981' : '#EF4444', fontWeight: 600 }}>{scanData.security.ssl.valid ? 'Valid' : 'Invalid/Missing'}</div></div>
+                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: '#64748B' }}>Issuer</div><div style={{ fontSize: '14px', color: '#F1F5F9', fontWeight: 600 }}>{scanData.security.ssl.issuer}</div></div>
+                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: '#64748B' }}>Expires</div><div style={{ fontSize: '14px', color: '#F1F5F9', fontWeight: 600 }}>{scanData.security.ssl.daysRemaining} days</div></div>
+                              </div>
+                            </div>
+                            <div>
+                              <h4 style={{ fontSize: '14px', color: '#F1F5F9', marginBottom: '12px' }}>Security Headers</h4>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                                {Object.entries(scanData.security.headers).map(([key, val]) => (
+                                  <div key={key} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '10px 12px', borderRadius: '6px', fontSize: '12px' }}>
+                                    <span style={{ color: '#CBD5E1' }}>{key}</span>
+                                    <span style={{ color: val ? '#10B981' : '#EF4444', fontWeight: 600 }}>{val ? 'PASS' : 'FAIL'}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {activeToolTab === 'carbon' && scanData?.carbon && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '32px', flexWrap: 'wrap' }}>
+                            <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', border: '4px solid #10B981', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)' }}>
+                              <span style={{ fontSize: '32px', fontWeight: 800, color: '#10B981' }}>{scanData.carbon.rating}</span>
+                              <span style={{ fontSize: '11px', color: '#10B981', textTransform: 'uppercase', fontWeight: 700 }}>Rating</span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
+                                <span style={{ color: '#64748B', fontSize: '13px' }}>CO₂ per view</span>
+                                <span style={{ color: '#F1F5F9', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.co2PerView}</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
+                                <span style={{ color: '#64748B', fontSize: '13px' }}>Cleaner than</span>
+                                <span style={{ color: '#10B981', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.cleanerThan} of tested sites</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {activeToolTab === 'dns' && dnsData && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                              <div style={{ flex: 1, minWidth: '200px', background: 'rgba(99, 102, 241, 0.1)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                                <div style={{ fontSize: '11px', color: '#6366F1', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Detected CDN / Host</div>
+                                <div style={{ fontSize: '16px', color: '#F1F5F9', fontWeight: 700 }}>{dnsData.cdn}</div>
+                              </div>
+                              <div style={{ flex: 1, minWidth: '200px', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
+                                <div style={{ fontSize: '11px', color: '#64748B', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Email Provider</div>
+                                <div style={{ fontSize: '16px', color: '#F1F5F9', fontWeight: 700 }}>{dnsData.emailProvider}</div>
+                              </div>
+                            </div>
+                            <div>
+                              <h4 style={{ fontSize: '14px', color: '#F1F5F9', marginBottom: '12px' }}>DNS Records</h4>
+                              <div style={{ background: 'rgba(0, 0, 0, 0.3)', borderRadius: '8px', overflow: 'hidden' }}>
+                                {['A', 'MX', 'NS', 'TXT'].map(type => {
+                                  const recs = dnsData.records[type] || [];
+                                  if (recs.length === 0) return null;
+                                  return (
+                                    <div key={type} style={{ display: 'flex', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', padding: '12px' }}>
+                                      <div style={{ width: '60px', color: '#6366F1', fontWeight: 700, fontSize: '13px' }}>{type}</div>
+                                      <div style={{ flex: 1, color: '#CBD5E1', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '4px', wordBreak: 'break-all' }}>
+                                        {recs.map((r, i) => <div key={i}>{typeof r === 'object' ? r.exchange : r}</div>)}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {activeToolTab === 'social' && scanData?.ogTags && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ background: '#FFFFFF', borderRadius: '8px', overflow: 'hidden', maxWidth: '500px', margin: '0 auto', width: '100%' }}>
+                              {scanData.ogTags.og.image ? (
+                                <img src={scanData.ogTags.og.image} alt="OG" style={{ width: '100%', height: '260px', objectFit: 'cover' }} />
+                              ) : (
+                                <div style={{ width: '100%', height: '260px', background: '#E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94A3B8' }}>No Image Found</div>
+                              )}
+                              <div style={{ padding: '16px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
+                                <div style={{ fontSize: '12px', color: '#64748B', textTransform: 'uppercase', marginBottom: '4px' }}>{scanData.ogTags.og.siteName || new URL(url.startsWith('http') ? url : 'https://' + url).hostname}</div>
+                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#0F172A', marginBottom: '4px', lineHeight: 1.3 }}>{scanData.ogTags.og.title || scanData.ogTags.standard.title || 'Missing Title'}</div>
+                                <div style={{ fontSize: '14px', color: '#475569', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{scanData.ogTags.og.description || scanData.ogTags.standard.description || 'Missing Description'}</div>
+                              </div>
+                            </div>
+                            <div style={{ textAlign: 'center', fontSize: '12px', color: '#64748B' }}>Live Social Share Preview</div>
+                          </div>
+                        )}
+
+                        {activeToolTab === 'pageWeight' && scanData?.pageWeight && (
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' }}>
+                            {[
+                              { label: 'HTML Size', val: scanData.pageWeight.htmlSize },
+                              { label: 'External Scripts', val: scanData.pageWeight.externalScripts },
+                              { label: 'Stylesheets', val: scanData.pageWeight.stylesheets },
+                              { label: 'Images', val: scanData.pageWeight.images },
+                              { label: 'Custom Fonts', val: scanData.pageWeight.fonts },
+                              { label: 'Inline Scripts', val: scanData.pageWeight.inlineScripts }
+                            ].map((item, idx) => (
+                              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', textAlign: 'center' }}>
+                                <div style={{ fontSize: '24px', fontWeight: 800, color: '#F1F5F9', marginBottom: '4px' }}>{item.val}</div>
+                                <div style={{ fontSize: '12px', color: '#64748B' }}>{item.label}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* --- SECTION 5: ACCORDION ISSUES BREAKDOWN --- */}
             <div>
