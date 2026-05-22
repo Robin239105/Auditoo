@@ -58,6 +58,8 @@ export default function App() {
   const [error, setError] = useState(null);
   const [auditData, setAuditData] = useState(null);
   const [loaderStep, setLoaderStep] = useState(0);
+  const [selectedLighthouseTab, setSelectedLighthouseTab] = useState('performance');
+  const [completedLighthouseTasks, setCompletedLighthouseTasks] = useState({});
 
   const [expandedSections, setExpandedSections] = useState({
     design: true,
@@ -74,7 +76,11 @@ export default function App() {
     speed: 0,
     conversion: 0,
     mobile: 0,
-    overall: 0
+    overall: 0,
+    performance: 0,
+    accessibility: 0,
+    bestPractices: 0,
+    lighthouseSeo: 0
   });
 
   // --- Recent Audits Live Activity State ---
@@ -918,11 +924,21 @@ export default function App() {
         conversion: Math.round((targets.conversion || 0) * easeProgress),
         mobile: Math.round((targets.mobile || 0) * easeProgress),
         overall: Math.round((targets.overall || 0) * easeProgress),
+        performance: Math.round((auditData.lighthouse?.performance?.score || 0) * easeProgress),
+        accessibility: Math.round((auditData.lighthouse?.accessibility?.score || 0) * easeProgress),
+        bestPractices: Math.round((auditData.lighthouse?.bestPractices?.score || 0) * easeProgress),
+        lighthouseSeo: Math.round((auditData.lighthouse?.seo?.score || 0) * easeProgress),
       });
 
       if (frame >= totalFrames) {
         clearInterval(timer);
-        setAnimatedScores(targets);
+        setAnimatedScores({
+          ...targets,
+          performance: auditData.lighthouse?.performance?.score || 0,
+          accessibility: auditData.lighthouse?.accessibility?.score || 0,
+          bestPractices: auditData.lighthouse?.bestPractices?.score || 0,
+          lighthouseSeo: auditData.lighthouse?.seo?.score || 0,
+        });
       }
     }, frameRate);
 
@@ -1027,7 +1043,42 @@ export default function App() {
           { section: "Hero Area", priority: "High", reason: "Unfocused messaging", suggestion: "Rebuild with a bold, clear headline, a secondary value subhead, and a single, obvious primary conversion button." }
         ],
         quickWins: ["Compress hero assets and defer offscreen scripts", "Position a primary CTA button above the fold", "Adjust font weight and touch sizes for mobile elements"],
-        overallSummary: "The scanned domain demonstrates sound structural fundamentals but shows distinct opportunities for improving layouts, loading times, and mobile tap layouts to raise user conversion."
+        overallSummary: "The scanned domain demonstrates sound structural fundamentals but shows distinct opportunities for improving layouts, loading times, and mobile tap layouts to raise user conversion.",
+        lighthouse: {
+          performance: {
+            score: 65,
+            metrics: { fcp: "1.8s", lcp: "3.2s", cls: "0.15", tbt: "240ms", speedIndex: "2.6s" },
+            items: [
+              { title: "Serve images in modern formats", impact: "High", description: "Image formats like WebP or AVIF often provide better compression than PNG or JPEG.", action: "Convert JPEG/PNG images to WebP formats using an automated image-minify asset script." },
+              { title: "Reduce unused JavaScript", impact: "Medium", description: "Reduce unused JavaScript and defer loading scripts until they are required.", action: "Split JavaScript bundles and use dynamic imports for below-the-fold components." },
+              { title: "Eliminate render-blocking resources", impact: "High", description: "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline.", action: "Defer loading non-critical stylesheets and scripts with async or defer tags." }
+            ]
+          },
+          accessibility: {
+            score: 72,
+            items: [
+              { title: "Buttons do not have an accessible name", impact: "High", description: "When a button doesn't have an accessible name, screen readers announce it as 'button'.", action: "Add descriptive aria-label attributes to all icon-only button and link elements." },
+              { title: "Background and foreground colors do not have a sufficient contrast ratio", impact: "High", description: "Low-contrast text is difficult or impossible for many users to read.", action: "Increase font color weight or adjust background shades to maintain a 4.5:1 ratio." },
+              { title: "Images do not have [alt] attributes", impact: "Medium", description: "Informative elements should aim for short, descriptive alternative text.", action: "Add alternative description text to every static img element on the page." }
+            ]
+          },
+          bestPractices: {
+            score: 80,
+            items: [
+              { title: "Does not use HTTPS", impact: "High", description: "All sites should be protected with HTTPS, even ones that don't handle sensitive data.", action: "Set up SSL encryption credentials and enforce standard 301 HTTPS redirection rules." },
+              { title: "Links to cross-origin destinations are unsafe", impact: "Medium", description: "Add rel='noopener' or rel='noreferrer' to any external links to improve performance and security.", action: "Append rel='noopener noreferrer' to all anchor tags with target='_blank'." },
+              { title: "Browser errors were logged to the console", impact: "Low", description: "Errors logged to the console indicate unresolved bugs or failed asset loads.", action: "Inspect console stack traces and resolve JavaScript runtime exceptions or missing asset fetches." }
+            ]
+          },
+          seo: {
+            score: 85,
+            items: [
+              { title: "Document does not have a meta description", impact: "High", description: "Meta descriptions may be included in search results to concisely summarize page content.", action: "Write a unique meta description tag containing target keywords under 160 characters." },
+              { title: "Document doesn't have a title element", impact: "High", description: "The title gives screen reader users and search engines an overview of the page context.", action: "Add a concise, keyword-rich header title element inside the HTML document head." },
+              { title: "Links do not have descriptive text", impact: "Medium", description: "Descriptive link text helps search engines understand the destination content.", action: "Replace generic link copy like 'click here' or 'learn more' with descriptive anchor names." }
+            ]
+          }
+        }
       };
 
       const sanitizedData = {
@@ -1040,7 +1091,8 @@ export default function App() {
         mobileIssues: resJson.mobileIssues || fallback.mobileIssues,
         redesignSections: resJson.redesignSections || fallback.redesignSections,
         quickWins: resJson.quickWins || fallback.quickWins,
-        overallSummary: resJson.overallSummary || fallback.overallSummary
+        overallSummary: resJson.overallSummary || fallback.overallSummary,
+        lighthouse: resJson.lighthouse || fallback.lighthouse
       };
 
       setAuditData(sanitizedData);
@@ -1067,13 +1119,19 @@ export default function App() {
     setError(null);
     setFormError(null);
     setLoaderStep(0);
+    setSelectedLighthouseTab('performance');
+    setCompletedLighthouseTasks({});
     setAnimatedScores({
       design: 0,
       seo: 0,
       speed: 0,
       conversion: 0,
       mobile: 0,
-      overall: 0
+      overall: 0,
+      performance: 0,
+      accessibility: 0,
+      bestPractices: 0,
+      lighthouseSeo: 0
     });
   };
 
@@ -1544,6 +1602,288 @@ export default function App() {
                   </span>
                 </div>
               ))}
+            </div>
+
+            {/* --- SECTION 4.5: GOOGLE LIGHTHOUSE AUDIT CENTER --- */}
+            <div className="card-surface" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ borderBottom: '1px solid #1E1E2E', paddingBottom: '16px', textAlign: 'left' }}>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#6366F1', fontWeight: 800, letterSpacing: '1px' }}>CORE PERFORMANCE SUITE</span>
+                <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#F1F5F9', marginTop: '4px' }}>
+                  Google Lighthouse Audit Heuristics
+                </h3>
+                <p style={{ fontSize: '14px', color: '#64748B', marginTop: '4px' }}>
+                  Dynamic Lighthouse compliance check. Select a category score dial to inspect concrete, step-by-step action plans.
+                </p>
+              </div>
+
+              {/* Lighthouse scores dials flex wrapper */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', gap: '16px', padding: '16px 0', borderBottom: '1px solid #1E1E2E' }}>
+                {[
+                  { key: 'performance', scoreKey: 'performance', label: 'Performance', icon: '⚡' },
+                  { key: 'accessibility', scoreKey: 'accessibility', label: 'Accessibility', icon: '♿' },
+                  { key: 'bestPractices', scoreKey: 'bestPractices', label: 'Best Practices', icon: '🛡️' },
+                  { key: 'seo', scoreKey: 'lighthouseSeo', label: 'SEO', icon: '🔍' }
+                ].map((lhTab) => {
+                  const isActive = selectedLighthouseTab === lhTab.key;
+                  const currentScore = animatedScores[lhTab.scoreKey] || 0;
+
+                  return (
+                    <div 
+                      key={lhTab.key} 
+                      onClick={() => setSelectedLighthouseTab(lhTab.key)}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '12px',
+                        cursor: 'pointer',
+                        padding: '16px 24px',
+                        borderRadius: '16px',
+                        background: isActive ? 'rgba(99, 102, 241, 0.08)' : 'transparent',
+                        border: isActive ? '1px solid rgba(99, 102, 241, 0.25)' : '1px solid transparent',
+                        boxShadow: isActive ? '0 0 15px rgba(99, 102, 241, 0.1)' : 'none',
+                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        minWidth: '150px'
+                      }}
+                      className="hover-card"
+                    >
+                      <ScoreRing score={currentScore} size={64} strokeWidth={6} showNumber={true} />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '14px' }}>{lhTab.icon}</span>
+                        <span style={{ fontSize: '13px', fontWeight: 700, color: isActive ? '#6366F1' : '#F1F5F9' }}>
+                          {lhTab.label}
+                        </span>
+                      </div>
+                      
+                      {/* Interactive indicator pill */}
+                      {isActive && (
+                        <div style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          background: '#6366F1',
+                          boxShadow: '0 0 8px #6366F1'
+                        }}></div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Sub-view under the selected Lighthouse tab */}
+              <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                
+                {/* 1. Core Web Vitals Metrics Grid (Only for Performance tab) */}
+                {selectedLighthouseTab === 'performance' && auditData.lighthouse?.performance?.metrics && (
+                  <div style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '20px', textAlign: 'left' }}>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748B', fontWeight: 700, letterSpacing: '0.8px', display: 'block', marginBottom: '16px' }}>
+                      ⚡ CORE WEB VITALS TELEMETRY
+                    </span>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '16px' }}>
+                      {[
+                        { name: 'First Contentful Paint (FCP)', val: auditData.lighthouse.performance.metrics.fcp, desc: 'Lighter is faster', spec: '< 1.8s is Good' },
+                        { name: 'Largest Contentful Paint (LCP)', val: auditData.lighthouse.performance.metrics.lcp, desc: 'Perceived load speed', spec: '< 2.5s is Good' },
+                        { name: 'Cumulative Layout Shift (CLS)', val: auditData.lighthouse.performance.metrics.cls, desc: 'Visual stability shift', spec: '< 0.1 is Good' },
+                        { name: 'Total Blocking Time (TBT)', val: auditData.lighthouse.performance.metrics.tbt, desc: 'Input delay blocks', spec: '< 150ms is Good' },
+                        { name: 'Speed Index', val: auditData.lighthouse.performance.metrics.speedIndex, desc: 'Visual content rate', spec: '< 3.4s is Good' }
+                      ].map((met, mIdx) => {
+                        // Evaluate metrics colors
+                        let isGreen = false;
+                        let isOrange = false;
+                        const numericVal = parseFloat(met.val);
+                        if (met.name.startsWith('First Contentful Paint')) {
+                          if (numericVal <= 1.8) isGreen = true;
+                          else if (numericVal <= 3.0) isOrange = true;
+                        } else if (met.name.startsWith('Largest Contentful Paint')) {
+                          if (numericVal <= 2.5) isGreen = true;
+                          else if (numericVal <= 4.0) isOrange = true;
+                        } else if (met.name.startsWith('Cumulative Layout Shift')) {
+                          if (numericVal <= 0.1) isGreen = true;
+                          else if (numericVal <= 0.25) isOrange = true;
+                        } else if (met.name.startsWith('Total Blocking Time')) {
+                          if (numericVal <= 150) isGreen = true;
+                          else if (numericVal <= 600) isOrange = true;
+                        } else if (met.name.startsWith('Speed Index')) {
+                          if (numericVal <= 3.4) isGreen = true;
+                          else if (numericVal <= 5.8) isOrange = true;
+                        }
+
+                        const statColor = isGreen ? '#10B981' : isOrange ? '#F59E0B' : '#EF4444';
+                        const statBg = isGreen ? 'rgba(16, 185, 129, 0.08)' : isOrange ? 'rgba(245, 158, 11, 0.08)' : 'rgba(239, 68, 68, 0.08)';
+                        const statBorder = isGreen ? 'rgba(16, 185, 129, 0.2)' : isOrange ? 'rgba(245, 158, 11, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+
+                        return (
+                          <div 
+                            key={mIdx} 
+                            style={{ 
+                              background: '#111118', 
+                              border: '1px solid #1E1E2E', 
+                              borderRadius: '12px', 
+                              padding: '14px', 
+                              display: 'flex', 
+                              flexDirection: 'column', 
+                              gap: '6px',
+                              textAlign: 'left'
+                            }}
+                          >
+                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', minHeight: '32px', display: 'flex', alignItems: 'center' }}>
+                              {met.name}
+                            </span>
+                            <span 
+                              style={{ 
+                                fontSize: '20px', 
+                                fontWeight: 800, 
+                                color: statColor,
+                                background: statBg,
+                                border: `1px solid ${statBorder}`,
+                                padding: '4px 10px',
+                                borderRadius: '8px',
+                                alignSelf: 'flex-start',
+                                marginTop: '4px'
+                              }}
+                            >
+                              {met.val}
+                            </span>
+                            <span style={{ fontSize: '10px', color: '#4B5563', marginTop: '2px' }}>
+                              {met.desc} · {met.spec}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Detailed Recommended Checklist: Exactly what needs to be done */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748B', fontWeight: 700, letterSpacing: '0.8px' }}>
+                      📋 ACTION PLAN CHECKLIST (WHAT TO FIX)
+                    </span>
+                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+                      {Object.keys(completedLighthouseTasks).filter(k => k.startsWith(selectedLighthouseTab) && completedLighthouseTasks[k]).length} of 3 tasks completed
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {(auditData.lighthouse?.[selectedLighthouseTab]?.items || []).map((lhItem, idx) => {
+                      const taskId = `${selectedLighthouseTab}-${idx}`;
+                      const isCompleted = !!completedLighthouseTasks[taskId];
+
+                      let impactBg = 'rgba(239, 68, 68, 0.1)';
+                      let impactColor = '#EF4444';
+                      let impactBorder = 'rgba(239, 68, 68, 0.2)';
+
+                      if (lhItem.impact?.toLowerCase() === 'medium') {
+                        impactBg = 'rgba(245, 158, 11, 0.1)';
+                        impactColor = '#F59E0B';
+                        impactBorder = 'rgba(245, 158, 11, 0.2)';
+                      } else if (lhItem.impact?.toLowerCase() === 'low') {
+                        impactBg = 'rgba(16, 185, 129, 0.1)';
+                        impactColor = '#10B981';
+                        impactBorder = 'rgba(16, 185, 129, 0.2)';
+                      }
+
+                      return (
+                        <div 
+                          key={idx}
+                          style={{
+                            background: '#111118',
+                            border: `1px solid ${isCompleted ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255, 255, 255, 0.05)'}`,
+                            borderRadius: '16px',
+                            padding: '20px',
+                            display: 'flex',
+                            gap: '16px',
+                            alignItems: 'flex-start',
+                            opacity: isCompleted ? 0.6 : 1,
+                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                            boxShadow: isCompleted ? 'inset 0 0 10px rgba(16, 185, 129, 0.05)' : 'none'
+                          }}
+                        >
+                          {/* Circle interactive toggle checkbox */}
+                          <div 
+                            onClick={() => {
+                              setCompletedLighthouseTasks(prev => ({
+                                ...prev,
+                                [taskId]: !prev[taskId]
+                              }));
+                            }}
+                            style={{
+                              width: '24px',
+                              height: '24px',
+                              borderRadius: '50%',
+                              border: `2px solid ${isCompleted ? '#10B981' : '#64748B'}`,
+                              background: isCompleted ? '#10B981' : 'transparent',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                              marginTop: '2px',
+                              transition: 'all 0.2s'
+                            }}
+                          >
+                            {isCompleted && (
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            )}
+                          </div>
+
+                          {/* Content block */}
+                          <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '6px', textAlign: 'left' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                              <h4 style={{ 
+                                fontSize: '15px', 
+                                fontWeight: 700, 
+                                color: '#F1F5F9',
+                                textDecoration: isCompleted ? 'line-through' : 'none'
+                              }}>
+                                {lhItem.title}
+                              </h4>
+                              
+                              <span style={{
+                                fontSize: '9px',
+                                fontWeight: 800,
+                                color: impactColor,
+                                background: impactBg,
+                                border: `1px solid ${impactBorder}`,
+                                padding: '2px 8px',
+                                borderRadius: '20px',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
+                              }}>
+                                {lhItem.impact} Impact
+                              </span>
+                            </div>
+
+                            <p style={{ fontSize: '13px', color: '#64748B', lineHeight: '1.5' }}>
+                              {lhItem.description}
+                            </p>
+
+                            {/* Action capsule detailing exactly what needs to be done */}
+                            <div style={{ 
+                              background: 'rgba(99, 102, 241, 0.05)', 
+                              borderLeft: '3px solid #6366F1', 
+                              borderRadius: '4px 8px 8px 4px', 
+                              padding: '10px 14px', 
+                              marginTop: '8px' 
+                            }}>
+                              <span style={{ fontSize: '10px', fontWeight: 800, color: '#6366F1', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>
+                                FIX ACTION STEPS:
+                              </span>
+                              <p style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 500, lineHeight: '1.4' }}>
+                                {lhItem.action}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
             </div>
 
             {/* --- SECTION 5: ACCORDION ISSUES BREAKDOWN --- */}

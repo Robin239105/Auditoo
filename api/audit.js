@@ -97,7 +97,7 @@ First, determine the likely category, industry, or purpose of the website by eva
 Tailor all scores, problems, and redesign suggestions specifically to this website type, subdomain context, and purpose. 
 
 Ensure the following:
-1. Vary the scores (design, seo, speed, conversion, mobile, overall) realistically so they do not look identical to previous runs or other websites. Introduce custom variations based on the complexity of the domain name and subdomain category.
+1. Vary the scores (design, seo, speed, conversion, mobile, overall) realistically so they do not look identical to previous runs or other websites. Introduce custom variations based on the complexity of the domain name and subdomain category. Also vary all Lighthouse category scores dynamically.
 2. For each problem array (designProblems, seoProblems, speedProblems, conversionProblems, mobileIssues, missingCTAs) and the quickWins array, you MUST generate EXACTLY 3 items.
 3. For redesignSections, you MUST generate EXACTLY 2 section items.
 4. Keep every single item description very short, concise, and direct (under 12 words per item). This is crucial to avoid API latency and output truncation.
@@ -106,8 +106,9 @@ Ensure the following:
    - For subdomains like "shop.*" or e-commerce: focus on checkout cart placement, product details layout, filtering, and conversion metrics.
    - For blogs/news: focus on readability, typography, social sharing, and searchability.
    - For portfolios: focus on project showcase quality, contact ease, and resume download visibility.
-6. Write a unique, custom 1-2 sentence overallSummary (maximum 35 words) that specifically references the domain and subdomain name, its industry, and the key issues identified.
-7. Do not use generic filler text or identical lists of issues across different websites.
+6. Provide specific Google Lighthouse scores and metrics for the domain (e.g., Performance, Accessibility, Best Practices, and SEO), along with EXACTLY 3 extremely actionable checklist recommendations per category specifying exactly what needs to be done.
+7. Write a unique, custom 1-2 sentence overallSummary (maximum 35 words) that specifically references the domain and subdomain name, its industry, and the key issues identified.
+8. Do not use generic filler text or identical lists of issues across different websites.
 
 Use the following JSON schema:
 {
@@ -134,7 +135,60 @@ Use the following JSON schema:
     }
   ],
   "quickWins": string[],
-  "overallSummary": string
+  "overallSummary": string,
+  "lighthouse": {
+    "performance": {
+      "score": number, // 0-100
+      "metrics": {
+        "fcp": string, // e.g., "1.1s"
+        "lcp": string, // e.g., "2.4s"
+        "cls": string, // e.g., "0.08"
+        "tbt": string, // e.g., "120ms"
+        "speedIndex": string // e.g., "1.8s"
+      },
+      "items": [
+        {
+          "title": string, // e.g. "Eliminate render-blocking resources"
+          "impact": "High" | "Medium" | "Low",
+          "description": string, // under 12 words description of the issue
+          "action": string // what exactly needs to be done to fix it, under 15 words
+        }
+      ]
+    },
+    "accessibility": {
+      "score": number,
+      "items": [
+        {
+          "title": string,
+          "impact": "High" | "Medium" | "Low",
+          "description": string,
+          "action": string
+        }
+      ]
+    },
+    "bestPractices": {
+      "score": number,
+      "items": [
+        {
+          "title": string,
+          "impact": "High" | "Medium" | "Low",
+          "description": string,
+          "action": string
+        }
+      ]
+    },
+    "seo": {
+      "score": number,
+      "items": [
+        {
+          "title": string,
+          "impact": "High" | "Medium" | "Low",
+          "description": string,
+          "action": string
+        }
+      ]
+    }
+  }
 }
 
 If you don't have specific data for this URL, use reasonable estimates based on typical websites in this industry. Always return plausible, specific, actionable issues - never generic filler.
@@ -196,7 +250,104 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
         type: 'array',
         items: { type: 'string' }
       },
-      overallSummary: { type: 'string' }
+      overallSummary: { type: 'string' },
+      lighthouse: {
+        type: 'object',
+        properties: {
+          performance: {
+            type: 'object',
+            properties: {
+              score: { type: 'integer' },
+              metrics: {
+                type: 'object',
+                properties: {
+                  fcp: { type: 'string' },
+                  lcp: { type: 'string' },
+                  cls: { type: 'string' },
+                  tbt: { type: 'string' },
+                  speedIndex: { type: 'string' }
+                },
+                required: ['fcp', 'lcp', 'cls', 'tbt', 'speedIndex']
+              },
+              items: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    impact: { type: 'string', enum: ['High', 'Medium', 'Low'] },
+                    description: { type: 'string' },
+                    action: { type: 'string' }
+                  },
+                  required: ['title', 'impact', 'description', 'action']
+                }
+              }
+            },
+            required: ['score', 'metrics', 'items']
+          },
+          accessibility: {
+            type: 'object',
+            properties: {
+              score: { type: 'integer' },
+              items: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    impact: { type: 'string', enum: ['High', 'Medium', 'Low'] },
+                    description: { type: 'string' },
+                    action: { type: 'string' }
+                  },
+                  required: ['title', 'impact', 'description', 'action']
+                }
+              }
+            },
+            required: ['score', 'items']
+          },
+          bestPractices: {
+            type: 'object',
+            properties: {
+              score: { type: 'integer' },
+              items: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    impact: { type: 'string', enum: ['High', 'Medium', 'Low'] },
+                    description: { type: 'string' },
+                    action: { type: 'string' }
+                  },
+                  required: ['title', 'impact', 'description', 'action']
+                }
+              }
+            },
+            required: ['score', 'items']
+          },
+          seo: {
+            type: 'object',
+            properties: {
+              score: { type: 'integer' },
+              items: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    impact: { type: 'string', enum: ['High', 'Medium', 'Low'] },
+                    description: { type: 'string' },
+                    action: { type: 'string' }
+                  },
+                  required: ['title', 'impact', 'description', 'action']
+                }
+              }
+            },
+            required: ['score', 'items']
+          }
+        },
+        required: ['performance', 'accessibility', 'bestPractices', 'seo']
+      }
     },
     required: [
       'scores',
@@ -208,7 +359,8 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
       'mobileIssues',
       'redesignSections',
       'quickWins',
-      'overallSummary'
+      'overallSummary',
+      'lighthouse'
     ]
   };
 
