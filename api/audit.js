@@ -385,7 +385,7 @@ Return ONLY the JSON. Nothing before it. Nothing after it.`;
             responseMimeType: 'application/json',
             responseSchema: responseSchema,
             temperature: 0.7,
-            maxOutputTokens: 2048
+            maxOutputTokens: 8192
           }
         })
       });
