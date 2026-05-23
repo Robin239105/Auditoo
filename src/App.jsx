@@ -571,7 +571,7 @@ export default function App() {
                 Live Activity
               </div>
               <div className="ticker-content">
-                <div className="ticker-track">
+                <div className="ticker-slide">
                   {auditsList.map((audit, idx) => (
                     <span key={`t1-${idx}`} className="ticker-item">
                       <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{audit.domain}</span>
@@ -586,7 +586,7 @@ export default function App() {
                     </span>
                   ))}
                 </div>
-                <div className="ticker-track" aria-hidden="true">
+                <div className="ticker-slide" aria-hidden="true">
                   {auditsList.map((audit, idx) => (
                     <span key={`t2-${idx}`} className="ticker-item">
                       <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{audit.domain}</span>
