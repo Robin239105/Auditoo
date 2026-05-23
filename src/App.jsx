@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Wrench, Link as LinkIcon, Cookie, Lock, Leaf, Globe, Scale, Palette, Zap, Target, Rocket, Accessibility, ShieldCheck, Search, Smartphone, CircleDollarSign } from "lucide-react";
 
 // Reusable Circular Progress Ring Component
 const ScoreRing = ({ score, size = 60, strokeWidth = 6, showNumber = false }) => {
@@ -1399,9 +1400,9 @@ export default function App() {
                 </h3>
                 <div className="capabilities-grid">
                   {[
-                    { title: 'UX & Design Analysis', desc: 'Checks typography scale, responsive layout shifts, formatting anomalies, and styling hierarchy.', icon: '🎨', color: 'rgba(99, 102, 241, 0.08)' },
-                    { title: 'Performance & Speed', desc: 'Identifies loading latency, oversized media assets, slow layout paints, and scripting blockages.', icon: '⚡', color: 'rgba(6, 182, 212, 0.08)' },
-                    { title: 'Conversion Mechanics', desc: 'Audits below-the-fold call-to-actions, conversion path friction, and messaging clarity above the fold.', icon: '🎯', color: 'rgba(139, 92, 246, 0.08)' }
+                    { title: 'UX & Design Analysis', desc: 'Checks typography scale, responsive layout shifts, formatting anomalies, and styling hierarchy.', icon: <Palette size={20} color="#6366F1" />, color: 'rgba(99, 102, 241, 0.08)' },
+                    { title: 'Performance & Speed', desc: 'Identifies loading latency, oversized media assets, slow layout paints, and scripting blockages.', icon: <Zap size={20} color="#6366F1" />, color: 'rgba(6, 182, 212, 0.08)' },
+                    { title: 'Conversion Mechanics', desc: 'Audits below-the-fold call-to-actions, conversion path friction, and messaging clarity above the fold.', icon: <Target size={20} color="#6366F1" />, color: 'rgba(139, 92, 246, 0.08)' }
                   ].map((cap, idx) => (
                     <div key={idx} className="capability-card hover-card">
                       <div className="capability-icon" style={{ background: cap.color }}>{cap.icon}</div>
@@ -1611,7 +1612,7 @@ export default function App() {
                 
                 <div>
                   <h4 style={{ fontSize: '12px', fontWeight: 800, color: '#F1F5F9', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    🚀 QUICK WINS
+                    <Rocket size={16} color="#6366F1" style={{ marginRight: "8px" }} /> QUICK WINS
                   </h4>
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {auditData.quickWins?.slice(0, 3).map((win, idx) => (
@@ -1665,10 +1666,10 @@ export default function App() {
               {/* Lighthouse scores dials flex wrapper */}
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', gap: '16px', padding: '16px 0', borderBottom: '1px solid #1E1E2E' }}>
                 {[
-                  { key: 'performance', scoreKey: 'performance', label: 'Performance', icon: '⚡' },
-                  { key: 'accessibility', scoreKey: 'accessibility', label: 'Accessibility', icon: '♿' },
-                  { key: 'bestPractices', scoreKey: 'bestPractices', label: 'Best Practices', icon: '🛡️' },
-                  { key: 'seo', scoreKey: 'lighthouseSeo', label: 'SEO', icon: '🔍' }
+                  { key: 'performance', scoreKey: 'performance', label: 'Performance', icon: <Zap size={20} color="#6366F1" /> },
+                  { key: 'accessibility', scoreKey: 'accessibility', label: 'Accessibility', icon: <Accessibility size={20} color="#6366F1" /> },
+                  { key: 'bestPractices', scoreKey: 'bestPractices', label: 'Best Practices', icon: <ShieldCheck size={20} color="#6366F1" /> },
+                  { key: 'seo', scoreKey: 'lighthouseSeo', label: 'SEO', icon: <Search size={20} color="#6366F1" /> }
                 ].map((lhTab) => {
                   const isActive = selectedLighthouseTab === lhTab.key;
                   const currentScore = animatedScores[lhTab.scoreKey] || 0;
@@ -1723,7 +1724,7 @@ export default function App() {
                 {selectedLighthouseTab === 'performance' && auditData.lighthouse?.performance?.metrics && (
                   <div style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '20px', textAlign: 'left' }}>
                     <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748B', fontWeight: 700, letterSpacing: '0.8px', display: 'block', marginBottom: '16px' }}>
-                      ⚡ CORE WEB VITALS TELEMETRY
+                      <Zap size={14} color="#6366F1" style={{ marginRight: "6px", display: "inline-block", verticalAlign: "middle" }} /> <span style={{ verticalAlign: "middle" }}>CORE WEB VITALS TELEMETRY</span>
                     </span>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '16px' }}>
                       {[
@@ -1942,14 +1943,14 @@ export default function App() {
                   {/* Tab Navigation */}
                   <div style={{ display: 'flex', overflowX: 'auto', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', scrollbarWidth: 'none' }}>
                     {[
-                      { id: 'techStack', icon: '🔧', label: 'Tech Stack' },
-                      { id: 'brokenLinks', icon: '🔗', label: 'Links' },
-                      { id: 'privacy', icon: '🍪', label: 'Privacy' },
-                      { id: 'security', icon: '🔒', label: 'Security' },
-                      { id: 'carbon', icon: '🌱', label: 'Carbon' },
-                      { id: 'dns', icon: '🌐', label: 'DNS' },
-                      { id: 'social', icon: '📱', label: 'Social' },
-                      { id: 'pageWeight', icon: '⚖️', label: 'Page Weight' },
+                      { id: 'techStack', icon: <Wrench size={20} color="#6366F1" />, label: 'Tech Stack' },
+                      { id: 'brokenLinks', icon: <LinkIcon size={20} color="#6366F1" />, label: 'Links' },
+                      { id: 'privacy', icon: <Cookie size={20} color="#6366F1" />, label: 'Privacy' },
+                      { id: 'security', icon: <Lock size={20} color="#6366F1" />, label: 'Security' },
+                      { id: 'carbon', icon: <Leaf size={20} color="#6366F1" />, label: 'Carbon' },
+                      { id: 'dns', icon: <Globe size={20} color="#6366F1" />, label: 'DNS' },
+                      { id: 'social', icon: <Smartphone size={20} color="#6366F1" />, label: 'Social' },
+                      { id: 'pageWeight', icon: <Scale size={20} color="#6366F1" />, label: 'Page Weight' },
                     ].map(tab => (
                       <button
                         key={tab.id}
@@ -2168,12 +2169,12 @@ export default function App() {
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  { key: 'design', label: 'Design Problems', icon: '🎨', data: auditData.designProblems },
-                  { key: 'seo', label: 'SEO Issues', icon: '🔍', data: auditData.seoProblems },
-                  { key: 'speed', label: 'Speed Issues', icon: '⚡', data: auditData.speedProblems },
-                  { key: 'conversion', label: 'Conversion Problems', icon: '💰', data: auditData.conversionProblems },
-                  { key: 'mobile', label: 'Mobile Issues', icon: '📱', data: auditData.mobileIssues },
-                  { key: 'cta', label: 'Missing CTAs', icon: '🎯', data: auditData.missingCTAs }
+                  { key: 'design', label: 'Design Problems', icon: <Palette size={20} color="#6366F1" />, data: auditData.designProblems },
+                  { key: 'seo', label: 'SEO Issues', icon: <Search size={20} color="#6366F1" />, data: auditData.seoProblems },
+                  { key: 'speed', label: 'Speed Issues', icon: <Zap size={20} color="#6366F1" />, data: auditData.speedProblems },
+                  { key: 'conversion', label: 'Conversion Problems', icon: <CircleDollarSign size={20} color="#6366F1" />, data: auditData.conversionProblems },
+                  { key: 'mobile', label: 'Mobile Issues', icon: <Smartphone size={20} color="#6366F1" />, data: auditData.mobileIssues },
+                  { key: 'cta', label: 'Missing CTAs', icon: <Target size={20} color="#6366F1" />, data: auditData.missingCTAs }
                 ].map((sec) => {
                   const isOpen = expandedSections[sec.key];
                   const count = sec.data ? sec.data.length : 0;
