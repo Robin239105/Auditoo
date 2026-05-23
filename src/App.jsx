@@ -23,7 +23,7 @@ const ScoreRing = ({ score, size = 60, strokeWidth = 6, showNumber = false }) =>
           cy={size / 2}
           r={radius}
           fill="transparent"
-          stroke="#1E1E2E"
+          stroke="var(--border-color)"
           strokeWidth={strokeWidth}
         />
         {/* Foreground Circle */}
@@ -44,7 +44,7 @@ const ScoreRing = ({ score, size = 60, strokeWidth = 6, showNumber = false }) =>
       </svg>
       {showNumber && (
         <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: size * 0.28, fontWeight: 800, color: '#F1F5F9' }}>{score}</span>
+          <span style={{ fontSize: size * 0.28, fontWeight: 800, color: 'var(--text-main)' }}>{score}</span>
         </div>
       )}
     </div>
@@ -53,6 +53,19 @@ const ScoreRing = ({ score, size = 60, strokeWidth = 6, showNumber = false }) =>
 
 export default function App() {
   // --- React State ---
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('auditoo_theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+  
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('auditoo_theme', theme);
+  }, [theme]);
+  
+  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState(null);
@@ -157,760 +170,7 @@ export default function App() {
     }, 80);
   };
 
-  // --- Dynamic Style Block Injection ---
-  useEffect(() => {
-    const styleId = 'auditoo-global-styles';
-    let styleTag = document.getElementById(styleId);
-    if (!styleTag) {
-      styleTag = document.createElement('style');
-      styleTag.id = styleId;
-      styleTag.innerHTML = `
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
-
-        .auditoo-wrapper {
-          position: relative;
-          background-color: #0A0A0F;
-          font-family: 'Inter', system-ui, -apple-system, sans-serif;
-          color: #F1F5F9;
-          min-height: 100vh;
-          padding: 40px 24px;
-          display: flex;
-          flex-direction: column;
-          overflow-x: hidden;
-          word-break: break-word;
-        }
-
-        /* Ambient Animated Blobs */
-        .ambient-blob {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(120px);
-          opacity: 0.15;
-          z-index: 0;
-          pointer-events: none;
-          animation: floatBlob 20s infinite alternate ease-in-out;
-        }
-        .blob-1 {
-          width: 400px;
-          height: 400px;
-          background: #6366F1;
-          top: 5%;
-          left: -10%;
-          animation-duration: 25s;
-        }
-        .blob-2 {
-          width: 500px;
-          height: 500px;
-          background: #8B5CF6;
-          bottom: 10%;
-          right: -10%;
-          animation-duration: 30s;
-          animation-delay: -5s;
-        }
-        .blob-3 {
-          width: 300px;
-          height: 300px;
-          background: #06B6D4;
-          top: 45%;
-          left: 60%;
-          animation-duration: 20s;
-          animation-delay: -10s;
-        }
-        @keyframes floatBlob {
-          0% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(60px, -80px) scale(1.1); }
-          100% { transform: translate(-30px, 30px) scale(0.95); }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes popIn {
-          from {
-            transform: scale(0.85);
-            opacity: 0;
-          }
-          to {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-
-        @keyframes shimmer {
-          0% {
-            left: -100%;
-          }
-          100% {
-            left: 100%;
-          }
-        }
-
-        @keyframes scan {
-          0% { top: 0; }
-          50% { top: 100%; }
-          100% { top: 0; }
-        }
-
-        .fade-in {
-          animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .pop-in {
-          animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        .input-glow:focus {
-          outline: none;
-          border-color: #6366F1 !important;
-          box-shadow: 0 0 15px rgba(99, 102, 241, 0.4) !important;
-        }
-
-        .btn-shimmer {
-          position: relative;
-          overflow: hidden;
-        }
-
-        .btn-shimmer::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 50%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-          transform: skewX(-20deg);
-        }
-
-        /* Ticker activity bar */
-        .ticker-wrap {
-          width: 100%;
-          overflow: hidden;
-          background: rgba(17, 17, 24, 0.5);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 12px;
-          padding: 10px 16px;
-          margin-bottom: 24px;
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          z-index: 1;
-        }
-        .ticker-title {
-          font-size: 11px;
-          font-weight: 800;
-          text-transform: uppercase;
-          color: #6366F1;
-          letter-spacing: 1.2px;
-          white-space: nowrap;
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
-          padding-right: 16px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .ticker-title::before {
-          content: '';
-          display: inline-block;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #10B981;
-          box-shadow: 0 0 8px #10B981;
-          animation: pulseGlow 1.5s infinite;
-        }
-        @keyframes pulseGlow {
-          0% { transform: scale(0.9); opacity: 0.6; }
-          50% { transform: scale(1.25); opacity: 1; }
-          100% { transform: scale(0.9); opacity: 0.6; }
-        }
-        .ticker-content {
-          flex-grow: 1;
-          overflow: hidden;
-          display: flex;
-          width: 100%;
-          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-          -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-        }
-        .ticker-track {
-          display: flex;
-          flex-shrink: 0;
-          gap: 40px;
-          padding-right: 40px;
-          white-space: nowrap;
-          animation: tickerScroll 25s linear infinite;
-        }
-        .ticker-content:hover .ticker-track {
-          animation-play-state: paused;
-        }
-        .ticker-item {
-          font-size: 12px;
-          color: #64748B;
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .ticker-score-badge {
-          font-weight: 700;
-          font-size: 10px;
-          padding: 2px 6px;
-          border-radius: 4px;
-        }
-        @keyframes tickerScroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
-        }
-
-        /* Capabilities Grid */
-        .capabilities-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          margin-top: 16px;
-        }
-        .capability-card {
-          background: rgba(17, 17, 24, 0.4);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.03);
-          border-radius: 20px;
-          padding: 24px;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .capability-icon {
-          width: 44px;
-          height: 44px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 20px;
-          margin-bottom: 16px;
-        }
-
-        /* Card surfaces and layout elements with glassmorphism */
-        .card-surface {
-          background: rgba(17, 17, 24, 0.7);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 24px;
-          padding: 32px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .hover-card {
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
-        }
-
-        @media (hover: hover) {
-          .hover-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(99, 102, 241, 0.5) !important;
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15), 0 0 25px rgba(99, 102, 241, 0.08);
-          }
-          .btn-shimmer:hover::after {
-            animation: shimmer 1.5s infinite;
-          }
-          .accordion-header:hover {
-            background-color: rgba(30, 30, 46, 0.6) !important;
-          }
-        }
-
-        /* Pill Badge */
-        .pill-badge {
-          display: inline-flex;
-          align-items: center;
-          background: rgba(99, 102, 241, 0.08);
-          border: 1px solid rgba(99, 102, 241, 0.2);
-          border-radius: 100px;
-          padding: 6px 16px;
-          font-size: 12px;
-          font-weight: 600;
-          color: #6366F1;
-          margin-bottom: 24px;
-          letter-spacing: 0.5px;
-        }
-
-        /* Hero Subtitle */
-        .hero-subtitle {
-          font-size: 16px;
-          color: #64748B;
-          max-width: 600px;
-          margin: 0 auto 40px auto;
-          line-height: 1.6;
-          font-weight: 400;
-        }
-
-        /* Report Header & Domain word break */
-        .report-title {
-          font-size: 26px;
-          font-weight: 800;
-          color: #F1F5F9;
-          margin-top: 4px;
-          overflow-wrap: break-word;
-          word-break: break-word;
-        }
-
-        /* Executive Summary Container */
-        .overall-score-container {
-          background: rgba(17, 17, 24, 0.7);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 24px;
-          padding: 32px;
-          display: flex;
-          gap: 32px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .overall-score-left {
-          flex: 0 0 250px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          border-right: 1px solid #1E1E2E;
-          padding-right: 32px;
-        }
-
-        .overall-score-right {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          gap: 20px;
-        }
-
-        /* Lead Generation CTA Wrapper & Rotating Glowing Border */
-        .lead-card-wrapper {
-          position: relative;
-          overflow: hidden;
-          border-radius: 24px;
-          padding: 1px;
-          margin-top: 16px;
-          box-shadow: 0 20px 40px rgba(99, 102, 241, 0.25);
-          background: rgba(99, 102, 241, 0.2);
-        }
-        .lead-card-wrapper::before {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: conic-gradient(transparent, #6366F1, #8B5CF6, transparent 40%);
-          animation: rotateBorder 6s linear infinite;
-          z-index: 0;
-        }
-        @keyframes rotateBorder {
-          100% { transform: rotate(360deg); }
-        }
-
-        /* Booking Lead Card */
-        .lead-card-inner {
-          position: relative;
-          z-index: 1;
-          background: rgba(17, 17, 24, 0.9) !important;
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 23px;
-          padding: 40px 32px;
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 24px;
-        }
-
-        .lead-title {
-          font-size: 30px;
-          font-weight: 800;
-          color: #F1F5F9;
-          margin-top: 16px;
-          line-height: 1.25;
-          letter-spacing: -0.5px;
-        }
-
-        /* Responsive Buttons */
-        .btn-primary {
-          background: linear-gradient(135deg, #6366F1, #8B5CF6);
-          border: none;
-          border-radius: 50px;
-          padding: 16px 32px;
-          font-size: 15px;
-          font-weight: 700;
-          color: #FFFFFF;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-          transition: all 0.25s;
-          margin-top: 8px;
-        }
-
-        .btn-booking {
-          text-decoration: none;
-          background: linear-gradient(135deg, #6366F1, #8B5CF6);
-          border: none;
-          border-radius: 50px;
-          padding: 16px 28px;
-          font-size: 15px;
-          font-weight: 700;
-          color: #FFFFFF;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
-          transition: all 0.25s;
-          width: 100%;
-        }
-
-        /* Accordion Header */
-        .accordion-header {
-          transition: background-color 0.2s, border-color 0.2s;
-        }
-
-        /* Scanning Loading State */
-        .scanner-container {
-          position: relative;
-          width: 100%;
-          max-width: 600px;
-          height: 280px;
-          background: #111118;
-          border: 1px solid #1E1E2E;
-          border-radius: 16px;
-          overflow: hidden;
-          margin: 0 auto 24px auto;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .scanner-line {
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 4px;
-          background: linear-gradient(90deg, transparent, #6366F1, #8B5CF6, #6366F1, transparent);
-          box-shadow: 0 0 15px #6366F1, 0 0 30px #8B5CF6;
-          animation: scan 2.5s linear infinite;
-          z-index: 10;
-        }
-
-        .mock-web-header {
-          height: 44px;
-          border-bottom: 1px solid #1E1E2E;
-          display: flex;
-          align-items: center;
-          padding: 0 16px;
-          gap: 8px;
-        }
-
-        .mock-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-        }
-        .mock-dot.red { background: #EF4444; }
-        .mock-dot.yellow { background: #F59E0B; }
-        .mock-dot.green { background: #10B981; }
-
-        .mock-web-hero {
-          padding: 32px 24px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 12px;
-          text-align: center;
-        }
-
-        .mock-text-title {
-          width: 75%;
-          height: 24px;
-          background: #1E1E2E;
-          border-radius: 6px;
-        }
-
-        .mock-text-sub {
-          width: 45%;
-          height: 14px;
-          background: #161622;
-          border-radius: 4px;
-        }
-
-        .mock-btn {
-          width: 110px;
-          height: 36px;
-          background: #1E1E2E;
-          border-radius: 8px;
-          margin-top: 8px;
-        }
-
-        .mock-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-          padding: 0 24px;
-        }
-
-        .mock-card {
-          height: 64px;
-          background: #161622;
-          border-radius: 8px;
-          border: 1px solid #1E1E2E;
-        }
-
-        /* Responsive Layouts Base (Centered Flex) */
-        .grid-scores {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 16px;
-        }
-        .grid-scores > div {
-          flex: 1 1 180px;
-          max-width: 220px;
-        }
-
-        .grid-redesign {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px;
-        }
-        .grid-redesign > div {
-          flex: 1 1 400px;
-        }
-
-        /* iOS Input Zoom Prevention */
-        @media (max-width: 768px) {
-          .input-glow, select.input-glow, input[type="text"].input-glow {
-            font-size: 16px !important;
-          }
-        }
-
-        /* Responsive Media Queries */
-        @media (max-width: 800px) {
-          .overall-score-container {
-            flex-direction: column;
-            padding: 24px 16px;
-            gap: 24px;
-          }
-          .overall-score-left {
-            flex: 1;
-            border-right: none;
-            border-bottom: 1px solid #1E1E2E;
-            padding-right: 0;
-            padding-bottom: 24px;
-          }
-          .overall-score-right {
-            width: 100%;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .capabilities-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-          }
-          .hero-title {
-            font-size: 32px !important;
-            line-height: 1.25 !important;
-          }
-          .hero-subtitle {
-            font-size: 14px !important;
-            line-height: 1.5 !important;
-            padding: 0 16px;
-          }
-          .hero-wrapper {
-            padding: 32px 16px !important;
-          }
-        }
-
-        @media (max-width: 600px) {
-          .card-surface {
-            padding: 20px 16px;
-            border-radius: 16px;
-          }
-          .grid-scores {
-            gap: 12px;
-          }
-          .grid-scores > div {
-            flex: 1 1 calc(50% - 6px);
-            max-width: none;
-          }
-          .grid-scores > div:last-child {
-            flex: 1 1 100%;
-          }
-          .lead-card-wrapper {
-            border-radius: 16px !important;
-          }
-          .lead-card-inner {
-            border-radius: 15px !important;
-            padding: 24px 16px;
-            gap: 18px;
-          }
-          .redesign-card {
-            padding: 16px !important;
-          }
-          .lead-fixes-box {
-            padding: 16px !important;
-            border-radius: 12px !important;
-          }
-          .lead-title {
-            font-size: 20px;
-          }
-          .btn-primary {
-            padding: 14px 24px;
-            font-size: 14px;
-          }
-          .btn-booking {
-            padding: 14px 22px;
-            font-size: 14px;
-          }
-          .report-title {
-            font-size: 20px;
-          }
-          .hero-subtitle {
-            font-size: 14px;
-            margin-bottom: 24px;
-          }
-          .footer-container {
-            flex-direction: column !important;
-            text-align: center !important;
-            align-items: center !important;
-            gap: 16px !important;
-          }
-        }
-
-        /* Radar and HUD styles */
-        .radar-box {
-          position: relative;
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          border: 1px solid rgba(99, 102, 241, 0.3);
-          background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto;
-        }
-        .radar-sweep {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          border: 2px solid #6366F1;
-          animation: radarPulse 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-          opacity: 0;
-        }
-        @keyframes radarPulse {
-          0% { transform: scale(0.6); opacity: 0.8; }
-          100% { transform: scale(1.4); opacity: 0; }
-        }
-        .hud-console {
-          text-align: left;
-          background: rgba(10, 10, 15, 0.8);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 16px;
-          padding: 24px;
-          font-family: 'Courier New', Courier, monospace;
-          margin-top: 12px;
-          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
-        }
-        .hud-line {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 12px;
-          font-size: 13px;
-          transition: all 0.3s;
-        }
-        .hud-line.pending {
-          color: #4A4A5A;
-        }
-        .hud-line.active {
-          color: #6366F1;
-          font-weight: bold;
-          text-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
-        }
-        .hud-line.completed {
-          color: #10B981;
-        }
-        .live-alert-banner {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.2);
-          border-radius: 100px;
-          padding: 6px 16px;
-          font-size: 12px;
-          font-weight: 700;
-          color: #EF4444;
-          margin-top: 12px;
-          animation: pulseSlots 2s infinite;
-        }
-        @keyframes pulseSlots {
-          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-          70% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-        .loader-grid {
-          display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          gap: 32px;
-          padding: 32px;
-          align-items: center;
-        }
-        @media (max-width: 768px) {
-          .loader-grid {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-            padding: 20px 16px !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .auditoo-wrapper {
-            padding: 20px 12px;
-          }
-          .pill-badge {
-            font-size: 11px;
-            padding: 4px 12px;
-            margin-bottom: 16px;
-          }
-        }
-      `;
-      document.head.appendChild(styleTag);
-    }
-    return () => {
-      if (styleTag && styleTag.parentNode) {
-        styleTag.parentNode.removeChild(styleTag);
-      }
-    };
-  }, []);
+  
 
 
 
@@ -1203,15 +463,15 @@ export default function App() {
             <svg width="40" height="40" viewBox="0 0 200 200" fill="none" style={{ filter: 'drop-shadow(0 0 10px rgba(99, 102, 241, 0.45))' }}>
               <defs>
                 <linearGradient id="logo-indigo-violet" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6366F1" />
-                  <stop offset="100%" stopColor="#8B5CF6" />
+                  <stop offset="0%" stopColor="var(--primary-color)" />
+                  <stop offset="100%" stopColor="var(--secondary-color)" />
                 </linearGradient>
                 <linearGradient id="logo-cyan-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#06B6D4" />
                   <stop offset="100%" stopColor="#10B981" />
                 </linearGradient>
                 <linearGradient id="logo-handle" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#8B5CF6" />
+                  <stop offset="0%" stopColor="var(--secondary-color)" />
                   <stop offset="100%" stopColor="#06B6D4" />
                 </linearGradient>
               </defs>
@@ -1225,26 +485,48 @@ export default function App() {
               <path d="M146 118 L176 148" stroke="url(#logo-handle)" strokeWidth="10" strokeLinecap="round" />
 
               {/* Left loop content: Glowing Lightning Bolt */}
-              <path d="M79 76 L65 96 L77 96 L74 114 L89 94 L77 94 Z" fill="#6366F1" />
+              <path d="M79 76 L65 96 L77 96 L74 114 L89 94 L77 94 Z" fill="var(--primary-color)" />
 
               {/* Right loop content: Glowing Checkmark */}
               <path d="M114 96 L122 104 L138 88" fill="none" stroke="#10B981" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             
-            <span style={{ fontSize: '22px', fontWeight: 800, background: 'linear-gradient(135deg, #F1F5F9, #64748B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>
-              Auditoo<span style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>.</span>
+            <span style={{ fontSize: '22px', fontWeight: 800, background: 'linear-gradient(135deg, var(--text-main), var(--text-muted))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>
+              Auditoo<span style={{ background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>.</span>
             </span>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            
+            <button
+              onClick={toggleTheme}
+              style={{
+                background: 'transparent',
+                border: '1px solid var(--border-color)',
+                borderRadius: '8px',
+                padding: '8px',
+                cursor: 'pointer',
+                color: 'var(--text-main)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              title="Toggle Theme"
+            >
+              {theme === 'dark' ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              )}
+            </button>
             <a
               href="https://github.com/Robin239105/Auditoo.git"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#F1F5F9',
+                background: 'var(--border-light)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
                 padding: '8px 16px',
                 borderRadius: '50px',
                 cursor: 'pointer',
@@ -1258,13 +540,13 @@ export default function App() {
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.background = 'var(--border-color)';
                 e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)';
                 e.currentTarget.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.25)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.background = 'var(--border-light)';
+                e.currentTarget.style.borderColor = 'var(--border-color)';
                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
               }}
             >
@@ -1273,7 +555,7 @@ export default function App() {
               </svg>
               <span>GitHub</span>
             </a>
-            <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 500 }}>
+            <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 500 }}>
               v1.0.0
             </span>
           </div>
@@ -1284,7 +566,7 @@ export default function App() {
             {!auditData && !loading && !error && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', zIndex: 2 }} className="fade-in">
             {/* Live Ticker Bar */}
-            <div className="ticker-wrap">
+            <div className="ticker-wrap glass-surface">
               <div className="ticker-title">
                 Live Activity
               </div>
@@ -1292,7 +574,7 @@ export default function App() {
                 <div className="ticker-track">
                   {auditsList.map((audit, idx) => (
                     <span key={`t1-${idx}`} className="ticker-item">
-                      <span style={{ color: '#F1F5F9', fontWeight: 600 }}>{audit.domain}</span>
+                      <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{audit.domain}</span>
                       <span>audited</span>
                       <span className="ticker-score-badge" style={{
                         background: audit.score >= 90 ? 'rgba(16, 185, 129, 0.15)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
@@ -1307,7 +589,7 @@ export default function App() {
                 <div className="ticker-track" aria-hidden="true">
                   {auditsList.map((audit, idx) => (
                     <span key={`t2-${idx}`} className="ticker-item">
-                      <span style={{ color: '#F1F5F9', fontWeight: 600 }}>{audit.domain}</span>
+                      <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{audit.domain}</span>
                       <span>audited</span>
                       <span className="ticker-score-badge" style={{
                         background: audit.score >= 90 ? 'rgba(16, 185, 129, 0.15)' : audit.score >= 70 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
@@ -1330,7 +612,7 @@ export default function App() {
               </div>
 
               {/* Main Headline */}
-              <h1 className="hero-title" style={{ fontSize: '48px', fontWeight: 800, lineHeight: 1.15, marginBottom: '16px', background: 'linear-gradient(135deg, #F1F5F9 50%, #6366F1, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-1px' }}>
+              <h1 className="hero-title text-gradient" style={{ fontSize: '48px', fontWeight: 800, lineHeight: 1.15, marginBottom: '16px', letterSpacing: '-1px' }}>
                 Uncover exactly what's killing your website's performance
               </h1>
 
@@ -1340,12 +622,12 @@ export default function App() {
               </p>
 
               {/* Input Card Container */}
-              <div className="card-surface" style={{ width: '100%', maxWidth: '760px', zIndex: 10 }}>
+              <div className="card-surface glass-surface" style={{ width: '100%', maxWidth: '760px', zIndex: 10 }}>
                 <form onSubmit={handleAuditSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   
                   {/* Large Website URL Input */}
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <div style={{ position: 'absolute', left: '20px', color: '#64748B', display: 'flex', alignItems: 'center' }}>
+                    <div style={{ position: 'absolute', left: '20px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -1360,12 +642,12 @@ export default function App() {
                       className="input-glow"
                       style={{
                         width: '100%',
-                        background: '#0A0A0F',
-                        border: '1px solid #1E1E2E',
+                        background: 'var(--bg-color)',
+                        border: '1px solid var(--border-color)',
                         borderRadius: '50px',
                         padding: '16px 20px 16px 52px',
                         fontSize: '15px',
-                        color: '#F1F5F9',
+                        color: 'var(--text-main)',
                         transition: 'all 0.25s',
                       }}
                     />
@@ -1395,19 +677,19 @@ export default function App() {
 
               {/* Interactive Capability Preview Cards */}
               <div style={{ marginTop: '48px', width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#F1F5F9', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '1px' }}>
                   Comprehensive Diagnostic Scope
                 </h3>
                 <div className="capabilities-grid">
                   {[
-                    { title: 'UX & Design Analysis', desc: 'Checks typography scale, responsive layout shifts, formatting anomalies, and styling hierarchy.', icon: <Palette size={20} color="#6366F1" />, color: 'rgba(99, 102, 241, 0.08)' },
-                    { title: 'Performance & Speed', desc: 'Identifies loading latency, oversized media assets, slow layout paints, and scripting blockages.', icon: <Zap size={20} color="#6366F1" />, color: 'rgba(6, 182, 212, 0.08)' },
-                    { title: 'Conversion Mechanics', desc: 'Audits below-the-fold call-to-actions, conversion path friction, and messaging clarity above the fold.', icon: <Target size={20} color="#6366F1" />, color: 'rgba(139, 92, 246, 0.08)' }
+                    { title: 'UX & Design Analysis', desc: 'Checks typography scale, responsive layout shifts, formatting anomalies, and styling hierarchy.', icon: <Palette size={20} color="var(--primary-color)" />, color: 'rgba(99, 102, 241, 0.08)' },
+                    { title: 'Performance & Speed', desc: 'Identifies loading latency, oversized media assets, slow layout paints, and scripting blockages.', icon: <Zap size={20} color="var(--primary-color)" />, color: 'rgba(6, 182, 212, 0.08)' },
+                    { title: 'Conversion Mechanics', desc: 'Audits below-the-fold call-to-actions, conversion path friction, and messaging clarity above the fold.', icon: <Target size={20} color="var(--primary-color)" />, color: 'rgba(139, 92, 246, 0.08)' }
                   ].map((cap, idx) => (
-                    <div key={idx} className="capability-card hover-card">
+                    <div key={idx} className="capability-card glass-surface hover-card">
                       <div className="capability-icon" style={{ background: cap.color }}>{cap.icon}</div>
-                      <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#F1F5F9', marginBottom: '8px' }}>{cap.title}</h4>
-                      <p style={{ fontSize: '12px', color: '#64748B', lineHeight: '1.6' }}>{cap.desc}</p>
+                      <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '8px' }}>{cap.title}</h4>
+                      <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.6' }}>{cap.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -1423,9 +705,9 @@ export default function App() {
             <div className="card-surface loader-grid">
               {/* Left Column: Sequential Diagnostic HUD checklist */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border-light)', paddingBottom: '12px' }}>
                   <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#EF4444', animation: 'pulseGlow 1.5s infinite' }}></div>
-                  <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#6366F1', letterSpacing: '1px' }}>SYSTEM DIAGNOSTICS ACTIVE</span>
+                  <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--primary-color)', letterSpacing: '1px' }}>SYSTEM DIAGNOSTICS ACTIVE</span>
                 </div>
                 <div className="hud-console">
                   {[
@@ -1473,7 +755,7 @@ export default function App() {
                     <div className="radar-sweep"></div>
                     <div className="radar-sweep" style={{ animationDelay: '0.6s' }}></div>
                     <div className="radar-sweep" style={{ animationDelay: '1.2s' }}></div>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366F1" strokeWidth="2.5" style={{ filter: 'drop-shadow(0 0 5px rgba(99, 102, 241, 0.6))' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="2.5" style={{ filter: 'drop-shadow(0 0 5px rgba(99, 102, 241, 0.6))' }}>
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="2" x2="12" y2="22"></line>
                       <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -1486,7 +768,7 @@ export default function App() {
                     <div className="mock-dot yellow"></div>
                     <div className="mock-dot green"></div>
                     <div style={{ flexGrow: 1 }}></div>
-                    <div style={{ width: '80px', height: '8px', background: '#1E1E2E', borderRadius: '4px' }}></div>
+                    <div style={{ width: '80px', height: '8px', background: 'var(--border-color)', borderRadius: '4px' }}></div>
                   </div>
                   
                   <div className="mock-web-hero" style={{ opacity: 0.3 }}>
@@ -1504,7 +786,7 @@ export default function App() {
               </div>
             </div>
             
-            <p style={{ fontSize: '13px', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
               Performing live analysis of {getCleanDomain(url)} ...
             </p>
           </div>
@@ -1520,15 +802,15 @@ export default function App() {
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
               </svg>
             </div>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#F1F5F9', marginBottom: '8px' }}>Audit Failed</h3>
-            <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '24px', lineHeight: '1.6' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '8px' }}>Audit Failed</h3>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '24px', lineHeight: '1.6' }}>
               {error}
             </p>
             <button
               onClick={handleReset}
               className="btn-shimmer"
               style={{
-                background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))',
                 border: 'none',
                 borderRadius: '50px',
                 padding: '12px 24px',
@@ -1549,19 +831,19 @@ export default function App() {
           <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginBottom: '40px' }}>
             
             {/* Header info */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1E1E2E', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#6366F1', fontWeight: 700, letterSpacing: '1px' }}>AUDIT COMPLETED</span>
+                <span style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--primary-color)', fontWeight: 700, letterSpacing: '1px' }}>AUDIT COMPLETED</span>
                 <h2 className="report-title">
-                  Report for <span style={{ color: '#8B5CF6', wordBreak: 'break-all' }}>{getCleanDomain(url)}</span>
+                  Report for <span style={{ color: 'var(--secondary-color)', wordBreak: 'break-all' }}>{getCleanDomain(url)}</span>
                 </h2>
               </div>
               <button
                 onClick={handleReset}
                 style={{
                   background: 'transparent',
-                  border: '1px solid #1E1E2E',
-                  color: '#64748B',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-muted)',
                   padding: '10px 18px',
                   borderRadius: '12px',
                   cursor: 'pointer',
@@ -1570,12 +852,12 @@ export default function App() {
                   transition: 'all 0.25s'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#F1F5F9';
-                  e.currentTarget.style.borderColor = '#6366F1';
+                  e.currentTarget.style.color = 'var(--text-main)';
+                  e.currentTarget.style.borderColor = 'var(--primary-color)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#64748B';
-                  e.currentTarget.style.borderColor = '#1E1E2E';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
                 }}
               >
                 Audit Another Site
@@ -1583,19 +865,19 @@ export default function App() {
             </div>
 
             {/* --- SECTION 3: OVERALL SCORE CARD --- */}
-            <div className="overall-score-container">
+            <div className="overall-score-container glass-surface">
               
               {/* Circle Graphic Side */}
               <div className="overall-score-left">
                 <ScoreRing score={animatedScores.overall} size={120} strokeWidth={9} showNumber={true} />
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#64748B', marginTop: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Score</span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', marginTop: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Score</span>
                 
                 {/* Grade Label */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(30, 30, 46, 0.6)', border: '1px solid #1E1E2E', padding: '6px 14px', borderRadius: '50px', marginTop: '12px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(30, 30, 46, 0.6)', border: '1px solid var(--border-color)', padding: '6px 14px', borderRadius: '50px', marginTop: '12px' }}>
                   <span style={{ fontSize: '20px', fontWeight: 800, color: getGrade(animatedScores.overall).color }}>
                     {getGrade(animatedScores.overall).letter}
                   </span>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#F1F5F9' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-main)' }}>
                     {getGrade(animatedScores.overall).label}
                   </span>
                 </div>
@@ -1604,19 +886,19 @@ export default function App() {
               {/* Text / Summary Side */}
               <div className="overall-score-right">
                 <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F1F5F9', marginBottom: '8px' }}>Executive Summary</h3>
-                  <p style={{ fontSize: '15px', color: '#64748B', lineHeight: '1.7' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-main)', marginBottom: '8px' }}>Executive Summary</h3>
+                  <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: '1.7' }}>
                     {auditData.overallSummary}
                   </p>
                 </div>
                 
                 <div>
-                  <h4 style={{ fontSize: '12px', fontWeight: 800, color: '#F1F5F9', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Rocket size={16} color="#6366F1" style={{ marginRight: "8px" }} /> QUICK WINS
+                  <h4 style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Rocket size={16} color="var(--primary-color)" style={{ marginRight: "8px" }} /> QUICK WINS
                   </h4>
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {auditData.quickWins?.slice(0, 3).map((win, idx) => (
-                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#F1F5F9', lineHeight: '1.5' }}>
+                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: 'var(--text-main)', lineHeight: '1.5' }}>
                         <span style={{ marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(16, 185, 129, 0.1)', padding: '4px', borderRadius: '50%' }}>
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
@@ -1639,12 +921,12 @@ export default function App() {
                 { key: 'conversion', label: 'Conversion Problems', short: 'Conversions', desc: 'Flows & action hooks' },
                 { key: 'mobile', label: 'Mobile UX', short: 'Mobile', desc: 'Viewport & touches' }
               ].map((item) => (
-                <div key={item.key} onClick={() => handleScoreClick(item.key)} className="hover-card" style={{ background: '#111118', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'pointer' }}>
+                <div key={item.key} onClick={() => handleScoreClick(item.key)} className="hover-card" style={{ background: '#111118', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'pointer' }}>
                   <ScoreRing score={animatedScores[item.key]} size={72} strokeWidth={6} showNumber={true} />
-                  <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#F1F5F9', marginTop: '16px', marginBottom: '4px' }}>
+                  <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', marginTop: '16px', marginBottom: '4px' }}>
                     {item.short}
                   </h4>
-                  <span style={{ fontSize: '11px', color: '#64748B', lineHeight: '1.4' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
                     {item.desc}
                   </span>
                 </div>
@@ -1652,24 +934,24 @@ export default function App() {
             </div>
 
             {/* --- SECTION 4.5: GOOGLE LIGHTHOUSE AUDIT CENTER --- */}
-            <div className="card-surface" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div style={{ borderBottom: '1px solid #1E1E2E', paddingBottom: '16px', textAlign: 'left' }}>
-                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#6366F1', fontWeight: 800, letterSpacing: '1px' }}>CORE PERFORMANCE SUITE</span>
-                <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#F1F5F9', marginTop: '4px' }}>
+            <div className="card-surface glass-surface" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', textAlign: 'left' }}>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--primary-color)', fontWeight: 800, letterSpacing: '1px' }}>CORE PERFORMANCE SUITE</span>
+                <h3 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)', marginTop: '4px' }}>
                   Google Lighthouse Audit Heuristics
                 </h3>
-                <p style={{ fontSize: '14px', color: '#64748B', marginTop: '4px' }}>
+                <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '4px' }}>
                   Dynamic Lighthouse compliance check. Select a category score dial to inspect concrete, step-by-step action plans.
                 </p>
               </div>
 
               {/* Lighthouse scores dials flex wrapper */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', gap: '16px', padding: '16px 0', borderBottom: '1px solid #1E1E2E' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', gap: '16px', padding: '16px 0', borderBottom: '1px solid var(--border-color)' }}>
                 {[
-                  { key: 'performance', scoreKey: 'performance', label: 'Performance', icon: <Zap size={20} color="#6366F1" /> },
-                  { key: 'accessibility', scoreKey: 'accessibility', label: 'Accessibility', icon: <Accessibility size={20} color="#6366F1" /> },
-                  { key: 'bestPractices', scoreKey: 'bestPractices', label: 'Best Practices', icon: <ShieldCheck size={20} color="#6366F1" /> },
-                  { key: 'seo', scoreKey: 'lighthouseSeo', label: 'SEO', icon: <Search size={20} color="#6366F1" /> }
+                  { key: 'performance', scoreKey: 'performance', label: 'Performance', icon: <Zap size={20} color="var(--primary-color)" /> },
+                  { key: 'accessibility', scoreKey: 'accessibility', label: 'Accessibility', icon: <Accessibility size={20} color="var(--primary-color)" /> },
+                  { key: 'bestPractices', scoreKey: 'bestPractices', label: 'Best Practices', icon: <ShieldCheck size={20} color="var(--primary-color)" /> },
+                  { key: 'seo', scoreKey: 'lighthouseSeo', label: 'SEO', icon: <Search size={20} color="var(--primary-color)" /> }
                 ].map((lhTab) => {
                   const isActive = selectedLighthouseTab === lhTab.key;
                   const currentScore = animatedScores[lhTab.scoreKey] || 0;
@@ -1697,7 +979,7 @@ export default function App() {
                       <ScoreRing score={currentScore} size={64} strokeWidth={6} showNumber={true} />
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <span style={{ fontSize: '14px' }}>{lhTab.icon}</span>
-                        <span style={{ fontSize: '13px', fontWeight: 700, color: isActive ? '#6366F1' : '#F1F5F9' }}>
+                        <span style={{ fontSize: '13px', fontWeight: 700, color: isActive ? 'var(--primary-color)' : 'var(--text-main)' }}>
                           {lhTab.label}
                         </span>
                       </div>
@@ -1708,8 +990,8 @@ export default function App() {
                           width: '6px',
                           height: '6px',
                           borderRadius: '50%',
-                          background: '#6366F1',
-                          boxShadow: '0 0 8px #6366F1'
+                          background: 'var(--primary-color)',
+                          boxShadow: '0 0 8px var(--primary-color)'
                         }}></div>
                       )}
                     </div>
@@ -1722,9 +1004,9 @@ export default function App() {
                 
                 {/* 1. Core Web Vitals Metrics Grid (Only for Performance tab) */}
                 {selectedLighthouseTab === 'performance' && auditData.lighthouse?.performance?.metrics && (
-                  <div style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '20px', textAlign: 'left' }}>
-                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748B', fontWeight: 700, letterSpacing: '0.8px', display: 'block', marginBottom: '16px' }}>
-                      <Zap size={14} color="#6366F1" style={{ marginRight: "6px", display: "inline-block", verticalAlign: "middle" }} /> <span style={{ verticalAlign: "middle" }}>CORE WEB VITALS TELEMETRY</span>
+                  <div style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '20px', textAlign: 'left' }}>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.8px', display: 'block', marginBottom: '16px' }}>
+                      <Zap size={14} color="var(--primary-color)" style={{ marginRight: "6px", display: "inline-block", verticalAlign: "middle" }} /> <span style={{ verticalAlign: "middle" }}>CORE WEB VITALS TELEMETRY</span>
                     </span>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '16px' }}>
                       {[
@@ -1764,7 +1046,7 @@ export default function App() {
                             key={mIdx} 
                             style={{ 
                               background: '#111118', 
-                              border: '1px solid #1E1E2E', 
+                              border: '1px solid var(--border-color)', 
                               borderRadius: '12px', 
                               padding: '14px', 
                               display: 'flex', 
@@ -1773,7 +1055,7 @@ export default function App() {
                               textAlign: 'left'
                             }}
                           >
-                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', minHeight: '32px', display: 'flex', alignItems: 'center' }}>
+                            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', minHeight: '32px', display: 'flex', alignItems: 'center' }}>
                               {met.name}
                             </span>
                             <span 
@@ -1804,10 +1086,10 @@ export default function App() {
                 {/* 2. Detailed Recommended Checklist: Exactly what needs to be done */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748B', fontWeight: 700, letterSpacing: '0.8px' }}>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.8px' }}>
                       📋 ACTION PLAN CHECKLIST (WHAT TO FIX)
                     </span>
-                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>
                       {Object.keys(completedLighthouseTasks).filter(k => k.startsWith(selectedLighthouseTab) && completedLighthouseTasks[k]).length} of 3 tasks completed
                     </span>
                   </div>
@@ -1836,7 +1118,7 @@ export default function App() {
                           key={idx}
                           style={{
                             background: '#111118',
-                            border: `1px solid ${isCompleted ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255, 255, 255, 0.05)'}`,
+                            border: `1px solid ${isCompleted ? 'rgba(16, 185, 129, 0.3)' : 'var(--border-light)'}`,
                             borderRadius: '16px',
                             padding: '20px',
                             display: 'flex',
@@ -1859,7 +1141,7 @@ export default function App() {
                               width: '24px',
                               height: '24px',
                               borderRadius: '50%',
-                              border: `2px solid ${isCompleted ? '#10B981' : '#64748B'}`,
+                              border: `2px solid ${isCompleted ? '#10B981' : 'var(--text-muted)'}`,
                               background: isCompleted ? '#10B981' : 'transparent',
                               display: 'flex',
                               alignItems: 'center',
@@ -1883,7 +1165,7 @@ export default function App() {
                               <h4 style={{ 
                                 fontSize: '15px', 
                                 fontWeight: 700, 
-                                color: '#F1F5F9',
+                                color: 'var(--text-main)',
                                 textDecoration: isCompleted ? 'line-through' : 'none'
                               }}>
                                 {lhItem.title}
@@ -1904,22 +1186,22 @@ export default function App() {
                               </span>
                             </div>
 
-                            <p style={{ fontSize: '13px', color: '#64748B', lineHeight: '1.5' }}>
+                            <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                               {lhItem.description}
                             </p>
 
                             {/* Action capsule detailing exactly what needs to be done */}
                             <div style={{ 
                               background: 'rgba(99, 102, 241, 0.05)', 
-                              borderLeft: '3px solid #6366F1', 
+                              borderLeft: '3px solid var(--primary-color)', 
                               borderRadius: '4px 8px 8px 4px', 
                               padding: '10px 14px', 
                               marginTop: '8px' 
                             }}>
-                              <span style={{ fontSize: '10px', fontWeight: 800, color: '#6366F1', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>
+                              <span style={{ fontSize: '10px', fontWeight: 800, color: 'var(--primary-color)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>
                                 FIX ACTION STEPS:
                               </span>
-                              <p style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 500, lineHeight: '1.4' }}>
+                              <p style={{ fontSize: '13px', color: 'var(--text-main)', fontWeight: 500, lineHeight: '1.4' }}>
                                 {lhItem.action}
                               </p>
                             </div>
@@ -1936,21 +1218,21 @@ export default function App() {
             {/* --- SECTION 4.5: ZERO-COST TOOLS PANEL --- */}
             {(scanData || dnsData) && (
               <div style={{ marginTop: '24px' }} className="fade-in">
-                <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F1F5F9', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '16px' }}>
                   Technical Diagnostics
                 </h3>
-                <div className="card-surface" style={{ padding: '0', overflow: 'hidden' }}>
+                <div className="card-surface glass-surface" style={{ padding: '0', overflow: 'hidden' }}>
                   {/* Tab Navigation */}
-                  <div style={{ display: 'flex', overflowX: 'auto', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', scrollbarWidth: 'none' }}>
+                  <div style={{ display: 'flex', overflowX: 'auto', borderBottom: '1px solid var(--border-light)', scrollbarWidth: 'none' }}>
                     {[
-                      { id: 'techStack', icon: <Wrench size={20} color="#6366F1" />, label: 'Tech Stack' },
-                      { id: 'brokenLinks', icon: <LinkIcon size={20} color="#6366F1" />, label: 'Links' },
-                      { id: 'privacy', icon: <Cookie size={20} color="#6366F1" />, label: 'Privacy' },
-                      { id: 'security', icon: <Lock size={20} color="#6366F1" />, label: 'Security' },
-                      { id: 'carbon', icon: <Leaf size={20} color="#6366F1" />, label: 'Carbon' },
-                      { id: 'dns', icon: <Globe size={20} color="#6366F1" />, label: 'DNS' },
-                      { id: 'social', icon: <Smartphone size={20} color="#6366F1" />, label: 'Social' },
-                      { id: 'pageWeight', icon: <Scale size={20} color="#6366F1" />, label: 'Page Weight' },
+                      { id: 'techStack', icon: <Wrench size={20} color="var(--primary-color)" />, label: 'Tech Stack' },
+                      { id: 'brokenLinks', icon: <LinkIcon size={20} color="var(--primary-color)" />, label: 'Links' },
+                      { id: 'privacy', icon: <Cookie size={20} color="var(--primary-color)" />, label: 'Privacy' },
+                      { id: 'security', icon: <Lock size={20} color="var(--primary-color)" />, label: 'Security' },
+                      { id: 'carbon', icon: <Leaf size={20} color="var(--primary-color)" />, label: 'Carbon' },
+                      { id: 'dns', icon: <Globe size={20} color="var(--primary-color)" />, label: 'DNS' },
+                      { id: 'social', icon: <Smartphone size={20} color="var(--primary-color)" />, label: 'Social' },
+                      { id: 'pageWeight', icon: <Scale size={20} color="var(--primary-color)" />, label: 'Page Weight' },
                     ].map(tab => (
                       <button
                         key={tab.id}
@@ -1959,8 +1241,8 @@ export default function App() {
                         style={{
                           background: activeToolTab === tab.id ? 'rgba(99, 102, 241, 0.1)' : 'transparent',
                           border: 'none',
-                          borderBottom: activeToolTab === tab.id ? '2px solid #6366F1' : '2px solid transparent',
-                          color: activeToolTab === tab.id ? '#F1F5F9' : '#64748B',
+                          borderBottom: activeToolTab === tab.id ? '2px solid var(--primary-color)' : '2px solid transparent',
+                          color: activeToolTab === tab.id ? 'var(--text-main)' : 'var(--text-muted)',
                           padding: '16px 20px',
                           fontSize: '13px',
                           fontWeight: 600,
@@ -1981,8 +1263,8 @@ export default function App() {
                   {/* Tab Content */}
                   <div style={{ padding: '24px' }}>
                     {scanLoading ? (
-                      <div style={{ textAlign: 'center', padding: '40px 0', color: '#64748B', fontSize: '14px' }}>
-                        <div style={{ width: '24px', height: '24px', border: '2px solid #6366F1', borderTopColor: 'transparent', borderRadius: '50%', animation: 'rotateBorder 1s linear infinite', margin: '0 auto 16px' }}></div>
+                      <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)', fontSize: '14px' }}>
+                        <div style={{ width: '24px', height: '24px', border: '2px solid var(--primary-color)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'rotateBorder 1s linear infinite', margin: '0 auto 16px' }}></div>
                         Running deep technical diagnostics...
                       </div>
                     ) : scanError && !scanData && !dnsData ? (
@@ -1991,10 +1273,10 @@ export default function App() {
                       <div className="fade-in">
                         {activeToolTab === 'techStack' && scanData?.techStack && (
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
-                            {scanData.techStack.length === 0 ? <p style={{ color: '#64748B', fontSize: '13px' }}>No specific technologies detected.</p> : scanData.techStack.map((tech, idx) => (
-                              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                                <div style={{ fontSize: '11px', color: '#6366F1', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{tech.category}</div>
-                                <div style={{ fontSize: '15px', color: '#F1F5F9', fontWeight: 600 }}>{tech.name}</div>
+                            {scanData.techStack.length === 0 ? <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>No specific technologies detected.</p> : scanData.techStack.map((tech, idx) => (
+                              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+                                <div style={{ fontSize: '11px', color: 'var(--primary-color)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{tech.category}</div>
+                                <div style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 600 }}>{tech.name}</div>
                               </div>
                             ))}
                           </div>
@@ -2004,13 +1286,13 @@ export default function App() {
                           <div>
                             <div style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
                               <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '12px 20px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10B981', fontWeight: 600, fontSize: '13px' }}>{scanData.links.workingCount} Working Links</div>
-                              <div style={{ background: scanData.links.broken.length > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255, 255, 255, 0.05)', padding: '12px 20px', borderRadius: '8px', border: scanData.links.broken.length > 0 ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid transparent', color: scanData.links.broken.length > 0 ? '#EF4444' : '#64748B', fontWeight: 600, fontSize: '13px' }}>{scanData.links.broken.length} Broken Links</div>
+                              <div style={{ background: scanData.links.broken.length > 0 ? 'rgba(239, 68, 68, 0.1)' : 'var(--border-light)', padding: '12px 20px', borderRadius: '8px', border: scanData.links.broken.length > 0 ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid transparent', color: scanData.links.broken.length > 0 ? '#EF4444' : 'var(--text-muted)', fontWeight: 600, fontSize: '13px' }}>{scanData.links.broken.length} Broken Links</div>
                             </div>
                             {scanData.links.broken.length > 0 && (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {scanData.links.broken.map((link, idx) => (
                                   <div key={idx} style={{ background: 'rgba(239, 68, 68, 0.05)', padding: '12px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
-                                    <span style={{ color: '#F1F5F9', wordBreak: 'break-all', paddingRight: '16px' }}>{link.url}</span>
+                                    <span style={{ color: 'var(--text-main)', wordBreak: 'break-all', paddingRight: '16px' }}>{link.url}</span>
                                     <span style={{ background: '#EF4444', color: '#FFF', padding: '2px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '11px', whiteSpace: 'nowrap' }}>{link.status === 0 ? 'TIMEOUT' : link.status}</span>
                                   </div>
                                 ))}
@@ -2023,20 +1305,20 @@ export default function App() {
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                               <div style={{ background: scanData.cookies.bannerDetected ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', padding: '16px', borderRadius: '12px', border: scanData.cookies.bannerDetected ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(239, 68, 68, 0.2)' }}>
-                                <div style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 600 }}>Cookie Banner</div>
+                                <div style={{ fontSize: '13px', color: 'var(--text-main)', fontWeight: 600 }}>Cookie Banner</div>
                                 <div style={{ fontSize: '12px', color: scanData.cookies.bannerDetected ? '#10B981' : '#EF4444', marginTop: '4px' }}>{scanData.cookies.bannerDetected ? 'Detected' : 'Not Found'}</div>
                               </div>
                               <div style={{ background: scanData.cookies.privacyPageFound ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)', padding: '16px', borderRadius: '12px', border: scanData.cookies.privacyPageFound ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(245, 158, 11, 0.2)' }}>
-                                <div style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 600 }}>Privacy Policy</div>
+                                <div style={{ fontSize: '13px', color: 'var(--text-main)', fontWeight: 600 }}>Privacy Policy</div>
                                 <div style={{ fontSize: '12px', color: scanData.cookies.privacyPageFound ? '#10B981' : '#F59E0B', marginTop: '4px' }}>{scanData.cookies.privacyPageFound ? 'Link Found' : 'Not Found'}</div>
                               </div>
                             </div>
                             {scanData.cookies.preConsentCookies.length > 0 && (
-                              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                                <div style={{ fontSize: '13px', color: '#F1F5F9', fontWeight: 600, marginBottom: '8px' }}>Cookies Set Before Consent ({scanData.cookies.preConsentCookies.length})</div>
+                              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+                                <div style={{ fontSize: '13px', color: 'var(--text-main)', fontWeight: 600, marginBottom: '8px' }}>Cookies Set Before Consent ({scanData.cookies.preConsentCookies.length})</div>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                   {scanData.cookies.preConsentCookies.map((c, i) => (
-                                    <span key={i} style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', color: '#CBD5E1' }}>{c}</span>
+                                    <span key={i} style={{ background: 'var(--border-color)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', color: '#CBD5E1' }}>{c}</span>
                                   ))}
                                 </div>
                               </div>
@@ -2047,15 +1329,15 @@ export default function App() {
                         {activeToolTab === 'security' && scanData?.security && (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             <div>
-                              <h4 style={{ fontSize: '14px', color: '#F1F5F9', marginBottom: '12px' }}>SSL Certificate</h4>
+                              <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '12px' }}>SSL Certificate</h4>
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' }}>
-                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: '#64748B' }}>Status</div><div style={{ fontSize: '14px', color: scanData.security.ssl.valid ? '#10B981' : '#EF4444', fontWeight: 600 }}>{scanData.security.ssl.valid ? 'Valid' : 'Invalid/Missing'}</div></div>
-                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: '#64748B' }}>Issuer</div><div style={{ fontSize: '14px', color: '#F1F5F9', fontWeight: 600 }}>{scanData.security.ssl.issuer}</div></div>
-                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: '#64748B' }}>Expires</div><div style={{ fontSize: '14px', color: '#F1F5F9', fontWeight: 600 }}>{scanData.security.ssl.daysRemaining} days</div></div>
+                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status</div><div style={{ fontSize: '14px', color: scanData.security.ssl.valid ? '#10B981' : '#EF4444', fontWeight: 600 }}>{scanData.security.ssl.valid ? 'Valid' : 'Invalid/Missing'}</div></div>
+                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Issuer</div><div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 600 }}>{scanData.security.ssl.issuer}</div></div>
+                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Expires</div><div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 600 }}>{scanData.security.ssl.daysRemaining} days</div></div>
                               </div>
                             </div>
                             <div>
-                              <h4 style={{ fontSize: '14px', color: '#F1F5F9', marginBottom: '12px' }}>Security Headers</h4>
+                              <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '12px' }}>Security Headers</h4>
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
                                 {Object.entries(scanData.security.headers).map(([key, val]) => (
                                   <div key={key} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '10px 12px', borderRadius: '6px', fontSize: '12px' }}>
@@ -2076,11 +1358,11 @@ export default function App() {
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
                               <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
-                                <span style={{ color: '#64748B', fontSize: '13px' }}>CO₂ per view</span>
-                                <span style={{ color: '#F1F5F9', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.co2PerView}</span>
+                                <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>CO₂ per view</span>
+                                <span style={{ color: 'var(--text-main)', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.co2PerView}</span>
                               </div>
                               <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
-                                <span style={{ color: '#64748B', fontSize: '13px' }}>Cleaner than</span>
+                                <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Cleaner than</span>
                                 <span style={{ color: '#10B981', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.cleanerThan} of tested sites</span>
                               </div>
                             </div>
@@ -2091,23 +1373,23 @@ export default function App() {
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                               <div style={{ flex: 1, minWidth: '200px', background: 'rgba(99, 102, 241, 0.1)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-                                <div style={{ fontSize: '11px', color: '#6366F1', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Detected CDN / Host</div>
-                                <div style={{ fontSize: '16px', color: '#F1F5F9', fontWeight: 700 }}>{dnsData.cdn}</div>
+                                <div style={{ fontSize: '11px', color: 'var(--primary-color)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Detected CDN / Host</div>
+                                <div style={{ fontSize: '16px', color: 'var(--text-main)', fontWeight: 700 }}>{dnsData.cdn}</div>
                               </div>
                               <div style={{ flex: 1, minWidth: '200px', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
-                                <div style={{ fontSize: '11px', color: '#64748B', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Email Provider</div>
-                                <div style={{ fontSize: '16px', color: '#F1F5F9', fontWeight: 700 }}>{dnsData.emailProvider}</div>
+                                <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Email Provider</div>
+                                <div style={{ fontSize: '16px', color: 'var(--text-main)', fontWeight: 700 }}>{dnsData.emailProvider}</div>
                               </div>
                             </div>
                             <div>
-                              <h4 style={{ fontSize: '14px', color: '#F1F5F9', marginBottom: '12px' }}>DNS Records</h4>
+                              <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '12px' }}>DNS Records</h4>
                               <div style={{ background: 'rgba(0, 0, 0, 0.3)', borderRadius: '8px', overflow: 'hidden' }}>
                                 {['A', 'MX', 'NS', 'TXT'].map(type => {
                                   const recs = dnsData.records[type] || [];
                                   if (recs.length === 0) return null;
                                   return (
-                                    <div key={type} style={{ display: 'flex', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', padding: '12px' }}>
-                                      <div style={{ width: '60px', color: '#6366F1', fontWeight: 700, fontSize: '13px' }}>{type}</div>
+                                    <div key={type} style={{ display: 'flex', borderBottom: '1px solid var(--border-light)', padding: '12px' }}>
+                                      <div style={{ width: '60px', color: 'var(--primary-color)', fontWeight: 700, fontSize: '13px' }}>{type}</div>
                                       <div style={{ flex: 1, color: '#CBD5E1', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '4px', wordBreak: 'break-all' }}>
                                         {recs.map((r, i) => <div key={i}>{typeof r === 'object' ? r.exchange : r}</div>)}
                                       </div>
@@ -2128,12 +1410,12 @@ export default function App() {
                                 <div style={{ width: '100%', height: '260px', background: '#E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94A3B8' }}>No Image Found</div>
                               )}
                               <div style={{ padding: '16px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
-                                <div style={{ fontSize: '12px', color: '#64748B', textTransform: 'uppercase', marginBottom: '4px' }}>{scanData.ogTags.og.siteName || new URL(url.startsWith('http') ? url : 'https://' + url).hostname}</div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>{scanData.ogTags.og.siteName || new URL(url.startsWith('http') ? url : 'https://' + url).hostname}</div>
                                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#0F172A', marginBottom: '4px', lineHeight: 1.3 }}>{scanData.ogTags.og.title || scanData.ogTags.standard.title || 'Missing Title'}</div>
                                 <div style={{ fontSize: '14px', color: '#475569', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{scanData.ogTags.og.description || scanData.ogTags.standard.description || 'Missing Description'}</div>
                               </div>
                             </div>
-                            <div style={{ textAlign: 'center', fontSize: '12px', color: '#64748B' }}>Live Social Share Preview</div>
+                            <div style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)' }}>Live Social Share Preview</div>
                           </div>
                         )}
 
@@ -2148,8 +1430,8 @@ export default function App() {
                               { label: 'Inline Scripts', val: scanData.pageWeight.inlineScripts }
                             ].map((item, idx) => (
                               <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', textAlign: 'center' }}>
-                                <div style={{ fontSize: '24px', fontWeight: 800, color: '#F1F5F9', marginBottom: '4px' }}>{item.val}</div>
-                                <div style={{ fontSize: '12px', color: '#64748B' }}>{item.label}</div>
+                                <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>{item.val}</div>
+                                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{item.label}</div>
                               </div>
                             ))}
                           </div>
@@ -2163,25 +1445,25 @@ export default function App() {
 
             {/* --- SECTION 5: ACCORDION ISSUES BREAKDOWN --- */}
             <div>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F1F5F9', marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '16px' }}>
                 Deep-Dive Problems & Issues
               </h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  { key: 'design', label: 'Design Problems', icon: <Palette size={20} color="#6366F1" />, data: auditData.designProblems },
-                  { key: 'seo', label: 'SEO Issues', icon: <Search size={20} color="#6366F1" />, data: auditData.seoProblems },
-                  { key: 'speed', label: 'Speed Issues', icon: <Zap size={20} color="#6366F1" />, data: auditData.speedProblems },
-                  { key: 'conversion', label: 'Conversion Problems', icon: <CircleDollarSign size={20} color="#6366F1" />, data: auditData.conversionProblems },
-                  { key: 'mobile', label: 'Mobile Issues', icon: <Smartphone size={20} color="#6366F1" />, data: auditData.mobileIssues },
-                  { key: 'cta', label: 'Missing CTAs', icon: <Target size={20} color="#6366F1" />, data: auditData.missingCTAs }
+                  { key: 'design', label: 'Design Problems', icon: <Palette size={20} color="var(--primary-color)" />, data: auditData.designProblems },
+                  { key: 'seo', label: 'SEO Issues', icon: <Search size={20} color="var(--primary-color)" />, data: auditData.seoProblems },
+                  { key: 'speed', label: 'Speed Issues', icon: <Zap size={20} color="var(--primary-color)" />, data: auditData.speedProblems },
+                  { key: 'conversion', label: 'Conversion Problems', icon: <CircleDollarSign size={20} color="var(--primary-color)" />, data: auditData.conversionProblems },
+                  { key: 'mobile', label: 'Mobile Issues', icon: <Smartphone size={20} color="var(--primary-color)" />, data: auditData.mobileIssues },
+                  { key: 'cta', label: 'Missing CTAs', icon: <Target size={20} color="var(--primary-color)" />, data: auditData.missingCTAs }
                 ].map((sec) => {
                   const isOpen = expandedSections[sec.key];
                   const count = sec.data ? sec.data.length : 0;
                   const isSevere = sec.key === 'speed' || sec.key === 'cta';
 
                   return (
-                    <div key={sec.key} id={`accordion-${sec.key}`} style={{ background: '#111118', border: '1px solid #1E1E2E', borderRadius: '12px', overflow: 'hidden' }}>
+                    <div key={sec.key} id={`accordion-${sec.key}`} style={{ background: '#111118', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden' }}>
                       {/* Accordion Toggle Header */}
                       <button
                         onClick={() => toggleSection(sec.key)}
@@ -2195,7 +1477,7 @@ export default function App() {
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           cursor: 'pointer',
-                          color: '#F1F5F9',
+                          color: 'var(--text-main)',
                           textAlign: 'left'
                         }}
                       >
@@ -2217,14 +1499,14 @@ export default function App() {
                           </span>
                         </div>
                         
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.25s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.25s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                       </button>
 
                       {/* Accordion Expand Area */}
                       {isOpen && (
-                        <div style={{ padding: '20px', borderTop: '1px solid #1E1E2E', background: 'rgba(10, 10, 15, 0.4)' }}>
+                        <div style={{ padding: '20px', borderTop: '1px solid var(--border-color)', background: 'rgba(10, 10, 15, 0.4)' }}>
                           {count === 0 ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10B981', fontSize: '13px' }}>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -2242,7 +1524,7 @@ export default function App() {
                                     borderRadius: '30px',
                                     padding: '6px 14px',
                                     fontSize: '13px',
-                                    color: '#F1F5F9',
+                                    color: 'var(--text-main)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '8px',
@@ -2271,10 +1553,10 @@ export default function App() {
 
             {/* --- SECTION 6: REDESIGN RECOMMENDATIONS --- */}
             <div>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F1F5F9', marginBottom: '4px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
                 Sections That Need Rebuilding
               </h3>
-              <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '20px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '20px' }}>
                 Data-driven layout blueprints to recover lost conversions.
               </p>
 
@@ -2295,10 +1577,10 @@ export default function App() {
                   }
 
                   return (
-                    <div key={idx} className="hover-card redesign-card" style={{ background: '#111118', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                    <div key={idx} className="hover-card redesign-card" style={{ background: '#111118', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                          <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#F1F5F9' }}>{section.section}</h4>
+                          <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>{section.section}</h4>
                           <span style={{
                             fontSize: '10px',
                             fontWeight: 800,
@@ -2316,12 +1598,12 @@ export default function App() {
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                           <div>
-                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Pain Point:</span>
-                            <p style={{ fontSize: '13px', color: '#64748B', marginTop: '2px', lineHeight: '1.5' }}>{section.reason}</p>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Pain Point:</span>
+                            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px', lineHeight: '1.5' }}>{section.reason}</p>
                           </div>
                           <div>
-                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#6366F1', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Wireframe Solution:</span>
-                            <p style={{ fontSize: '14px', color: '#F1F5F9', marginTop: '2px', lineHeight: '1.5' }}>{section.suggestion}</p>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Wireframe Solution:</span>
+                            <p style={{ fontSize: '14px', color: 'var(--text-main)', marginTop: '2px', lineHeight: '1.5' }}>{section.suggestion}</p>
                           </div>
                         </div>
                       </div>
@@ -2333,9 +1615,9 @@ export default function App() {
 
             {/* --- SECTION 7: LEAD GENERATION CTA --- */}
             <div className="lead-card-wrapper">
-              <div className="lead-card-inner">
+              <div className="lead-card-inner glass-surface">
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5CF6', background: 'rgba(139, 92, 246, 0.1)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '4px 12px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--secondary-color)', background: 'rgba(139, 92, 246, 0.1)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '4px 12px', borderRadius: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>
                     EXCLUSIVE OFFER FOR {getCleanDomain(url).toUpperCase()}
                   </span>
                   
@@ -2347,22 +1629,22 @@ export default function App() {
                     Your site is losing customers every day. Let's fix that.
                   </h3>
                   
-                  <p style={{ fontSize: '15px', color: '#64748B', maxWidth: '600px', margin: '8px auto 0 auto', lineHeight: '1.6' }}>
+                  <p style={{ fontSize: '15px', color: 'var(--text-muted)', maxWidth: '600px', margin: '8px auto 0 auto', lineHeight: '1.6' }}>
                     I've personally audited 200+ sites. These issues are costing you valuable leads.
                   </p>
                 </div>
 
                 {/* Summarized Target Fixes Box */}
-                <div className="lead-fixes-box" style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid #1E1E2E', borderRadius: '16px', padding: '24px', maxWidth: '520px', width: '100%', textAlign: 'left' }}>
-                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#F1F5F9', display: 'block', marginBottom: '16px' }}>
+                <div className="lead-fixes-box" style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '24px', maxWidth: '520px', width: '100%', textAlign: 'left' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '16px' }}>
                     Your site scored <span style={{ color: getGrade(auditData.scores.overall).color, fontWeight: 800 }}>{auditData.scores.overall}/100</span>. Here is what I would fix first:
                   </span>
                   
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {auditData.quickWins?.slice(0, 3).map((win, idx) => (
-                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#F1F5F9', lineHeight: '1.4' }}>
+                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: 'var(--text-main)', lineHeight: '1.4' }}>
                         <span style={{ marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(99, 102, 241, 0.1)', padding: '4px', borderRadius: '50%' }}>
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6366F1" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                           </svg>
                         </span>
@@ -2391,7 +1673,7 @@ export default function App() {
                     Book a Free Redesign Strategy Call →
                   </a>
                   
-                  <span style={{ display: 'block', fontSize: '12px', color: '#64748B', marginTop: '12px' }}>
+                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginTop: '12px' }}>
                     No pressure · 30 min · I'll show you exactly what to fix.
                   </span>
                 </div>
@@ -2399,7 +1681,7 @@ export default function App() {
                 {/* Rating / Social Proof */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
                   <span style={{ color: '#F59E0B', fontSize: '14px' }}>★★★★★</span>
-                  <span style={{ fontSize: '12px', fontWeight: 600, color: '#64748B', letterSpacing: '0.3px' }}>Trusted by 50+ businesses</span>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.3px' }}>Trusted by 50+ businesses</span>
                 </div>
               </div>
             </div>
@@ -2410,9 +1692,9 @@ export default function App() {
 
         {/* --- GLOBAL FOOTER --- */}
         {!loading && (
-          <div className="footer-container" style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderTop: '1px solid #1E1E2E', marginTop: '32px', paddingTop: '24px' }}>
+          <div className="footer-container" style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderTop: '1px solid var(--border-color)', marginTop: '32px', paddingTop: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-              <p style={{ fontSize: '11px', color: '#64748B', maxWidth: '600px', lineHeight: '1.6' }}>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', maxWidth: '600px', lineHeight: '1.6' }}>
                 Auditoo Diagnostics · Audit reports are based on public web analysis heuristics and typical UX standards. Scores and recommendations are predictive guides.
               </p>
               
@@ -2422,7 +1704,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    color: '#6366F1',
+                    color: 'var(--primary-color)',
                     fontSize: '13px',
                     fontWeight: 600,
                     textDecoration: 'underline',
@@ -2436,7 +1718,7 @@ export default function App() {
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: '#6366F1',
+                      color: 'var(--primary-color)',
                       cursor: 'pointer',
                       fontSize: '13px',
                       fontWeight: 600,
@@ -2453,20 +1735,20 @@ export default function App() {
               <p style={{ fontSize: '12px', color: '#4B5563' }}>
                 &copy; {new Date().getFullYear()} Auditoo. All rights reserved.
               </p>
-              <p style={{ fontSize: '12px', color: '#64748B' }}>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                 Developed by{' '}
                 <a
                   href="https://alaminrobin.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    color: '#6366F1',
+                    color: 'var(--primary-color)',
                     textDecoration: 'none',
                     fontWeight: 600,
                     transition: 'color 0.2s'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#8B5CF6'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = '#6366F1'}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--secondary-color)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--primary-color)'}
                 >
                   Al Amin Robin
                 </a>
