@@ -699,3 +699,104 @@ html, body {
     line-height: 1.25 !important;
   }
 }
+
+/* High-Tech Loader Console and HUD Styles */
+.loader-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+  padding: 32px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .loader-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 24px 16px !important;
+  }
+}
+
+.hud-console {
+  text-align: left;
+  background: var(--card-bg-nested);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  font-family: monospace;
+  margin-top: 12px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .hud-console {
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.hud-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.hud-line.pending {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.hud-line.active {
+  color: var(--primary-color);
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.35);
+}
+
+.hud-line.completed {
+  color: #10B981;
+}
+
+.radar-box {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.radar-sweep {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  animation: radarPulse 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+  opacity: 0;
+}
+
+@keyframes radarPulse {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.live-alert-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #EF4444;
+  margin-top: 12px;
+}
