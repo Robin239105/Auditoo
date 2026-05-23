@@ -28,6 +28,12 @@
   --mock-card-bg: #E2E8F0;
   
   --accordion-hover: rgba(99, 102, 241, 0.04);
+
+  /* Themed variables to prevent hardcoded dark colors */
+  --card-bg-solid: #FFFFFF;
+  --card-bg-nested: #F1F5F9;
+  --card-bg-accent: rgba(99, 102, 241, 0.05);
+  --pill-bg-dark: rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="dark"] {
@@ -58,6 +64,12 @@
   --mock-card-bg: #161622;
   
   --accordion-hover: rgba(30, 30, 46, 0.6);
+
+  /* Themed variables to prevent hardcoded dark colors */
+  --card-bg-solid: #111118;
+  --card-bg-nested: rgba(10, 10, 15, 0.6);
+  --card-bg-accent: rgba(30, 30, 46, 0.4);
+  --pill-bg-dark: rgba(30, 30, 46, 0.6);
 }
 
 * {

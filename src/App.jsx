@@ -794,7 +794,7 @@ export default function App() {
 
         {/* --- ERROR DISPLAY CARD --- */}
         {error && (
-          <div className="fade-in" style={{ background: '#111118', border: '1px solid #EF4444', borderRadius: '16px', padding: '32px', textAlign: 'center', maxWidth: '600px', margin: '40px auto', boxShadow: '0 8px 30px rgba(239, 68, 68, 0.15)' }}>
+          <div className="fade-in" style={{ background: 'var(--card-bg-solid)', border: '1px solid #EF4444', borderRadius: '16px', padding: '32px', textAlign: 'center', maxWidth: '600px', margin: '40px auto', boxShadow: '0 8px 30px rgba(239, 68, 68, 0.15)' }}>
             <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto', color: '#EF4444' }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -873,7 +873,7 @@ export default function App() {
                 <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', marginTop: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Score</span>
                 
                 {/* Grade Label */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(30, 30, 46, 0.6)', border: '1px solid var(--border-color)', padding: '6px 14px', borderRadius: '50px', marginTop: '12px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--pill-bg-dark)', border: '1px solid var(--border-color)', padding: '6px 14px', borderRadius: '50px', marginTop: '12px' }}>
                   <span style={{ fontSize: '20px', fontWeight: 800, color: getGrade(animatedScores.overall).color }}>
                     {getGrade(animatedScores.overall).letter}
                   </span>
@@ -921,7 +921,7 @@ export default function App() {
                 { key: 'conversion', label: 'Conversion Problems', short: 'Conversions', desc: 'Flows & action hooks' },
                 { key: 'mobile', label: 'Mobile UX', short: 'Mobile', desc: 'Viewport & touches' }
               ].map((item) => (
-                <div key={item.key} onClick={() => handleScoreClick(item.key)} className="hover-card" style={{ background: '#111118', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'pointer' }}>
+                <div key={item.key} onClick={() => handleScoreClick(item.key)} className="hover-card" style={{ background: 'var(--card-bg-solid)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', boxShadow: 'var(--card-shadow)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'pointer' }}>
                   <ScoreRing score={animatedScores[item.key]} size={72} strokeWidth={6} showNumber={true} />
                   <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', marginTop: '16px', marginBottom: '4px' }}>
                     {item.short}
@@ -1004,7 +1004,7 @@ export default function App() {
                 
                 {/* 1. Core Web Vitals Metrics Grid (Only for Performance tab) */}
                 {selectedLighthouseTab === 'performance' && auditData.lighthouse?.performance?.metrics && (
-                  <div style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '20px', textAlign: 'left' }}>
+                  <div style={{ background: 'var(--card-bg-nested)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '20px', textAlign: 'left' }}>
                     <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.8px', display: 'block', marginBottom: '16px' }}>
                       <Zap size={14} color="var(--primary-color)" style={{ marginRight: "6px", display: "inline-block", verticalAlign: "middle" }} /> <span style={{ verticalAlign: "middle" }}>CORE WEB VITALS TELEMETRY</span>
                     </span>
@@ -1045,7 +1045,7 @@ export default function App() {
                           <div 
                             key={mIdx} 
                             style={{ 
-                              background: '#111118', 
+                              background: 'var(--card-bg-solid)', 
                               border: '1px solid var(--border-color)', 
                               borderRadius: '12px', 
                               padding: '14px', 
@@ -1073,7 +1073,7 @@ export default function App() {
                             >
                               {met.val}
                             </span>
-                            <span style={{ fontSize: '10px', color: '#4B5563', marginTop: '2px' }}>
+                            <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
                               {met.desc} · {met.spec}
                             </span>
                           </div>
@@ -1117,7 +1117,7 @@ export default function App() {
                         <div 
                           key={idx}
                           style={{
-                            background: '#111118',
+                            background: 'var(--card-bg-solid)',
                             border: `1px solid ${isCompleted ? 'rgba(16, 185, 129, 0.3)' : 'var(--border-light)'}`,
                             borderRadius: '16px',
                             padding: '20px',
@@ -1274,7 +1274,7 @@ export default function App() {
                         {activeToolTab === 'techStack' && scanData?.techStack && (
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
                             {scanData.techStack.length === 0 ? <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>No specific technologies detected.</p> : scanData.techStack.map((tech, idx) => (
-                              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+                              <div key={idx} style={{ background: 'var(--border-light)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
                                 <div style={{ fontSize: '11px', color: 'var(--primary-color)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>{tech.category}</div>
                                 <div style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 600 }}>{tech.name}</div>
                               </div>
@@ -1314,11 +1314,11 @@ export default function App() {
                               </div>
                             </div>
                             {scanData.cookies.preConsentCookies.length > 0 && (
-                              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
+                              <div style={{ background: 'var(--border-light)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
                                 <div style={{ fontSize: '13px', color: 'var(--text-main)', fontWeight: 600, marginBottom: '8px' }}>Cookies Set Before Consent ({scanData.cookies.preConsentCookies.length})</div>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                   {scanData.cookies.preConsentCookies.map((c, i) => (
-                                    <span key={i} style={{ background: 'var(--border-color)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', color: '#CBD5E1' }}>{c}</span>
+                                    <span key={i} style={{ background: 'var(--border-color)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', color: 'var(--text-main)' }}>{c}</span>
                                   ))}
                                 </div>
                               </div>
@@ -1331,17 +1331,17 @@ export default function App() {
                             <div>
                               <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '12px' }}>SSL Certificate</h4>
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' }}>
-                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status</div><div style={{ fontSize: '14px', color: scanData.security.ssl.valid ? '#10B981' : '#EF4444', fontWeight: 600 }}>{scanData.security.ssl.valid ? 'Valid' : 'Invalid/Missing'}</div></div>
-                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Issuer</div><div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 600 }}>{scanData.security.ssl.issuer}</div></div>
-                                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Expires</div><div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 600 }}>{scanData.security.ssl.daysRemaining} days</div></div>
+                                <div style={{ background: 'var(--border-light)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status</div><div style={{ fontSize: '14px', color: scanData.security.ssl.valid ? '#10B981' : '#EF4444', fontWeight: 600 }}>{scanData.security.ssl.valid ? 'Valid' : 'Invalid/Missing'}</div></div>
+                                <div style={{ background: 'var(--border-light)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Issuer</div><div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 600 }}>{scanData.security.ssl.issuer}</div></div>
+                                <div style={{ background: 'var(--border-light)', padding: '12px', borderRadius: '8px' }}><div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Expires</div><div style={{ fontSize: '14px', color: 'var(--text-main)', fontWeight: 600 }}>{scanData.security.ssl.daysRemaining} days</div></div>
                               </div>
                             </div>
                             <div>
                               <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '12px' }}>Security Headers</h4>
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
                                 {Object.entries(scanData.security.headers).map(([key, val]) => (
-                                  <div key={key} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '10px 12px', borderRadius: '6px', fontSize: '12px' }}>
-                                    <span style={{ color: '#CBD5E1' }}>{key}</span>
+                                  <div key={key} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--border-light)', padding: '10px 12px', borderRadius: '6px', fontSize: '12px' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>{key}</span>
                                     <span style={{ color: val ? '#10B981' : '#EF4444', fontWeight: 600 }}>{val ? 'PASS' : 'FAIL'}</span>
                                   </div>
                                 ))}
@@ -1357,11 +1357,11 @@ export default function App() {
                               <span style={{ fontSize: '11px', color: '#10B981', textTransform: 'uppercase', fontWeight: 700 }}>Rating</span>
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--border-light)', padding: '16px', borderRadius: '12px' }}>
                                 <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>CO₂ per view</span>
                                 <span style={{ color: 'var(--text-main)', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.co2PerView}</span>
                               </div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--border-light)', padding: '16px', borderRadius: '12px' }}>
                                 <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Cleaner than</span>
                                 <span style={{ color: '#10B981', fontWeight: 700, fontSize: '15px' }}>{scanData.carbon.cleanerThan} of tested sites</span>
                               </div>
@@ -1376,21 +1376,21 @@ export default function App() {
                                 <div style={{ fontSize: '11px', color: 'var(--primary-color)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Detected CDN / Host</div>
                                 <div style={{ fontSize: '16px', color: 'var(--text-main)', fontWeight: 700 }}>{dnsData.cdn}</div>
                               </div>
-                              <div style={{ flex: 1, minWidth: '200px', background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px' }}>
+                              <div style={{ flex: 1, minWidth: '200px', background: 'var(--border-light)', padding: '16px', borderRadius: '12px' }}>
                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Email Provider</div>
                                 <div style={{ fontSize: '16px', color: 'var(--text-main)', fontWeight: 700 }}>{dnsData.emailProvider}</div>
                               </div>
                             </div>
                             <div>
                               <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '12px' }}>DNS Records</h4>
-                              <div style={{ background: 'rgba(0, 0, 0, 0.3)', borderRadius: '8px', overflow: 'hidden' }}>
+                              <div style={{ background: 'var(--card-bg-nested)', borderRadius: '8px', overflow: 'hidden' }}>
                                 {['A', 'MX', 'NS', 'TXT'].map(type => {
                                   const recs = dnsData.records[type] || [];
                                   if (recs.length === 0) return null;
                                   return (
                                     <div key={type} style={{ display: 'flex', borderBottom: '1px solid var(--border-light)', padding: '12px' }}>
                                       <div style={{ width: '60px', color: 'var(--primary-color)', fontWeight: 700, fontSize: '13px' }}>{type}</div>
-                                      <div style={{ flex: 1, color: '#CBD5E1', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '4px', wordBreak: 'break-all' }}>
+                                      <div style={{ flex: 1, color: 'var(--text-main)', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '4px', wordBreak: 'break-all' }}>
                                         {recs.map((r, i) => <div key={i}>{typeof r === 'object' ? r.exchange : r}</div>)}
                                       </div>
                                     </div>
@@ -1429,7 +1429,7 @@ export default function App() {
                               { label: 'Custom Fonts', val: scanData.pageWeight.fonts },
                               { label: 'Inline Scripts', val: scanData.pageWeight.inlineScripts }
                             ].map((item, idx) => (
-                              <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '12px', textAlign: 'center' }}>
+                              <div key={idx} style={{ background: 'var(--border-light)', padding: '16px', borderRadius: '12px', textAlign: 'center' }}>
                                 <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>{item.val}</div>
                                 <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{item.label}</div>
                               </div>
@@ -1463,14 +1463,14 @@ export default function App() {
                   const isSevere = sec.key === 'speed' || sec.key === 'cta';
 
                   return (
-                    <div key={sec.key} id={`accordion-${sec.key}`} style={{ background: '#111118', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden' }}>
+                    <div key={sec.key} id={`accordion-${sec.key}`} style={{ background: 'var(--card-bg-solid)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden' }}>
                       {/* Accordion Toggle Header */}
                       <button
                         onClick={() => toggleSection(sec.key)}
                         className="accordion-header"
                         style={{
                           width: '100%',
-                          background: isOpen ? 'rgba(30, 30, 46, 0.4)' : 'transparent',
+                          background: isOpen ? 'var(--card-bg-accent)' : 'transparent',
                           border: 'none',
                           padding: '16px 20px',
                           display: 'flex',
@@ -1506,7 +1506,7 @@ export default function App() {
 
                       {/* Accordion Expand Area */}
                       {isOpen && (
-                        <div style={{ padding: '20px', borderTop: '1px solid var(--border-color)', background: 'rgba(10, 10, 15, 0.4)' }}>
+                        <div style={{ padding: '20px', borderTop: '1px solid var(--border-color)', background: 'var(--card-bg-nested)' }}>
                           {count === 0 ? (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10B981', fontSize: '13px' }}>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -1519,7 +1519,7 @@ export default function App() {
                                   key={idx}
                                   className="pop-in"
                                   style={{
-                                    background: '#111118',
+                                    background: 'var(--card-bg-solid)',
                                     border: `1px solid ${isSevere ? 'rgba(239, 68, 68, 0.25)' : 'rgba(245, 158, 11, 0.25)'}`,
                                     borderRadius: '30px',
                                     padding: '6px 14px',
@@ -1577,7 +1577,7 @@ export default function App() {
                   }
 
                   return (
-                    <div key={idx} className="hover-card redesign-card" style={{ background: '#111118', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                    <div key={idx} className="hover-card redesign-card" style={{ background: 'var(--card-bg-solid)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'space-between', boxShadow: 'var(--card-shadow)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                           <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>{section.section}</h4>
@@ -1635,7 +1635,7 @@ export default function App() {
                 </div>
 
                 {/* Summarized Target Fixes Box */}
-                <div className="lead-fixes-box" style={{ background: 'rgba(10, 10, 15, 0.6)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '24px', maxWidth: '520px', width: '100%', textAlign: 'left' }}>
+                <div className="lead-fixes-box" style={{ background: 'var(--card-bg-nested)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '24px', maxWidth: '520px', width: '100%', textAlign: 'left' }}>
                   <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)', display: 'block', marginBottom: '16px' }}>
                     Your site scored <span style={{ color: getGrade(auditData.scores.overall).color, fontWeight: 800 }}>{auditData.scores.overall}/100</span>. Here is what I would fix first:
                   </span>
@@ -1731,7 +1731,7 @@ export default function App() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.03)', paddingTop: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid var(--border-light)', paddingTop: '16px' }}>
               <p style={{ fontSize: '12px', color: '#4B5563' }}>
                 &copy; {new Date().getFullYear()} Auditoo. All rights reserved.
               </p>
